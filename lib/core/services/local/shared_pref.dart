@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:bookia/features/auth/data/models/auth_response/user.dart';
+//import 'package:bookia/features/auth/data/models/auth_response/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
@@ -14,22 +14,22 @@ class SharedPref {
     prefs = await SharedPreferences.getInstance();
   }
 
-  static Future<void> saveUserInfo(User? user) async {
-    // object ==> json ==> string
-    if (user == null) return;
-    var objToJson = user.toJson();
-    var jsonToString = jsonEncode(objToJson);
+  // static Future<void> saveUserInfo(User? user) async {
+  //   // object ==> json ==> string
+  //   if (user == null) return;
+  //   var objToJson = user.toJson();
+  //   var jsonToString = jsonEncode(objToJson);
 
-    await prefs.setString(kUser, jsonToString);
-  }
+  //   await prefs.setString(kUser, jsonToString);
+  // }
 
-  static User? getUserInfo() {
-    var cachedString = prefs.getString(kUser);
-    if (cachedString == null) return null;
-    // string ==> json ==> object
-    var stringToJson = jsonDecode(cachedString);
-    return User.fromJson(stringToJson);
-  }
+  // static User? getUserInfo() {
+  //   var cachedString = prefs.getString(kUser);
+  //   if (cachedString == null) return null;
+  //   // string ==> json ==> object
+  //   var stringToJson = jsonDecode(cachedString);
+  //   return User.fromJson(stringToJson);
+  // }
 
   static Future<void> saveToken(String? token) async {
     if (token == null) return;

@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 
 abstract class AppThemes {
   static ThemeData get lightTheme => ThemeData(
-    fontFamily: AppFonts.dMSerif,
-    scaffoldBackgroundColor: AppColors.backgroundColor,
+    fontFamily: AppFonts.inter,
+    scaffoldBackgroundColor: AppColors.background,
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: AppColors.background,
       elevation: 0,
       centerTitle: true,
       surfaceTintColor: Colors.transparent,
     ),
     dividerColor: Colors.transparent,
-    dividerTheme: DividerThemeData(color: AppColors.borderColor),
+    dividerTheme: DividerThemeData(color: AppColors.primary),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         padding: EdgeInsets.zero,
@@ -23,48 +23,26 @@ abstract class AppThemes {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      hintStyle: TextStyles.body.copyWith(color: AppColors.greyColor),
-      fillColor: AppColors.white,
+      hintStyle: TextStyles.hintTextStyle.copyWith(color: AppColors.secondary),
+      fillColor: AppColors.onPrimary,
       filled: true,
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.borderColor),
+        borderSide: BorderSide(color: AppColors.onSurfaceVariant),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.borderColor),
+        borderSide: BorderSide(color: AppColors.onSurfaceVariant),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.errorColor),
+        borderSide: BorderSide(color: AppColors.onSurfaceVariant),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.errorColor),
+        borderSide: BorderSide(color: AppColors.onSurfaceVariant),
       ),
     ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      type: BottomNavigationBarType.fixed,
-
-      selectedItemColor: AppColors.primaryColor,
-      unselectedItemColor: AppColors.greyColor,
-      backgroundColor: Colors.transparent,
-      selectedLabelStyle: TextStyles.caption2.copyWith(
-        fontWeight: FontWeight.w600,
-        height: 2,
-      ),
-      unselectedLabelStyle: TextStyles.caption2.copyWith(
-        fontWeight: FontWeight.w600,
-        height: 2,
-      ),
-      showSelectedLabels: false,
-      showUnselectedLabels: false,
-      elevation: 0,
-    ),
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.primaryColor,
-      // text color
-      onSurface: AppColors.darkColor,
-    ),
+    
   );
 }
