@@ -1,4 +1,4 @@
-import 'package:bookia/core/services/local/shared_pref.dart';
+import '../services/local/shared_pref.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
