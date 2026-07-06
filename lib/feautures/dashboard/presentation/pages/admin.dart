@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'user.dart'; 
 
 class AdminView extends StatefulWidget {
   final String adminName; 
@@ -129,30 +128,6 @@ class _AdminViewState extends State<AdminView> {
             ],
           ),
         ),
-      ),
-      
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF53B157),
-        unselectedItemColor: Colors.grey,
-        currentIndex: 3, 
-        onTap: (index) {
-          if (index == 0) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const UserView(userName: "أحمد"),
-              ),
-            );
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'الملف الشخصي'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_outlined), label: 'الإحصائيات'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'البحث'),
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'الرئيسية'),
-        ],
       ),
     );
   }

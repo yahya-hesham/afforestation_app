@@ -1,14 +1,15 @@
-import 'package:bookia/core/styles/colors.dart';
-import 'package:bookia/core/widgets/build_field_label.dart';
-import 'package:bookia/core/widgets/custom_textForm_field.dart';
-import 'package:bookia/feautures/auth/presentation/cubit/auth_cubit.dart';
-import 'package:bookia/feautures/auth/presentation/cubit/auth_state.dart';
-import 'package:bookia/feautures/auth/presentation/pages/login.dart';
-import 'package:bookia/feautures/auth/presentation/widgets/app_bar.dart';
-import 'package:bookia/feautures/auth/presentation/widgets/drop_down.dart';
-import 'package:bookia/feautures/auth/presentation/widgets/form_footer.dart'; // Still imported to use inside the column
-import 'package:bookia/feautures/auth/presentation/widgets/form_header.dart';
-import 'package:bookia/feautures/auth/presentation/widgets/submit_button.dart';
+
+import 'package:afforestation_app/core/styles/colors.dart';
+import 'package:afforestation_app/core/widgets/build_field_label.dart';
+import 'package:afforestation_app/core/widgets/custom_textForm_field.dart';
+import 'package:afforestation_app/feautures/auth/presentation/cubit/auth_cubit.dart';
+import 'package:afforestation_app/feautures/auth/presentation/cubit/auth_state.dart';
+import 'package:afforestation_app/feautures/auth/presentation/pages/login.dart';
+import 'package:afforestation_app/feautures/auth/presentation/widgets/app_bar.dart';
+import 'package:afforestation_app/feautures/auth/presentation/widgets/drop_down.dart';
+import 'package:afforestation_app/feautures/auth/presentation/widgets/form_footer.dart';
+import 'package:afforestation_app/feautures/auth/presentation/widgets/form_header.dart';
+import 'package:afforestation_app/feautures/auth/presentation/widgets/submit_button.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -184,7 +185,7 @@ class AddUserScreen extends StatelessWidget {
                                                 email: emailController.text,
                                                 password:
                                                     passwordController.text,
-                                                role: selectedRole,
+                                                role: cubit.currentRole,
                                               );
                                             }
                                           },

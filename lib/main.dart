@@ -1,6 +1,9 @@
-import 'package:bookia/core/services/local/shared_pref.dart';
+
+import 'package:afforestation_app/core/services/local/shared_pref.dart';
+import 'package:afforestation_app/core/styles/themes.dart';
+
 import 'package:flutter/material.dart';
-import 'feautures/auth/presentation/pages/login.dart'; 
+import 'package:afforestation_app/feautures/auth/presentation/pages/login.dart'; 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,9 +17,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginView(), 
+      theme: AppThemes.lightTheme,
+      home: const LoginView(), 
     );
   }
 }
