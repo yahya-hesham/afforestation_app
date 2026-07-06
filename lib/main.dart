@@ -4,6 +4,8 @@ import 'package:afforestation_app/feautures/auth/presentation/pages/login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //DioProvider.init();
+  await SharedPref.init();
   runApp(const MainApp());
 }
 

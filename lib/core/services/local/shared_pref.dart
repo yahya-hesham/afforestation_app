@@ -8,6 +8,14 @@ class SharedPref {
     prefs = await SharedPreferences.getInstance();
   }
 
+static Future<bool> saveToken(String token) async {
+    return await prefs.setString('token', token);
+  }
+
+
+  static String? getToken() {
+    return prefs.getString('token');
+  }
   static Future<void> setCounter(int value) async {
     await prefs.setInt(kCounter, value);
   }
