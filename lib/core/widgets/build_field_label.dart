@@ -5,7 +5,7 @@ import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class BuiledFieldLabel extends StatelessWidget {
-  const BuiledFieldLabel({
+  const BuiledFieldLabel.BuildFieldLabel({
     super.key,
     required this.labelText,
     required this.icon,
