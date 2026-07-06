@@ -1,9 +1,22 @@
 class AuthState {}
 
-class CounterLoadingScreenState extends AuthState {}
-
 class AuthInitialState extends AuthState {}
 
-class CounterUpdatedState extends AuthState {}
 
-class CounterResetState extends AuthState {}
+//login states
+class LoginLoading extends AuthState {}
+
+class LoginError extends AuthState {}
+
+class LoginSuccess extends AuthState {}
+
+
+// register states
+class RegisterLoading extends AuthState {}
+
+class RegisterSuccess extends AuthState {}
+
+class RegisterFailure extends AuthState {
+  final String errorMessage;
+  RegisterFailure(this.errorMessage);
+}

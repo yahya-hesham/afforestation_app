@@ -1,16 +1,20 @@
- // Extracted Submit button method since it uses the view state validations
-  import 'package:bookia/core/styles/colors.dart';
+// Extracted Submit button method since it uses the view state validations
+import 'package:bookia/core/styles/colors.dart';
 import 'package:bookia/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
-Widget buildSubmitButton() {
+class BuildSubmitButton extends StatelessWidget {
+  final VoidCallback? onTap;
+  // final void Function()? onTap;
+  const BuildSubmitButton({super.key,this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: 54,
       child: ElevatedButton.icon(
-        onPressed: () {
-     {}
-        },
+        onPressed: onTap,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.secondary,
           foregroundColor: AppColors.onSecondary,
@@ -22,8 +26,11 @@ Widget buildSubmitButton() {
         icon: const Icon(Icons.person_add_alt_1_outlined, size: 22),
         label: Text(
           'تسجيل الحساب الجديد',
-          style: TextStyles.buttonTextStyle.copyWith(color: AppColors.onSecondary),
+          style: TextStyles.buttonTextStyle.copyWith(
+            color: AppColors.onSecondary,
+          ),
         ),
       ),
     );
   }
+}
