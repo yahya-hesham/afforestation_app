@@ -17,10 +17,7 @@ class UserView extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFFF7F9FA),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black87, size: 20),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: const Text(
           "لوحة المستخدم",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E)),
@@ -128,24 +125,6 @@ class UserView extends StatelessWidget {
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF53B157),
-        unselectedItemColor: Colors.grey,
-        currentIndex: 0,
-        onTap: (index) {
-          if (index == 3) {
-            Navigator.pop(context);
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'الملف الشخصي'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart_outlined), label: 'الإحصائيات'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'البحث'),
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'الرئيسية'),
-        ],
       ),
     );
   }
