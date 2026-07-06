@@ -1,4 +1,4 @@
-import 'package:bookia/core/services/apis/apis.dart';
+import 'apis.dart';
 import 'package:chili_debug_view/chili_debug_view.dart';
 import 'package:dio/dio.dart';
 
