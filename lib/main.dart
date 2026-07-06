@@ -1,6 +1,6 @@
-import 'package:bookia/core/styles/themes.dart';
+import 'package:afforestation_app/core/styles/themes.dart';
 import 'package:flutter/material.dart';
-import 'feautures/auth/presentation/pages/login.dart'; 
+import 'package:afforestation_app/feautures/auth/presentation/pages/login.dart'; 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

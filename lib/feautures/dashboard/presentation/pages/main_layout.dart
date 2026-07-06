@@ -1,7 +1,7 @@
-import 'package:bookia/feautures/dashboard/presentation/pages/admin.dart';
-import 'package:bookia/feautures/dashboard/presentation/pages/statistics_placeholder.dart';
-import 'package:bookia/feautures/dashboard/presentation/pages/user.dart';
-import 'package:bookia/feautures/search/presentation/page/search.dart';
+import 'package:afforestation_app/feautures/dashboard/presentation/pages/admin.dart';
+import 'package:afforestation_app/feautures/dashboard/presentation/pages/statistics_placeholder.dart';
+import 'package:afforestation_app/feautures/dashboard/presentation/pages/user.dart';
+import 'package:afforestation_app/feautures/search/presentation/page/search.dart';
 import 'package:flutter/material.dart';
 
 class MainLayout extends StatefulWidget {

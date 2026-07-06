@@ -1,6 +1,6 @@
  // Extracted Submit button method since it uses the view state validations
-  import 'package:bookia/core/styles/colors.dart';
-import 'package:bookia/core/styles/text_styles.dart';
+  import 'package:afforestation_app/core/styles/colors.dart';
+import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 Widget buildSubmitButton() {

@@ -1,6 +1,6 @@
-import 'package:bookia/core/constants/app_fonts.dart';
-import 'package:bookia/core/styles/colors.dart';
-import 'package:bookia/core/styles/text_styles.dart';
+import 'package:afforestation_app/core/constants/app_fonts.dart';
+import 'package:afforestation_app/core/styles/colors.dart';
+import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 abstract class AppThemes {

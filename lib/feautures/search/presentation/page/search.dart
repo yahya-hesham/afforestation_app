@@ -1,5 +1,10 @@
-import 'package:bookia/core/styles/colors.dart';
+import 'package:afforestation_app/core/styles/colors.dart';
+import 'package:afforestation_app/feautures/search/presentation/widgets/quick_tip_card.dart';
+import 'package:afforestation_app/feautures/search/presentation/widgets/search_date_field.dart';
+import 'package:afforestation_app/feautures/search/presentation/widgets/search_dropdown_field.dart';
+import 'package:afforestation_app/feautures/search/presentation/widgets/summary_card.dart';
 import 'package:flutter/material.dart';
+import 'search_results.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -10,36 +15,15 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   DateTime? _startDate;
-  DateTime? _endDate = DateTime(
-    2026,
-    1,
-    24,
-  ); // Mock default date from image: 24/01/2026
+  DateTime? _endDate = DateTime(2026, 1, 24); // Mock default date: 24/01/2026
 
   String _selectedUser = "كل المستخدمين";
   String _selectedLocation = "كل المواقع";
   String _selectedPlant = "كل النباتات";
 
-  final List<String> _usersList = [
-    "كل المستخدمين",
-    "أحمد",
-    "سارة",
-    "خالد",
-    "مريم",
-  ];
-  final List<String> _locationsList = [
-    "كل المواقع",
-    "موقع الشمال",
-    "موقع الجنوب",
-    "المنطقة الوسطى",
-  ];
-  final List<String> _plantsList = [
-    "كل النباتات",
-    "شجرة السدر",
-    "شجرة الغاف",
-    "النخيل",
-    "شجر السمر",
-  ];
+  final List<String> _usersList = ["كل المستخدمين", "أحمد", "سارة", "خالد", "مريم"];
+  final List<String> _locationsList = ["كل المواقع", "موقع الشمال", "موقع الجنوب", "المنطقة الوسطى"];
+  final List<String> _plantsList = ["كل النباتات", "شجرة السدر", "شجرة الغاف", "النخيل", "شجر السمر"];
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
@@ -80,8 +64,6 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      // We force the AppBar navigation structure to LTR so the back button is on the Left
-      // and the logo is on the Right, matching your mockup image exactly.
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Directionality(
@@ -90,11 +72,7 @@ class _SearchState extends State<Search> {
             backgroundColor: AppColors.background,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.onSurface,
-                size: 20,
-              ),
+              icon: const Icon(Icons.arrow_back_ios, color: AppColors.onSurface, size: 20),
               onPressed: () => Navigator.maybePop(context),
             ),
             title: const Text(
@@ -114,11 +92,7 @@ class _SearchState extends State<Search> {
                   color: AppColors.secondary,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(
-                  Icons.park_outlined,
-                  color: Colors.white,
-                  size: 20,
-                ),
+                child: const Icon(Icons.park_outlined, color: Colors.white, size: 20),
               ),
             ],
           ),
@@ -137,11 +111,9 @@ class _SearchState extends State<Search> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: Colors.black.withValues(alpha: 0.04),
-                    ),
+                    border: Border.all(color: Colors.black.withValues(alpha: 0.04)),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.02),
@@ -170,122 +142,19 @@ class _SearchState extends State<Search> {
                       // Dates row (من تاريخ / إلى تاريخ)
                       Row(
                         children: [
-                          // من تاريخ
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "من تاريخ",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.onSurface,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                InkWell(
-                                  onTap: () => _selectDate(context, true),
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: Container(
-                                    height: 48,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF9FBF9),
-                                      borderRadius: BorderRadius.circular(24),
-                                      border: Border.all(
-                                        color: Colors.black.withValues(
-                                          alpha: 0.08,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_today_outlined,
-                                          color: Colors.black.withValues(
-                                            alpha: 0.5,
-                                          ),
-                                          size: 18,
-                                        ),
-                                        Text(
-                                          _formatDate(_startDate),
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: _startDate == null
-                                                ? Colors.grey
-                                                : AppColors.onSurface,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            child: SearchDateField(
+                              label: "من تاريخ",
+                              value: _formatDate(_startDate),
+                              onTap: () => _selectDate(context, true),
                             ),
                           ),
                           const SizedBox(width: 15),
-
-                          // إلى تاريخ
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "إلى تاريخ",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.onSurface,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                InkWell(
-                                  onTap: () => _selectDate(context, false),
-                                  borderRadius: BorderRadius.circular(24),
-                                  child: Container(
-                                    height: 48,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFF9FBF9),
-                                      borderRadius: BorderRadius.circular(24),
-                                      border: Border.all(
-                                        color: Colors.black.withValues(
-                                          alpha: 0.08,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_today_outlined,
-                                          color: Colors.black.withValues(
-                                            alpha: 0.5,
-                                          ),
-                                          size: 18,
-                                        ),
-                                        Text(
-                                          _formatDate(_endDate),
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: _endDate == null
-                                                ? Colors.grey
-                                                : AppColors.onSurface,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            child: SearchDateField(
+                              label: "إلى تاريخ",
+                              value: _formatDate(_endDate),
+                              onTap: () => _selectDate(context, false),
                             ),
                           ),
                         ],
@@ -295,56 +164,25 @@ class _SearchState extends State<Search> {
                       // اسم المستخدم والموقع Row
                       Row(
                         children: [
-                          // اسم المستخدم
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "اسم المستخدم",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.onSurface,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                _buildDropdownField(
-                                  value: _selectedUser,
-                                  items: _usersList,
-                                  onChanged: (val) {
-                                    if (val != null)
-                                      setState(() => _selectedUser = val);
-                                  },
-                                ),
-                              ],
+                            child: SearchDropdownField<String>(
+                              label: "اسم المستخدم",
+                              value: _selectedUser,
+                              items: _usersList,
+                              onChanged: (val) {
+                                if (val != null) setState(() => _selectedUser = val);
+                              },
                             ),
                           ),
                           const SizedBox(width: 15),
-
-                          // الموقع
                           Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "الموقع",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.onSurface,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                _buildDropdownField(
-                                  value: _selectedLocation,
-                                  items: _locationsList,
-                                  onChanged: (val) {
-                                    if (val != null)
-                                      setState(() => _selectedLocation = val);
-                                  },
-                                ),
-                              ],
+                            child: SearchDropdownField<String>(
+                              label: "الموقع",
+                              value: _selectedLocation,
+                              items: _locationsList,
+                              onChanged: (val) {
+                                if (val != null) setState(() => _selectedLocation = val);
+                              },
                             ),
                           ),
                         ],
@@ -352,27 +190,13 @@ class _SearchState extends State<Search> {
                       const SizedBox(height: 20),
 
                       // اسم النبات
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "اسم النبات",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.onSurface,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          _buildDropdownField(
-                            value: _selectedPlant,
-                            items: _plantsList,
-                            onChanged: (val) {
-                              if (val != null)
-                                setState(() => _selectedPlant = val);
-                            },
-                          ),
-                        ],
+                      SearchDropdownField<String>(
+                        label: "اسم النبات",
+                        value: _selectedPlant,
+                        items: _plantsList,
+                        onChanged: (val) {
+                          if (val != null) setState(() => _selectedPlant = val);
+                        },
                       ),
                       const SizedBox(height: 30),
 
@@ -382,7 +206,12 @@ class _SearchState extends State<Search> {
                         height: 52,
                         child: ElevatedButton(
                           onPressed: () {
-                            // Perform Search Action
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SearchResultsPage(),
+                              ),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.secondary,
@@ -430,21 +259,18 @@ class _SearchState extends State<Search> {
                 const SizedBox(height: 16),
 
                 // Summary Stats Cards Row
-                Row(
+                const Row(
                   children: [
-                    // حسب اسم النبات
                     Expanded(
-                      child: _buildSummaryCard(
+                      child: SummaryCard(
                         title: "حسب اسم النبات",
                         value: "1,250",
                         icon: Icons.park_outlined,
                       ),
                     ),
-                    const SizedBox(width: 15),
-
-                    // حسب نوع النبات (indicated by location pin icon in mockup)
+                    SizedBox(width: 15),
                     Expanded(
-                      child: _buildSummaryCard(
+                      child: SummaryCard(
                         title: "حسب نوع النبات",
                         value: "5,430",
                         icon: Icons.location_on_outlined,
@@ -455,145 +281,13 @@ class _SearchState extends State<Search> {
                 const SizedBox(height: 25),
 
                 // 3. Quick Tip Card
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE8F5E9).withValues(alpha: 0.5),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: const Color(0xFFC8E6C9)),
-                  ),
-                  child: const Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.info_outline,
-                        color: Color(0xFF2E7D32),
-                        size: 22,
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "نصيحة سريعة",
-                              style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2E7D32),
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              "يمكنك استخدام ميزة \"تصدير إلى إكسل\" من صفحة النتائج لحفظ التقارير على جهازك.",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xFF388E3C),
-                                height: 1.5,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                const QuickTipCard(
+                  tipText: "يمكنك استخدام ميزة \"تصدير إلى إكسل\" من صفحة النتائج لحفظ التقارير على جهازك.",
                 ),
               ],
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildDropdownField({
-    required String value,
-    required List<String> items,
-    required ValueChanged<String?> onChanged,
-  }) {
-    return Container(
-      height: 48,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF9FBF9),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: value,
-          isExpanded: true,
-          icon: Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.black.withValues(alpha: 0.5),
-          ),
-          items: items.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(
-                item,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.onSurface,
-                ),
-              ),
-            );
-          }).toList(),
-          onChanged: onChanged,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSummaryCard({
-    required String title,
-    required String value,
-    required IconData icon,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.black.withValues(alpha: 0.04)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.015),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-              color: Color(0xFFE8F5E9),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: AppColors.primary, size: 24),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primary,
-            ),
-          ),
-        ],
       ),
     );
   }

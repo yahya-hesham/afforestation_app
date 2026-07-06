@@ -1,4 +1,4 @@
-import 'package:bookia/core/styles/colors.dart';
+import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:flutter/material.dart';
 
 class StatisticsPlaceholderView extends StatelessWidget {
