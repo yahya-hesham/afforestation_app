@@ -1,6 +1,8 @@
+import 'package:bookia/feautures/auth/presentation/pages/register_screen.dart';
+import 'package:bookia/feautures/dashboard/presentation/pages/admin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'admin.dart'; 
+
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -26,7 +28,7 @@ class _LoginViewState extends State<LoginView> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const AdminView(adminName: "أحمد"),
+        builder: (context) => const AddUserScreen(),
       ),
     );
   }
