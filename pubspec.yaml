@@ -1,4 +1,4 @@
-name: bookia
+name: afforestation_app
 description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0
@@ -36,11 +36,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/images/
     - assets/icons/
-     
+    - assets/icons/tree.svg
 
-  fonts:
-    - family: DMSerif
-      fonts:
-        - asset: assets/fonts/DMSerifDisplay-Regular.ttf
+#  fonts:
+#    - family: DMSerif
+#     fonts:
+#        - asset: assets/fonts/DMSerifDisplay-Regular.ttf
