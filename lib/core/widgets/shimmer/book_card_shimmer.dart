@@ -1,5 +1,5 @@
-// import 'package:bookia/core/styles/colors.dart';
-// import 'package:bookia/core/widgets/shimmer/custom_shimmer_widget.dart';
+// import 'package:afforestation_app/core/styles/colors.dart';
+// import 'package:afforestation_app/core/widgets/shimmer/custom_shimmer_widget.dart';
 // import 'package:flutter/material.dart';
 // import 'package:gap/gap.dart';
 
