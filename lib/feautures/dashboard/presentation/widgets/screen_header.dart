@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 
 class ScreenHeader extends StatelessWidget {
-  const ScreenHeader({Key? key}) : super(key: key);
+  const ScreenHeader({super.key});
 
   @override
   Widget build(BuildContext context) {

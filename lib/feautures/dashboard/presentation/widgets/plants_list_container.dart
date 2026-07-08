@@ -11,13 +11,13 @@ class PlantsListContainer extends StatelessWidget {
   final VoidCallback onAddPlant;
 
   const PlantsListContainer({
-    Key? key,
+    super.key,
     required this.categoryTitle,
     required this.plants,
     required this.onEdit,
     required this.onDelete,
     required this.onAddPlant,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

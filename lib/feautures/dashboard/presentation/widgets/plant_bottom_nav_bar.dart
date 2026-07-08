@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 
 class PlantBottomNavigationBar extends StatelessWidget {
-  const PlantBottomNavigationBar({Key? key}) : super(key: key);
+  const PlantBottomNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -10,7 +10,6 @@ import 'package:afforestation_app/feautures/auth/presentation/widgets/drop_down.
 import 'package:afforestation_app/feautures/auth/presentation/widgets/form_footer.dart';
 import 'package:afforestation_app/feautures/auth/presentation/widgets/form_header.dart';
 import 'package:afforestation_app/feautures/auth/presentation/widgets/submit_button.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

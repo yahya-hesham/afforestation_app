@@ -3,7 +3,7 @@ import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class FormHeader extends StatelessWidget {
-  const FormHeader();
+  const FormHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
