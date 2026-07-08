@@ -10,11 +10,11 @@ class CategorySelectionCard extends StatelessWidget {
   final ValueChanged<int> onCategorySelected;
 
   const CategorySelectionCard({
-    Key? key,
+    super.key,
     required this.categories,
     required this.selectedIndex,
     required this.onCategorySelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

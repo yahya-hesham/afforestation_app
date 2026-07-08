@@ -9,7 +9,7 @@ import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 
 class PlantManagementScreen extends StatefulWidget {
-  const PlantManagementScreen({Key? key}) : super(key: key);
+  const PlantManagementScreen({super.key});
 
   @override
   State<PlantManagementScreen> createState() => _PlantManagementScreenState();

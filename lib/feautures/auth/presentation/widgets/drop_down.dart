@@ -7,7 +7,7 @@ class RoleDropdownField extends StatelessWidget {
   final List<String> roles;
   final ValueChanged<String?> onChanged;
 
-  const RoleDropdownField({
+  const RoleDropdownField({super.key, 
     required this.selectedRole,
     required this.roles,
     required this.onChanged,
