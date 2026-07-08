@@ -3,7 +3,7 @@ import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 
 class PlantAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const PlantAppBar({Key? key}) : super(key: key);
+  const PlantAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
