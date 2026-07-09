@@ -1,8 +1,5 @@
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/core/styles/themes.dart';
-import 'package:afforestation_app/features/location/page/add_new_location.dart';
-import 'package:afforestation_app/features/location/page/add_new_location_type.dart';
-
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/features/auth/presentation/pages/login.dart';
 
@@ -21,7 +18,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppThemes.lightTheme,
-      home: const LocationDetailsScreen(),
+      home: const LoginView(),
     );
   }
 }
