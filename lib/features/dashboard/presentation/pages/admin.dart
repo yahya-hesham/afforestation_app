@@ -296,16 +296,3 @@ class _AdminViewState extends State<AdminView> {
   }
 }
 
-import 'package:afforestation_app/core/functions/extenstion.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-
-class AdminView extends StatefulWidget {
-  final String adminName;
-
-  const AdminView({super.key, this.adminName = "أحمد"});
-
-  @override
-  State<AdminView> createState() => _AdminViewState();
-}
-
