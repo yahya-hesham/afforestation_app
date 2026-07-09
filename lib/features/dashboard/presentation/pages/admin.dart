@@ -1,6 +1,5 @@
-import 'package:afforestation_app/core/functions/extenstion.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import '../../../notifications/presentation/pages/notifications_screen.dart';
 
 class AdminView extends StatefulWidget {
   final String adminName;
@@ -23,27 +22,19 @@ class _AdminViewState extends State<AdminView> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.notifications_none_outlined,
-                    color: Colors.black87,
+            IconButton(
+              icon: const Icon(
+                Icons.notifications_none_outlined,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationsScreen(),
                   ),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.language_outlined,
-                    color: Colors.black87,
-                  ),
-                  onPressed: () {
-                    context.isArabic
-                        ? context.setLocale(const Locale('en'))
-                        : context.setLocale(const Locale('ar'));
-                  },
-                ),
-              ],
+                );
+              },
             ),
             Container(
               padding: const EdgeInsets.all(6),
@@ -304,3 +295,17 @@ class _AdminViewState extends State<AdminView> {
     );
   }
 }
+
+import 'package:afforestation_app/core/functions/extenstion.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+
+class AdminView extends StatefulWidget {
+  final String adminName;
+
+  const AdminView({super.key, this.adminName = "أحمد"});
+
+  @override
+  State<AdminView> createState() => _AdminViewState();
+}
+

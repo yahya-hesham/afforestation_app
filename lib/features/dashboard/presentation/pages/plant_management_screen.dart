@@ -1,4 +1,7 @@
 import 'package:afforestation_app/features/dashboard/data/repository/models/plant_model.dart';
+
+import 'package:afforestation_app/features/dashboard/presentation/models/plant_model.dart';
+
 import 'package:afforestation_app/features/dashboard/presentation/widgets/category_selection_card.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/plant_app_bar.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/plant_bottom_nav_bar.dart';
