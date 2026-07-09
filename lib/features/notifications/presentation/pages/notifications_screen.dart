@@ -1,8 +1,8 @@
 import 'package:afforestation_app/core/styles/themes.dart';
-import 'package:afforestation_app/feautures/notifiction/widget/buildheader.dart';
-import 'package:afforestation_app/feautures/notifiction/widget/notfication_card.dart';
+import 'package:afforestation_app/features/notifications/presentation/widget/buildheader.dart';
+import 'package:afforestation_app/features/notifications/presentation/widget/notfication_card.dart';
 import 'package:flutter/material.dart';
-import 'package:afforestation_app/feautures/dashboard/presentation/widgets/plant_bottom_nav_bar.dart';
+import 'package:afforestation_app/features/dashboard/presentation/widgets/plant_bottom_nav_bar.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 

@@ -1,8 +1,8 @@
 import 'package:afforestation_app/core/styles/colors.dart';
-import 'package:afforestation_app/feautures/search/presentation/widgets/quick_tip_card.dart';
-import 'package:afforestation_app/feautures/search/presentation/widgets/search_date_field.dart';
-import 'package:afforestation_app/feautures/search/presentation/widgets/search_dropdown_field.dart';
-import 'package:afforestation_app/feautures/search/presentation/widgets/summary_card.dart';
+import 'package:afforestation_app/features/search/presentation/widgets/quick_tip_card.dart';
+import 'package:afforestation_app/features/search/presentation/widgets/search_date_field.dart';
+import 'package:afforestation_app/features/search/presentation/widgets/search_dropdown_field.dart';
+import 'package:afforestation_app/features/search/presentation/widgets/summary_card.dart';
 import 'package:flutter/material.dart';
 import 'search_results.dart';
 

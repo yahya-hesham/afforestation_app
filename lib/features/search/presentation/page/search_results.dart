@@ -1,7 +1,7 @@
 import 'package:afforestation_app/core/styles/colors.dart';
-import 'package:afforestation_app/feautures/search/presentation/widgets/record_card.dart';
-import 'package:afforestation_app/feautures/search/presentation/widgets/summary_table.dart';
-import 'package:afforestation_app/feautures/search/presentation/widgets/total_count_card.dart';
+import 'package:afforestation_app/features/search/presentation/widgets/record_card.dart';
+import 'package:afforestation_app/features/search/presentation/widgets/summary_table.dart';
+import 'package:afforestation_app/features/search/presentation/widgets/total_count_card.dart';
 import 'package:flutter/material.dart';
 
 class SearchResultsPage extends StatelessWidget {
