@@ -1,6 +1,6 @@
-import 'package:afforestation_app/feautures/auth/presentation/pages/register_screen.dart';
-import 'package:afforestation_app/feautures/dashboard/presentation/pages/plant_management_screen.dart';
-import 'package:afforestation_app/feautures/dashboard/presentation/widgets/main_layout.dart';
+import 'package:afforestation_app/features/auth/presentation/pages/register_screen.dart';
+import 'package:afforestation_app/features/dashboard/presentation/pages/plant_management_screen.dart';
+import 'package:afforestation_app/features/dashboard/presentation/widgets/main_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 

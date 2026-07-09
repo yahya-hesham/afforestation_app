@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../notifiction/screen/notifications_screen.dart';
+import '../../../notifications/presentation/pages/notifications_screen.dart';
 
 class AdminView extends StatefulWidget {
   final String adminName;

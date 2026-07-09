@@ -2,7 +2,7 @@ import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/core/styles/themes.dart';
 
 import 'package:flutter/material.dart';
-import 'package:afforestation_app/feautures/auth/presentation/pages/login.dart'; 
+import 'package:afforestation_app/features/auth/presentation/pages/login.dart'; 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
