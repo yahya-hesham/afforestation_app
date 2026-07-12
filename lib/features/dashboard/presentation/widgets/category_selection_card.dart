@@ -1,4 +1,5 @@
 import 'package:afforestation_app/features/dashboard/presentation/models/plant_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
@@ -10,11 +11,11 @@ class CategorySelectionCard extends StatelessWidget {
   final ValueChanged<int> onCategorySelected;
 
   const CategorySelectionCard({
-    Key? key,
+    super.key,
     required this.categories,
     required this.selectedIndex,
     required this.onCategorySelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

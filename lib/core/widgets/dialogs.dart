@@ -1,5 +1,5 @@
-// import 'package:bookia/core/constants/app_images.dart';
-// import 'package:bookia/core/styles/colors.dart';
+// import 'package:afforestation_app/core/constants/app_images.dart';
+// import 'package:afforestation_app/core/styles/colors.dart';
 // import 'package:flutter/material.dart';
 // import 'package:gap/gap.dart';
 // import 'package:lottie/lottie.dart';

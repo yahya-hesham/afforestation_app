@@ -1,4 +1,5 @@
 import 'package:afforestation_app/core/styles/colors.dart';
+import 'package:afforestation_app/features/search/presentation/page/statistics_summary.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/record_card.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/summary_table.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/total_count_card.dart';
@@ -130,7 +131,42 @@ class SearchResultsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 12),
+
+                // View Statistics Summary Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const StatisticsSummaryPage(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: AppColors.primary,
+                      elevation: 0,
+                      side: const BorderSide(color: AppColors.secondary, width: 1.5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                    icon: const Icon(Icons.analytics_outlined, color: AppColors.primary, size: 20),
+                    label: const Text(
+                      "عرض ملخص الإحصائيات",
+                      style: TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
 
                 // Latest Records Header
                 Row(

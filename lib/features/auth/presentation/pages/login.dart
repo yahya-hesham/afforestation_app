@@ -1,3 +1,4 @@
+
 import 'package:afforestation_app/features/auth/presentation/pages/register_screen.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/plant_management_screen.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/main_layout.dart';
@@ -16,7 +17,7 @@ class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
+  final bool _obscurePassword = true;
 
   @override
   void dispose() {

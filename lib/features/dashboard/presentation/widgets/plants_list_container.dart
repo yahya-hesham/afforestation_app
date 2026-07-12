@@ -1,4 +1,5 @@
 import 'package:afforestation_app/features/dashboard/presentation/models/plant_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
@@ -11,13 +12,13 @@ class PlantsListContainer extends StatelessWidget {
   final VoidCallback onAddPlant;
 
   const PlantsListContainer({
-    Key? key,
+    super.key,
     required this.categoryTitle,
     required this.plants,
     required this.onEdit,
     required this.onDelete,
     required this.onAddPlant,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
