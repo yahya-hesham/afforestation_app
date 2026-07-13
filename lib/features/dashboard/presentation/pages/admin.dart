@@ -1,4 +1,7 @@
+import 'package:afforestation_app/core/routes/routes.dart';
+import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../notifications/presentation/pages/notifications_screen.dart';
 
 class AdminView extends StatefulWidget {
@@ -81,8 +84,11 @@ class _AdminViewState extends State<AdminView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
+                    onPressed: () async {
+                      await SharedPref.prefs.clear();
+                      if (context.mounted) {
+                        context.go(Routes.login);
+                      }
                     },
                     style: TextButton.styleFrom(
                       backgroundColor: const Color(0xFFFFEBEE),
@@ -295,4 +301,3 @@ class _AdminViewState extends State<AdminView> {
     );
   }
 }
-

@@ -20,31 +20,36 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       'name': 'أحمد محمود',
       'email': 'ahmed@gmail.com',
       'role': 'مشرف',
-      'avatar': 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=120'
+      'avatar':
+          'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=120',
     },
     {
       'name': 'سارة كمال',
       'email': 'sara.k@afforest.sa',
       'role': 'مستخدم',
-      'avatar': 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=120'
+      'avatar':
+          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=120',
     },
     {
       'name': 'ياسين علي',
       'email': 'yassin.a@outlook.com',
       'role': 'مستخدم',
-      'avatar': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=120'
+      'avatar':
+          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=120',
     },
     {
       'name': 'ليلى حسن',
       'email': 'layla.h@afforest.sa',
       'role': 'مستخدم',
-      'avatar': 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=120'
+      'avatar':
+          'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=120',
     },
     {
       'name': 'فهد العتيبي',
       'email': 'fahad.o@gmail.com',
       'role': 'مشرف',
-      'avatar': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=120'
+      'avatar':
+          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=120',
     },
   ];
 
@@ -52,22 +57,24 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   Widget build(BuildContext context) {
     List<Map<String, String>> filteredUsers = selectedFilter == 'الكل'
         ? allUsers
-        : allUsers.where((user) => user['role'] == selectedFilter.replaceAll('ون', '')).toList();
+        : allUsers
+              .where(
+                (user) => user['role'] == selectedFilter.replaceAll('ون', ''),
+              )
+              .toList();
 
     return Scaffold(
       backgroundColor: AppColors.background,
-     floatingActionButton: FloatingActionButton(
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const AddNewPlantScreen(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddNewPlantScreen()),
+          );
+        },
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.add, color: AppColors.onPrimary, size: 28),
       ),
-    );
-  },
-  backgroundColor: AppColors.primary,
-  child: const Icon(Icons.add, color: AppColors.onPrimary, size: 28),
-),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
@@ -86,12 +93,17 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                 children: [
                   Text(
                     'إدارة المستخدمين',
-                    style: TextStyles.loginHeaderStyle.copyWith(color: AppColors.onSurface),
+                    style: TextStyles.loginHeaderStyle.copyWith(
+                      color: AppColors.onSurface,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   SvgPicture.asset(
                     AppAssets.treesvg,
-                    colorFilter: const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.primary,
+                      BlendMode.srcIn,
+                    ),
                     width: 24,
                     height: 24,
                   ),
@@ -107,7 +119,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                 ),
                 child: SvgPicture.asset(
                   AppAssets.bellsvg,
-                  colorFilter: const ColorFilter.mode(AppColors.onSecondary, BlendMode.srcIn),
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.onSecondary,
+                    BlendMode.srcIn,
+                  ),
                   width: 20,
                   height: 20,
                 ),
@@ -122,11 +137,19 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: _buildStatCard('إجمالي المستخدمين', '128', AppAssets.treesvg),
+                          child: _buildStatCard(
+                            'إجمالي المستخدمين',
+                            '128',
+                            AppAssets.treesvg,
+                          ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
-                          child: _buildStatCard('المشرفون', '12', AppAssets.plantCropssvg),
+                          child: _buildStatCard(
+                            'المشرفون',
+                            '12',
+                            AppAssets.plantCropssvg,
+                          ),
                         ),
                       ],
                     ),
@@ -143,7 +166,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                     const SizedBox(height: 20),
                     Text(
                       'قائمة المستخدمين',
-                      style: TextStyles.loginHeaderStyle.copyWith(color: AppColors.onSurface, fontSize: 16),
+                      style: TextStyles.loginHeaderStyle.copyWith(
+                        color: AppColors.onSurface,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
@@ -154,15 +180,24 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         body: filteredUsers.isEmpty
             ? const Center(child: Text('لا يوجد مستخدمين في هذا القسم'))
             : ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 itemCount: filteredUsers.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final user = filteredUsers[index];
-                  return _buildUserCard(user['name']!, user['email']!, user['role']!, user['avatar']!);
+                  return _buildUserCard(
+                    user['name']!,
+                    user['email']!,
+                    user['role']!,
+                    user['avatar']!,
+                  );
                 },
               ),
-    ),
+      ),
     );
   }
 
@@ -178,18 +213,25 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         children: [
           SvgPicture.asset(
             svgAsset,
-            colorFilter: const ColorFilter.mode(AppColors.secondary, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(
+              AppColors.secondary,
+              BlendMode.srcIn,
+            ),
             width: 28,
             height: 28,
           ),
           const SizedBox(height: 8),
           Text(
             title,
-            style: TextStyles.footerTextTextStyle.copyWith(color: AppColors.onSurfaceVariant),
+            style: TextStyles.footerTextTextStyle.copyWith(
+              color: AppColors.onSurfaceVariant,
+            ),
           ),
           Text(
             count,
-            style: TextStyles.loginHeaderStyle.copyWith(color: AppColors.onSurface),
+            style: TextStyles.loginHeaderStyle.copyWith(
+              color: AppColors.onSurface,
+            ),
           ),
         ],
       ),
@@ -209,7 +251,11 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary : AppColors.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: isSelected ? Colors.transparent : AppColors.tertiary.withOpacity(0.3)),
+          border: Border.all(
+            color: isSelected
+                ? Colors.transparent
+                : AppColors.tertiary.withOpacity(0.3),
+          ),
         ),
         child: Text(
           text,
@@ -222,7 +268,12 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  Widget _buildUserCard(String name, String email, String role, String avatarUrl) {
+  Widget _buildUserCard(
+    String name,
+    String email,
+    String role,
+    String avatarUrl,
+  ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -247,16 +298,26 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                 children: [
                   Text(
                     name,
-                    style: TextStyles.buttonTextStyle.copyWith(color: AppColors.onSurface, fontSize: 14),
+                    style: TextStyles.buttonTextStyle.copyWith(
+                      color: AppColors.onSurface,
+                      fontSize: 14,
+                    ),
                   ),
                   Text(
                     email,
-                    style: TextStyles.hintTextStyle.copyWith(color: AppColors.onSurfaceVariant, fontSize: 12),
+                    style: TextStyles.hintTextStyle.copyWith(
+                      color: AppColors.onSurfaceVariant,
+                      fontSize: 12,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     role,
-                    style: TextStyles.textButtonTextStyle.copyWith(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.bold),
+                    style: TextStyles.textButtonTextStyle.copyWith(
+                      color: AppColors.primary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -264,8 +325,22 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           ),
           Row(
             children: [
-              IconButton(icon: const Icon(Icons.edit, color: AppColors.onSurfaceVariant, size: 20), onPressed: () {}),
-              IconButton(icon: const Icon(Icons.delete, color: AppColors.error, size: 20), onPressed: () {}),
+              IconButton(
+                icon: const Icon(
+                  Icons.edit,
+                  color: AppColors.onSurfaceVariant,
+                  size: 20,
+                ),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.delete,
+                  color: AppColors.error,
+                  size: 20,
+                ),
+                onPressed: () {},
+              ),
             ],
           ),
         ],

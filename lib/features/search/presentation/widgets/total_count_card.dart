@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 class TotalCountCard extends StatelessWidget {
   final String totalCount;
 
-  const TotalCountCard({
-    super.key,
-    required this.totalCount,
-  });
+  const TotalCountCard({super.key, required this.totalCount});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +32,11 @@ class TotalCountCard extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.25),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Icon(Icons.analytics_outlined, color: Colors.white, size: 36),
+            child: const Icon(
+              Icons.analytics_outlined,
+              color: Colors.white,
+              size: 36,
+            ),
           ),
 
           // Count Text Column

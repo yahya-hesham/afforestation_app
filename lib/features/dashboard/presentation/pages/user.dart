@@ -1,4 +1,7 @@
+import 'package:afforestation_app/core/routes/routes.dart';
+import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class UserView extends StatelessWidget {
   final String userName;
@@ -20,7 +23,11 @@ class UserView extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: const Text(
           "لوحة المستخدم",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E)),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1B3A1E),
+          ),
         ),
         centerTitle: true,
       ),
@@ -35,7 +42,12 @@ class UserView extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: const Icon(Icons.logout, color: Colors.redAccent),
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () async {
+                      await SharedPref.prefs.clear();
+                      if (context.mounted) {
+                        context.go(Routes.login);
+                      }
+                    },
                   ),
                   Row(
                     children: [
@@ -44,11 +56,18 @@ class UserView extends StatelessWidget {
                         children: [
                           Text(
                             "مرحباً مجدداً، $userName",
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E)),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1B3A1E),
+                            ),
                           ),
                           Text(
                             userEmail,
-                            style: const TextStyle(fontSize: 13, color: Colors.grey),
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -86,24 +105,34 @@ class UserView extends StatelessWidget {
               const SizedBox(height: 30),
               const Text(
                 "العمليات السريعة",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E)),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3A1E),
+                ),
               ),
               const SizedBox(height: 12),
               _buildActionCard(
                 title: "إضافة عملية تشجير جديدة",
-                subtitle: "سجل بيانات شتلات جديدة في المواقع الميدانية المعتمدة",
+                subtitle:
+                    "سجل بيانات شتلات جديدة في المواقع الميدانية المعتمدة",
                 icon: Icons.add_circle_outline,
                 onTap: () {},
               ),
               const SizedBox(height: 25),
               const Text(
                 "عرض البيانات المضافة",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E)),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3A1E),
+                ),
               ),
               const SizedBox(height: 12),
               _buildActionCard(
                 title: "عرض البيانات المضافة",
-                subtitle: "راجع سجلاتك السابقة وتتبع حالة نمو النباتات التي قمت بزراعتها",
+                subtitle:
+                    "راجع سجلاتك السابقة وتتبع حالة نمو النباتات التي قمت بزراعتها",
                 icon: Icons.storage_outlined,
                 onTap: () {},
               ),
@@ -118,7 +147,11 @@ class UserView extends StatelessWidget {
                 child: const Text(
                   "تساهم جهودك في زيادة الغطاء النباتي. شكراً لمساهمتك في حماية البيئة وتطوير المناطق الخضراء.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 13, color: Color(0xFF2E7D32), height: 1.5),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF2E7D32),
+                    height: 1.5,
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
@@ -129,7 +162,12 @@ class UserView extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCard({required String title, required String value, required String unit, required IconData icon}) {
+  Widget _buildStatCard({
+    required String title,
+    required String value,
+    required String unit,
+    required IconData icon,
+  }) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -143,7 +181,14 @@ class UserView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Icon(icon, color: const Color(0xFF53B157), size: 20),
-              Text(title, style: const TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold)),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -152,9 +197,19 @@ class UserView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(unit, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+              Text(
+                unit,
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
               const SizedBox(width: 4),
-              Text(value, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E))),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1B3A1E),
+                ),
+              ),
             ],
           ),
         ],
@@ -162,7 +217,12 @@ class UserView extends StatelessWidget {
     );
   }
 
-  Widget _buildActionCard({required String title, required String subtitle, required IconData icon, required VoidCallback onTap}) {
+  Widget _buildActionCard({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -181,9 +241,24 @@ class UserView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E))),
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1B3A1E),
+                    ),
+                  ),
                   const SizedBox(height: 4),
-                  Text(subtitle, textAlign: TextAlign.end, style: const TextStyle(fontSize: 12, color: Colors.grey, height: 1.4)),
+                  Text(
+                    subtitle,
+                    textAlign: TextAlign.end,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      height: 1.4,
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 class GrandTotalCard extends StatelessWidget {
   final int totalCount;
 
-  const GrandTotalCard({
-    super.key,
-    required this.totalCount,
-  });
+  const GrandTotalCard({super.key, required this.totalCount});
 
   String _formatNumber(int number) {
     final RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-    return number.toString().replaceAllMapped(reg, (Match match) => '${match[1]},');
+    return number.toString().replaceAllMapped(
+      reg,
+      (Match match) => '${match[1]},',
+    );
   }
 
   @override
@@ -46,10 +46,30 @@ class GrandTotalCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Container(width: 8, height: 35, color: Colors.white, margin: const EdgeInsets.only(right: 4)),
-                    Container(width: 8, height: 60, color: Colors.white, margin: const EdgeInsets.only(right: 4)),
-                    Container(width: 8, height: 45, color: Colors.white, margin: const EdgeInsets.only(right: 4)),
-                    Container(width: 8, height: 80, color: Colors.white, margin: const EdgeInsets.only(right: 4)),
+                    Container(
+                      width: 8,
+                      height: 35,
+                      color: Colors.white,
+                      margin: const EdgeInsets.only(right: 4),
+                    ),
+                    Container(
+                      width: 8,
+                      height: 60,
+                      color: Colors.white,
+                      margin: const EdgeInsets.only(right: 4),
+                    ),
+                    Container(
+                      width: 8,
+                      height: 45,
+                      color: Colors.white,
+                      margin: const EdgeInsets.only(right: 4),
+                    ),
+                    Container(
+                      width: 8,
+                      height: 80,
+                      color: Colors.white,
+                      margin: const EdgeInsets.only(right: 4),
+                    ),
                     Container(width: 8, height: 50, color: Colors.white),
                   ],
                 ),

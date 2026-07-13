@@ -21,9 +21,26 @@ class _SearchState extends State<Search> {
   String _selectedLocation = "كل المواقع";
   String _selectedPlant = "كل النباتات";
 
-  final List<String> _usersList = ["كل المستخدمين", "أحمد", "سارة", "خالد", "مريم"];
-  final List<String> _locationsList = ["كل المواقع", "موقع الشمال", "موقع الجنوب", "المنطقة الوسطى"];
-  final List<String> _plantsList = ["كل النباتات", "شجرة السدر", "شجرة الغاف", "النخيل", "شجر السمر"];
+  final List<String> _usersList = [
+    "كل المستخدمين",
+    "أحمد",
+    "سارة",
+    "خالد",
+    "مريم",
+  ];
+  final List<String> _locationsList = [
+    "كل المواقع",
+    "موقع الشمال",
+    "موقع الجنوب",
+    "المنطقة الوسطى",
+  ];
+  final List<String> _plantsList = [
+    "كل النباتات",
+    "شجرة السدر",
+    "شجرة الغاف",
+    "النخيل",
+    "شجر السمر",
+  ];
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     final DateTime? picked = await showDatePicker(
@@ -72,7 +89,11 @@ class _SearchState extends State<Search> {
             backgroundColor: AppColors.background,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios, color: AppColors.onSurface, size: 20),
+              icon: const Icon(
+                Icons.arrow_back_ios,
+                color: AppColors.onSurface,
+                size: 20,
+              ),
               onPressed: () => Navigator.maybePop(context),
             ),
             title: const Text(
@@ -92,7 +113,11 @@ class _SearchState extends State<Search> {
                   color: AppColors.secondary,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Icon(Icons.park_outlined, color: Colors.white, size: 20),
+                child: const Icon(
+                  Icons.park_outlined,
+                  color: Colors.white,
+                  size: 20,
+                ),
               ),
             ],
           ),
@@ -113,7 +138,9 @@ class _SearchState extends State<Search> {
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.black.withValues(alpha: 0.04)),
+                    border: Border.all(
+                      color: Colors.black.withValues(alpha: 0.04),
+                    ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.02),
@@ -170,7 +197,8 @@ class _SearchState extends State<Search> {
                               value: _selectedUser,
                               items: _usersList,
                               onChanged: (val) {
-                                if (val != null) setState(() => _selectedUser = val);
+                                if (val != null)
+                                  setState(() => _selectedUser = val);
                               },
                             ),
                           ),
@@ -181,7 +209,8 @@ class _SearchState extends State<Search> {
                               value: _selectedLocation,
                               items: _locationsList,
                               onChanged: (val) {
-                                if (val != null) setState(() => _selectedLocation = val);
+                                if (val != null)
+                                  setState(() => _selectedLocation = val);
                               },
                             ),
                           ),
@@ -282,7 +311,8 @@ class _SearchState extends State<Search> {
 
                 // 3. Quick Tip Card
                 const QuickTipCard(
-                  tipText: "يمكنك استخدام ميزة \"تصدير إلى إكسل\" من صفحة النتائج لحفظ التقارير على جهازك.",
+                  tipText:
+                      "يمكنك استخدام ميزة \"تصدير إلى إكسل\" من صفحة النتائج لحفظ التقارير على جهازك.",
                 ),
               ],
             ),

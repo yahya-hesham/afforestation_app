@@ -32,7 +32,11 @@ class SearchResultsPage extends StatelessWidget {
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.black12),
                     ),
-                    child: const Icon(Icons.park_outlined, color: AppColors.primary, size: 20),
+                    child: const Icon(
+                      Icons.park_outlined,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   const Text(
@@ -65,12 +69,16 @@ class SearchResultsPage extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   IconButton(
-                    icon: const Icon(Icons.logout, color: AppColors.onSurface, size: 20),
+                    icon: const Icon(
+                      Icons.logout,
+                      color: AppColors.onSurface,
+                      size: 20,
+                    ),
                     onPressed: () => Navigator.maybePop(context),
                   ),
                   const SizedBox(width: 16),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -120,7 +128,11 @@ class SearchResultsPage extends StatelessWidget {
                       ),
                       elevation: 0,
                     ),
-                    icon: const Icon(Icons.download, color: Colors.white, size: 20),
+                    icon: const Icon(
+                      Icons.download,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                     label: const Text(
                       "تصدير إلى إكسل",
                       style: TextStyle(
@@ -150,12 +162,19 @@ class SearchResultsPage extends StatelessWidget {
                       backgroundColor: Colors.white,
                       foregroundColor: AppColors.primary,
                       elevation: 0,
-                      side: const BorderSide(color: AppColors.secondary, width: 1.5),
+                      side: const BorderSide(
+                        color: AppColors.secondary,
+                        width: 1.5,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
                     ),
-                    icon: const Icon(Icons.analytics_outlined, color: AppColors.primary, size: 20),
+                    icon: const Icon(
+                      Icons.analytics_outlined,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
                     label: const Text(
                       "عرض ملخص الإحصائيات",
                       style: TextStyle(
@@ -173,7 +192,11 @@ class SearchResultsPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.search, color: AppColors.primary, size: 22),
+                      icon: const Icon(
+                        Icons.search,
+                        color: AppColors.primary,
+                        size: 22,
+                      ),
                       onPressed: () {},
                     ),
                     const Text(
@@ -219,9 +242,7 @@ class SearchResultsPage extends StatelessWidget {
                 const SizedBox(height: 25),
 
                 // Total Count Card
-                const TotalCountCard(
-                  totalCount: "1",
-                ),
+                const TotalCountCard(totalCount: "1"),
                 const SizedBox(height: 15),
               ],
             ),

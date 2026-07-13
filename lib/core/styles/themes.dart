@@ -43,6 +43,5 @@ abstract class AppThemes {
         borderSide: BorderSide(color: AppColors.onSurfaceVariant),
       ),
     ),
-    
   );
 }

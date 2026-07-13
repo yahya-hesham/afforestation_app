@@ -7,7 +7,8 @@ class RoleDropdownField extends StatelessWidget {
   final List<String> roles;
   final ValueChanged<String?> onChanged;
 
-  const RoleDropdownField({super.key, 
+  const RoleDropdownField({
+    super.key,
     required this.selectedRole,
     required this.roles,
     required this.onChanged,
@@ -20,9 +21,7 @@ class RoleDropdownField extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(
-          color: AppColors.tertiary.withOpacity(0.3),
-        ),
+        border: Border.all(color: AppColors.tertiary.withOpacity(0.3)),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(

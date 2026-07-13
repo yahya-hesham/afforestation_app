@@ -3,7 +3,7 @@ class PlantCategory {
   final String titleEn;
 
   PlantCategory({required this.titleAr, required this.titleEn});
-   static final List<PlantCategory> categories = [
+  static final List<PlantCategory> categories = [
     PlantCategory(titleAr: 'الشجيرات', titleEn: 'SHREUBS'),
     PlantCategory(titleAr: 'أشجار فرعية', titleEn: 'SUB TREE'),
     PlantCategory(titleAr: 'مغطيات التربة', titleEn: 'Green covers'),
@@ -12,8 +12,6 @@ class PlantCategory {
     PlantCategory(titleAr: 'الصبارات', titleEn: 'CACTUS'),
   ];
 }
-
-
 
 class PlantItem {
   final String id;
@@ -41,6 +39,4 @@ class PlantItem {
     ),
     PlantItem(id: '6', nameAr: 'الأكاسيا جلوكا', nameEn: 'Cassia glauca'),
   ];
-
 }
-

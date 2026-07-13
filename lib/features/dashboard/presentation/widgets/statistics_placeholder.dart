@@ -61,7 +61,11 @@ class StatisticsPlaceholderView extends StatelessWidget {
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          const Icon(Icons.trending_up, color: Colors.white, size: 20),
+                          const Icon(
+                            Icons.trending_up,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             "زيادة بنسبة 15% هذا الشهر",
@@ -145,7 +149,9 @@ class StatisticsPlaceholderView extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.black.withValues(alpha: 0.05)),
+                    border: Border.all(
+                      color: Colors.black.withValues(alpha: 0.05),
+                    ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.02),
@@ -251,10 +257,7 @@ class StatisticsPlaceholderView extends StatelessWidget {
           ),
           Text(
             subtitle,
-            style: const TextStyle(
-              fontSize: 11,
-              color: Colors.grey,
-            ),
+            style: const TextStyle(fontSize: 11, color: Colors.grey),
           ),
         ],
       ),
@@ -281,10 +284,7 @@ class StatisticsPlaceholderView extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          day,
-          style: const TextStyle(fontSize: 11, color: Colors.grey),
-        ),
+        Text(day, style: const TextStyle(fontSize: 11, color: Colors.grey)),
       ],
     );
   }

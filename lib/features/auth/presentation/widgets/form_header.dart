@@ -15,12 +15,16 @@ class FormHeader extends StatelessWidget {
         children: [
           Text(
             'إنشاء حساب جديد',
-            style: TextStyles.loginHeaderStyle.copyWith(color: AppColors.onSecondary),
+            style: TextStyles.loginHeaderStyle.copyWith(
+              color: AppColors.onSecondary,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             'قم بإنشاء حساب جديد للانضمام إلى نظام التشجير',
-            style: TextStyles.footerTextTextStyle.copyWith(color: AppColors.onSecondary),
+            style: TextStyles.footerTextTextStyle.copyWith(
+              color: AppColors.onSecondary,
+            ),
           ),
         ],
       ),

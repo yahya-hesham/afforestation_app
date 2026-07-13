@@ -18,5 +18,3 @@ void pushToBase(BuildContext context, String routeName, {Object? extra}) {
 void pop(BuildContext context) {
   context.pop();
 }
-
-

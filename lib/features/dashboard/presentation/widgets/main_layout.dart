@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/admin.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/statistics_placeholder.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/user.dart';
@@ -19,21 +20,20 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   void initState() {
     super.initState();
+    final user = SharedPref.getUserInfo();
+    final name = user?.name ?? user?.email?.split('@').first ?? "أحمد";
     _screens = [
-      const UserView(userName: "أحمد"), // Index 0: الملف الشخصي (Profile)
+      UserView(userName: name, userEmail: user?.email ?? ""), // Index 0: الملف الشخصي (Profile)
       const StatisticsPlaceholderView(), // Index 1: الإحصائيات (Statistics)
       Search(),
-      const AdminView(adminName: "أحمد"), // Index 3: الرئيسية (Home)
+      AdminView(adminName: name), // Index 3: الرئيسية (Home)
     ];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
@@ -56,10 +56,7 @@ class _MainLayoutState extends State<MainLayout> {
             activeIcon: Icon(Icons.bar_chart),
             label: 'الإحصائيات',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'البحث',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'البحث'),
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),

@@ -1,37 +1,89 @@
 // import 'package:counter_screen/feautures/auth/data/models/auth_response/auth_response.dart';
+import 'package:afforestation_app/core/services/apis/apis.dart';
 import 'package:dio/dio.dart';
 
 class DioProvider {
   static late Dio dio;
+
   static void init() {
-    dio = Dio();
+    // configure Dio
+    dio = Dio(
+      BaseOptions(
+        baseUrl: Apis.baseUrl,
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+        sendTimeout: const Duration(seconds: 10),
+      ),
+    );
   }
 
-
-// post
   static Future<Response> post({
-    required String path,
+    required String endpoint,
     Object? data,
-    Map<String, dynamic>? queryParamaters,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
   }) {
-    return dio.post(path, data: data, queryParameters: queryParamaters);
+    return dio.post(
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+      options: Options(headers: headers),
+    );
   }
 
-  // put
-  static Future<Response> put({
-    required String path,
-    Object? data,
-    Map<String, dynamic>? queryParamaters,
-  }) {
-    return dio.put(path, data: data, queryParameters: queryParamaters);
-  }
-  // get
   static Future<Response> get({
-    required String path,
+    required String endpoint,
     Object? data,
-    Map<String, dynamic>? queryParamaters,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
   }) {
-    return dio.get(path, data: data, queryParameters: queryParamaters);
+    return dio.get(
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+      options: Options(headers: headers),
+    );
+  }
+
+  static Future<Response> put({
+    required String endpoint,
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) {
+    return dio.put(
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+      options: Options(headers: headers),
+    );
+  }
+
+  static Future<Response> delete({
+    required String endpoint,
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) {
+    return dio.delete(
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+      options: Options(headers: headers),
+    );
+  }
+
+  static Future<Response> patch({
+    required String endpoint,
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) {
+    return dio.patch(
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+      options: Options(headers: headers),
+    );
   }
 }
-

@@ -12,22 +12,62 @@ class StatisticsSummaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Sample category data from mockup
     final greenCovers = [
-      const CategorySummaryItem(nameAr: 'روبينيا', nameEn: 'Ruellia', quantity: 7152),
-      const CategorySummaryItem(nameAr: 'اريسين', nameEn: 'Iresine', quantity: 13092),
-      const CategorySummaryItem(nameAr: 'ويدليا', nameEn: 'Wedelia', quantity: 6800),
+      const CategorySummaryItem(
+        nameAr: 'روبينيا',
+        nameEn: 'Ruellia',
+        quantity: 7152,
+      ),
+      const CategorySummaryItem(
+        nameAr: 'اريسين',
+        nameEn: 'Iresine',
+        quantity: 13092,
+      ),
+      const CategorySummaryItem(
+        nameAr: 'ويدليا',
+        nameEn: 'Wedelia',
+        quantity: 6800,
+      ),
     ];
 
     final trees = [
-      const CategorySummaryItem(nameAr: 'اللوز الهندي - غاف البحر', nameEn: 'Prosopis juliflora', quantity: 30),
-      const CategorySummaryItem(nameAr: 'اللبخ', nameEn: 'Albizia lebbeck', quantity: 85),
-      const CategorySummaryItem(nameAr: 'النيم', nameEn: 'Azadirachta indica', quantity: 146),
+      const CategorySummaryItem(
+        nameAr: 'اللوز الهندي - غاف البحر',
+        nameEn: 'Prosopis juliflora',
+        quantity: 30,
+      ),
+      const CategorySummaryItem(
+        nameAr: 'اللبخ',
+        nameEn: 'Albizia lebbeck',
+        quantity: 85,
+      ),
+      const CategorySummaryItem(
+        nameAr: 'النيم',
+        nameEn: 'Azadirachta indica',
+        quantity: 146,
+      ),
     ];
 
     final shrubs = [
-      const CategorySummaryItem(nameAr: 'كف مريم', nameEn: 'Vitex agnus-castus', quantity: 8),
-      const CategorySummaryItem(nameAr: 'اكاسيا جلوكا', nameEn: 'Acacia glauca', quantity: 235),
-      const CategorySummaryItem(nameAr: 'الجافتروفا', nameEn: 'Jatropha', quantity: 200),
-      const CategorySummaryItem(nameAr: 'القنب - الوايتكس', nameEn: 'Vitex', quantity: 773),
+      const CategorySummaryItem(
+        nameAr: 'كف مريم',
+        nameEn: 'Vitex agnus-castus',
+        quantity: 8,
+      ),
+      const CategorySummaryItem(
+        nameAr: 'اكاسيا جلوكا',
+        nameEn: 'Acacia glauca',
+        quantity: 235,
+      ),
+      const CategorySummaryItem(
+        nameAr: 'الجافتروفا',
+        nameEn: 'Jatropha',
+        quantity: 200,
+      ),
+      const CategorySummaryItem(
+        nameAr: 'القنب - الوايتكس',
+        nameEn: 'Vitex',
+        quantity: 773,
+      ),
     ];
 
     return Directionality(
@@ -69,7 +109,10 @@ class StatisticsSummaryPage extends StatelessWidget {
         ),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 15.0,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -85,10 +128,7 @@ class StatisticsSummaryPage extends StatelessWidget {
                 const SizedBox(height: 4),
                 const Text(
                   "عرض توزيع النباتات والكميات المزروعة حسب الفئة العلمية",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
                 const SizedBox(height: 25),
 
@@ -126,7 +166,8 @@ class StatisticsSummaryPage extends StatelessWidget {
                 // Smart Alert Card
                 const SmartAlertCard(
                   title: "تنبيه ذكي",
-                  message: "تمت زيادة معدل التشجير في منطقة \"أغلفة خضراء\" بنسبة 12% مقارنة بالشهر الماضي.",
+                  message:
+                      "تمت زيادة معدل التشجير في منطقة \"أغلفة خضراء\" بنسبة 12% مقارنة بالشهر الماضي.",
                 ),
                 const SizedBox(height: 25),
               ],

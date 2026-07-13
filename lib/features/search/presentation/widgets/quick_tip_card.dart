@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 class QuickTipCard extends StatelessWidget {
   final String tipText;
 
-  const QuickTipCard({
-    super.key,
-    required this.tipText,
-  });
+  const QuickTipCard({super.key, required this.tipText});
 
   @override
   Widget build(BuildContext context) {

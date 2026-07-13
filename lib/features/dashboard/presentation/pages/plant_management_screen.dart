@@ -1,7 +1,4 @@
-
-
 import 'package:afforestation_app/features/dashboard/presentation/models/plant_model.dart';
-
 
 import 'package:afforestation_app/features/dashboard/presentation/widgets/category_selection_card.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/plant_app_bar.dart';
@@ -22,7 +19,6 @@ class PlantManagementScreen extends StatefulWidget {
 class _PlantManagementScreenState extends State<PlantManagementScreen> {
   int _selectedCategoryIndex = 0;
 
-  
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -54,7 +50,9 @@ class _PlantManagementScreenState extends State<PlantManagementScreen> {
                 },
                 onDelete: (plant) {
                   setState(
-                    () => PlantItem.plants.removeWhere((item) => item.id == plant.id),
+                    () => PlantItem.plants.removeWhere(
+                      (item) => item.id == plant.id,
+                    ),
                   );
                 },
                 onAddPlant: () {
