@@ -41,14 +41,6 @@ class _AdminViewState extends State<AdminView> {
                 );
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.language, color: Colors.black87),
-              onPressed: () {
-                context.isArabic
-                    ? context.setLocale(const Locale('en'))
-                    : context.setLocale(const Locale('ar'));
-              },
-            ),
             Container(
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
@@ -60,6 +52,14 @@ class _AdminViewState extends State<AdminView> {
                 color: Colors.white,
                 size: 20,
               ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.language, color: Colors.black87),
+              onPressed: () {
+                context.isArabic
+                    ? context.setLocale(const Locale('en'))
+                    : context.setLocale(const Locale('ar'));
+              },
             ),
           ],
         ),

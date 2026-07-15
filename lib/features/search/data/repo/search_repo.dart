@@ -1,6 +1,7 @@
 import 'package:afforestation_app/core/services/apis/apis.dart';
 import 'package:afforestation_app/core/services/apis/dio_provider.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
+import 'package:afforestation_app/features/search/data/models/dropdown_item_model.dart';
 import 'package:afforestation_app/features/search/data/models/search_request_model.dart';
 import 'package:afforestation_app/features/search/data/models/search_result_model.dart';
 import 'package:afforestation_app/features/search/data/models/update_record_model.dart';
@@ -95,4 +96,95 @@ class SearchRepo {
       rethrow;
     }
   }
+
+  /// Fetches all users from GET /api/User/all
+  static Future<List<DropdownItemModel>> fetchUsers() async {
+    try {
+      final token = SharedPref.getToken();
+      var response = await DioProvider.get(
+        endpoint: Apis.users,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final list = response.data as List<dynamic>;
+        return list
+            .map((e) => DropdownItemModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        throw Exception('فشل في تحميل المستخدمين.');
+      }
+    } on DioException catch (e) {
+      debugPrint("Dio error (fetchUsers): ${e.response?.data ?? e.message}");
+      final errorMsg =
+          e.response?.data?.toString() ?? e.message ?? 'خطأ في تحميل المستخدمين';
+      throw Exception(errorMsg);
+    } catch (e) {
+      debugPrint("fetchUsers error: $e");
+      rethrow;
+    }
+  }
+
+  /// Fetches all locations from GET /api/Location/all
+  static Future<List<DropdownItemModel>> fetchLocations() async {
+    try {
+      final token = SharedPref.getToken();
+      var response = await DioProvider.get(
+        endpoint: Apis.locations,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final list = response.data as List<dynamic>;
+        return list
+            .map((e) => DropdownItemModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        throw Exception('فشل في تحميل المواقع.');
+      }
+    } on DioException catch (e) {
+      debugPrint("Dio error (fetchLocations): ${e.response?.data ?? e.message}");
+      final errorMsg =
+          e.response?.data?.toString() ?? e.message ?? 'خطأ في تحميل المواقع';
+      throw Exception(errorMsg);
+    } catch (e) {
+      debugPrint("fetchLocations error: $e");
+      rethrow;
+    }
+  }
+
+  /// Fetches all tree names from GET /api/TreeName/all
+  static Future<List<DropdownItemModel>> fetchTreeNames() async {
+    try {
+      final token = SharedPref.getToken();
+      var response = await DioProvider.get(
+        endpoint: Apis.treeNames,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final list = response.data as List<dynamic>;
+        return list
+            .map((e) => DropdownItemModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+      } else {
+        throw Exception('فشل في تحميل أسماء النباتات.');
+      }
+    } on DioException catch (e) {
+      debugPrint("Dio error (fetchTreeNames): ${e.response?.data ?? e.message}");
+      final errorMsg =
+          e.response?.data?.toString() ?? e.message ?? 'خطأ في تحميل النباتات';
+      throw Exception(errorMsg);
+    } catch (e) {
+      debugPrint("fetchTreeNames error: $e");
+      rethrow;
+    }
+  }
 }
+

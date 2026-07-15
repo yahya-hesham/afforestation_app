@@ -1,3 +1,4 @@
+import 'package:afforestation_app/features/search/data/models/dropdown_item_model.dart';
 import 'package:afforestation_app/features/search/data/models/search_request_model.dart';
 import 'package:afforestation_app/features/search/data/models/search_result_model.dart';
 import 'package:afforestation_app/features/search/data/models/update_record_model.dart';
@@ -18,6 +19,85 @@ class SearchCubit extends Cubit<SearchState> {
   List<SearchResultModel> _allResults = [];
 
   List<SearchResultModel> get allResults => _allResults;
+
+  /// Holds the loaded dropdown data
+  List<DropdownItemModel> users = [];
+  List<DropdownItemModel> locations = [];
+  List<DropdownItemModel> treeNames = [];
+
+  /// Holds the 30-day summary data
+  int summaryTotalByPlantName = 0;
+  int summaryTotalByPlantType = 0;
+  int summaryDistinctPlantNames = 0;
+  int summaryDistinctPlantTypes = 0;
+  bool isSummaryLoaded = false;
+  bool areDropdownsLoaded = false;
+
+  /// Fetch all dropdown data (users, locations, treeNames) from API
+  Future<void> loadDropdowns() async {
+    emit(DropdownsLoading());
+    try {
+      final results = await Future.wait([
+        SearchRepo.fetchUsers(),
+        SearchRepo.fetchLocations(),
+        SearchRepo.fetchTreeNames(),
+      ]);
+
+      users = results[0];
+      locations = results[1];
+      treeNames = results[2];
+      areDropdownsLoaded = true;
+
+      emit(DropdownsLoaded(
+        users: users,
+        locations: locations,
+        treeNames: treeNames,
+      ));
+    } catch (e) {
+      emit(DropdownsError(e.toString()));
+    }
+  }
+
+  /// Fetch last 30 days data from the search API and compute summary
+  Future<void> loadLast30DaysSummary() async {
+    emit(SummaryLoading());
+    try {
+      final now = DateTime.now();
+      final thirtyDaysAgo = now.subtract(const Duration(days: 30));
+
+      final request = SearchRequestModel(
+        fromDate: thirtyDaysAgo,
+        toDate: now,
+      );
+
+      final results = await SearchRepo.search(request: request);
+
+      // Compute summary stats
+      summaryTotalByPlantName = results.fold<int>(0, (sum, item) => sum + item.number);
+
+      // Count distinct plant names
+      final plantNameSet = results.map((e) => e.treeName).whereType<String>().toSet();
+      summaryDistinctPlantNames = plantNameSet.length;
+
+      // Count distinct plant types
+      final plantTypeSet = results.map((e) => e.treeTypeName).whereType<String>().toSet();
+      summaryDistinctPlantTypes = plantTypeSet.length;
+
+      // Total by plant type (same total, just a different grouping perspective)
+      summaryTotalByPlantType = summaryTotalByPlantName;
+
+      isSummaryLoaded = true;
+
+      emit(SummaryLoaded(
+        totalByPlantName: summaryTotalByPlantName,
+        totalByPlantType: summaryTotalByPlantType,
+        distinctPlantNames: summaryDistinctPlantNames,
+        distinctPlantTypes: summaryDistinctPlantTypes,
+      ));
+    } catch (e) {
+      emit(SummaryError(e.toString()));
+    }
+  }
 
   Future<void> search() async {
     emit(SearchLoading());
