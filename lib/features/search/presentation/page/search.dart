@@ -1,9 +1,11 @@
 import 'package:afforestation_app/core/styles/colors.dart';
+import 'package:afforestation_app/features/search/presentation/cubit/search_cubit.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/quick_tip_card.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/search_date_field.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/search_dropdown_field.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/summary_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'search_results.dart';
 
 class Search extends StatefulWidget {
@@ -15,7 +17,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   DateTime? _startDate;
-  DateTime? _endDate = DateTime(2026, 1, 24); // Mock default date: 24/01/2026
+  DateTime? _endDate;
 
   String _selectedUser = "كل المستخدمين";
   String _selectedLocation = "كل المواقع";
@@ -75,6 +77,36 @@ class _SearchState extends State<Search> {
   String _formatDate(DateTime? date) {
     if (date == null) return "dd/mm/yyyy";
     return "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}";
+  }
+
+  void _performSearch() {
+    final searchCubit = context.read<SearchCubit>();
+
+    // Set date filters on the cubit
+    searchCubit.fromDate = _startDate;
+    searchCubit.toDate = _endDate;
+
+    // For now, dropdowns pass null (meaning "all") since we don't have ID mappings yet
+    searchCubit.selectedUserId =
+        _selectedUser == "كل المستخدمين" ? null : null;
+    searchCubit.selectedLocationId =
+        _selectedLocation == "كل المواقع" ? null : null;
+    searchCubit.selectedTreeId =
+        _selectedPlant == "كل النباتات" ? null : null;
+
+    // Trigger the search
+    searchCubit.search();
+
+    // Navigate to results page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider.value(
+          value: searchCubit,
+          child: const SearchResultsPage(),
+        ),
+      ),
+    );
   }
 
   @override
@@ -197,8 +229,9 @@ class _SearchState extends State<Search> {
                               value: _selectedUser,
                               items: _usersList,
                               onChanged: (val) {
-                                if (val != null)
+                                if (val != null) {
                                   setState(() => _selectedUser = val);
+                                }
                               },
                             ),
                           ),
@@ -209,8 +242,9 @@ class _SearchState extends State<Search> {
                               value: _selectedLocation,
                               items: _locationsList,
                               onChanged: (val) {
-                                if (val != null)
+                                if (val != null) {
                                   setState(() => _selectedLocation = val);
+                                }
                               },
                             ),
                           ),
@@ -234,14 +268,7 @@ class _SearchState extends State<Search> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const SearchResultsPage(),
-                              ),
-                            );
-                          },
+                          onPressed: _performSearch,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.secondary,
                             shape: RoundedRectangleBorder(

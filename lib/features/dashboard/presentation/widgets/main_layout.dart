@@ -2,8 +2,10 @@ import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/admin.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/statistics_placeholder.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/user.dart';
+import 'package:afforestation_app/features/search/presentation/cubit/search_cubit.dart';
 import 'package:afforestation_app/features/search/presentation/page/search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MainLayout extends StatefulWidget {
   const MainLayout({super.key});
@@ -25,7 +27,10 @@ class _MainLayoutState extends State<MainLayout> {
     _screens = [
       UserView(userName: name, userEmail: user?.email ?? ""), // Index 0: الملف الشخصي (Profile)
       const StatisticsPlaceholderView(), // Index 1: الإحصائيات (Statistics)
-      Search(),
+      BlocProvider(
+        create: (_) => SearchCubit(),
+        child: const Search(),
+      ),
       AdminView(adminName: name), // Index 3: الرئيسية (Home)
     ];
   }
