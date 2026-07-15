@@ -42,7 +42,3 @@ flutter:
     - assets/icons/tree.svg
     - assets/translations/
 
-#  fonts:
-#    - family: DMSerif
-#     fonts:
-#        - asset: assets/fonts/DMSerifDisplay-Regular.ttf

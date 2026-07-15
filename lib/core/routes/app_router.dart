@@ -4,6 +4,7 @@ import 'package:afforestation_app/features/auth/presentation/pages/register_scre
 import 'package:afforestation_app/features/dashboard/presentation/pages/user.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/main_layout.dart';
 import 'package:afforestation_app/features/notifications/presentation/pages/notifications_screen.dart';
+import 'package:afforestation_app/features/splash/presentation/page/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -11,9 +12,10 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 class AppRouter {
   static final routes = GoRouter(
-    initialLocation: Routes.login,
+    initialLocation: Routes.splash,
     navigatorKey: navigatorKey,
     routes: [
+      GoRoute(path: Routes.splash, builder: (context, state) => SplashScreen()),
       GoRoute(
         path: Routes.login,
         builder: (context, state) => const LoginView(),
