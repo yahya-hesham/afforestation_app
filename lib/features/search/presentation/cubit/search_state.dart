@@ -1,4 +1,4 @@
-import 'package:afforestation_app/features/search/data/models/paginated_result_model.dart';
+import 'package:afforestation_app/features/search/data/models/search_result_model.dart';
 
 class SearchState {}
 
@@ -7,9 +7,9 @@ class SearchInitial extends SearchState {}
 class SearchLoading extends SearchState {}
 
 class SearchSuccess extends SearchState {
-  final PaginatedResultModel result;
+  final List<SearchResultModel> results;
 
-  SearchSuccess(this.result);
+  SearchSuccess(this.results);
 }
 
 class SearchError extends SearchState {
@@ -17,3 +17,7 @@ class SearchError extends SearchState {
 
   SearchError(this.message);
 }
+
+class RecordDeleted extends SearchState {}
+
+class RecordUpdated extends SearchState {}

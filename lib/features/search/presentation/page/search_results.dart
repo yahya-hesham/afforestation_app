@@ -1,5 +1,6 @@
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/features/search/data/models/search_result_model.dart';
+import 'package:afforestation_app/features/search/data/models/update_record_model.dart';
 import 'package:afforestation_app/features/search/presentation/cubit/search_cubit.dart';
 import 'package:afforestation_app/features/search/presentation/cubit/search_state.dart';
 import 'package:afforestation_app/features/search/presentation/page/statistics_summary.dart';
@@ -9,14 +10,21 @@ import 'package:afforestation_app/features/search/presentation/widgets/total_cou
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SearchResultsPage extends StatelessWidget {
+class SearchResultsPage extends StatefulWidget {
   const SearchResultsPage({super.key});
+
+  @override
+  State<SearchResultsPage> createState() => _SearchResultsPageState();
+}
+
+class _SearchResultsPageState extends State<SearchResultsPage> {
+  static const int _pageSize = 10;
+  int _currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      // Custom LTR AppBar to position Title on Left and Admin Profile on Right
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Directionality(
@@ -90,7 +98,17 @@ class SearchResultsPage extends StatelessWidget {
       body: SafeArea(
         child: Directionality(
           textDirection: TextDirection.rtl,
-          child: BlocBuilder<SearchCubit, SearchState>(
+          child: BlocConsumer<SearchCubit, SearchState>(
+            listener: (context, state) {
+              if (state is SearchError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: AppColors.error,
+                  ),
+                );
+              }
+            },
             builder: (context, state) {
               if (state is SearchLoading) {
                 return const Center(
@@ -139,10 +157,9 @@ class SearchResultsPage extends StatelessWidget {
               }
 
               if (state is SearchSuccess) {
-                final results = state.result.items;
-                final totalCount = state.result.totalCount;
+                final allResults = state.results;
 
-                if (results.isEmpty) {
+                if (allResults.isEmpty) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -182,10 +199,9 @@ class SearchResultsPage extends StatelessWidget {
                   );
                 }
 
-                return _buildResultsContent(context, results, totalCount);
+                return _buildResultsContent(context, allResults);
               }
 
-              // Initial state — shouldn't normally be seen on this page
               return const Center(
                 child: CircularProgressIndicator(
                   color: AppColors.secondary,
@@ -200,15 +216,22 @@ class SearchResultsPage extends StatelessWidget {
 
   Widget _buildResultsContent(
     BuildContext context,
-    List<SearchResultModel> results,
-    int totalCount,
+    List<SearchResultModel> allResults,
   ) {
-    // Build summary data from results
-    final treeTypeSummary = <String, int>{};
-    for (final item in results) {
-      final typeName = item.treeTypeName ?? "غير محدد";
-      treeTypeSummary[typeName] = (treeTypeSummary[typeName] ?? 0) + item.number;
+    // UI-side pagination
+    final totalCount = allResults.length;
+    final totalPages = (totalCount / _pageSize).ceil();
+    // Clamp current page
+    if (_currentPage >= totalPages) {
+      _currentPage = totalPages - 1;
     }
+    if (_currentPage < 0) {
+      _currentPage = 0;
+    }
+    final startIndex = _currentPage * _pageSize;
+    final endIndex =
+        (startIndex + _pageSize > totalCount) ? totalCount : startIndex + _pageSize;
+    final pageResults = allResults.sublist(startIndex, endIndex);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
@@ -315,13 +338,9 @@ class SearchResultsPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.search,
-                  color: AppColors.primary,
-                  size: 22,
-                ),
-                onPressed: () {},
+              Text(
+                "صفحة ${_currentPage + 1} من $totalPages  ($totalCount سجل)",
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
               const Text(
                 "أحدث السجلات",
@@ -335,20 +354,97 @@ class SearchResultsPage extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // Record Cards from API data
-          ...results.map(
+          // Record Cards — current page only
+          ...pageResults.map(
             (item) => RecordCard(
               plantName: item.treeName ?? "غير محدد",
               badgeText: item.treeTypeName ?? "",
-              plantingDate: "${item.dateOfPlanted.year}-${item.dateOfPlanted.month.toString().padLeft(2, '0')}-${item.dateOfPlanted.day.toString().padLeft(2, '0')}",
+              plantingDate:
+                  "${item.dateOfPlanted.year}-${item.dateOfPlanted.month.toString().padLeft(2, '0')}-${item.dateOfPlanted.day.toString().padLeft(2, '0')}",
               scientificName: item.scientificName ?? "",
               location: item.locationName ?? "غير محدد",
               quantity: item.number.toString(),
               registeredBy: item.userName ?? "غير معروف",
-              onEdit: () {},
-              onDelete: () {},
+              onEdit: () => _showEditDialog(context, item),
+              onDelete: () => _showDeleteConfirmation(context, item),
             ),
           ),
+
+          const SizedBox(height: 16),
+
+          // Pagination Controls
+          if (totalPages > 1)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Previous
+                IconButton(
+                  onPressed: _currentPage > 0
+                      ? () {
+                          setState(() => _currentPage--);
+                        }
+                      : null,
+                  icon: const Icon(Icons.arrow_back_ios, size: 18),
+                  color: AppColors.primary,
+                  disabledColor: Colors.grey.shade300,
+                ),
+                // Page numbers
+                ...List.generate(
+                  totalPages > 5 ? 5 : totalPages,
+                  (i) {
+                    // Show pages around current
+                    int pageIndex;
+                    if (totalPages <= 5) {
+                      pageIndex = i;
+                    } else if (_currentPage < 3) {
+                      pageIndex = i;
+                    } else if (_currentPage > totalPages - 4) {
+                      pageIndex = totalPages - 5 + i;
+                    } else {
+                      pageIndex = _currentPage - 2 + i;
+                    }
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() => _currentPage = pageIndex);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: _currentPage == pageIndex
+                              ? AppColors.secondary
+                              : Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '${pageIndex + 1}',
+                          style: TextStyle(
+                            color: _currentPage == pageIndex
+                                ? Colors.white
+                                : AppColors.onSurface,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                // Next
+                IconButton(
+                  onPressed: _currentPage < totalPages - 1
+                      ? () {
+                          setState(() => _currentPage++);
+                        }
+                      : null,
+                  icon: const Icon(Icons.arrow_forward_ios, size: 18),
+                  color: AppColors.primary,
+                  disabledColor: Colors.grey.shade300,
+                ),
+              ],
+            ),
 
           const SizedBox(height: 12),
           const Center(
@@ -359,12 +455,14 @@ class SearchResultsPage extends StatelessWidget {
           ),
           const SizedBox(height: 25),
 
-          // Summary Table — show first result summary or first tree type
-          if (results.isNotEmpty)
+          // Summary Table
+          if (allResults.isNotEmpty)
             SummaryTable(
-              plantType: results.first.treeTypeName ?? "",
-              plantName: results.first.treeName ?? "",
-              quantity: results.fold<int>(0, (sum, item) => sum + item.number).toString(),
+              plantType: allResults.first.treeTypeName ?? "",
+              plantName: allResults.first.treeName ?? "",
+              quantity: allResults
+                  .fold<int>(0, (sum, item) => sum + item.number)
+                  .toString(),
             ),
           const SizedBox(height: 25),
 
@@ -372,6 +470,182 @@ class SearchResultsPage extends StatelessWidget {
           TotalCountCard(totalCount: totalCount.toString()),
           const SizedBox(height: 15),
         ],
+      ),
+    );
+  }
+
+  // ─── Delete Confirmation Dialog ───
+  void _showDeleteConfirmation(BuildContext context, SearchResultModel item) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Text(
+            "تأكيد الحذف",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
+            ),
+          ),
+          content: Text(
+            "هل أنت متأكد من حذف سجل \"${item.treeName ?? ''}\"؟\nلا يمكن التراجع عن هذا الإجراء.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text(
+                "إلغاء",
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                context.read<SearchCubit>().deleteRecord(item.id);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.error,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                "حذف",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ─── Edit Dialog ───
+  void _showEditDialog(BuildContext context, SearchResultModel item) {
+    final numberController =
+        TextEditingController(text: item.number.toString());
+    DateTime? selectedDate = item.dateOfPlanted;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (dialogContext, setDialogState) => Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+            title: const Text(
+              "تعديل السجل",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppColors.primary,
+              ),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Plant name (read-only info)
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading:
+                        const Icon(Icons.park, color: AppColors.secondary),
+                    title: Text(item.treeName ?? "غير محدد"),
+                    subtitle: Text(item.scientificName ?? ""),
+                  ),
+                  const Divider(),
+                  // Date picker
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.calendar_today,
+                        color: AppColors.secondary),
+                    title: const Text("تاريخ الزراعة"),
+                    subtitle: Text(
+                      "${selectedDate?.year}-${selectedDate?.month.toString().padLeft(2, '0')}-${selectedDate?.day.toString().padLeft(2, '0')}",
+                    ),
+                    onTap: () async {
+                      final picked = await showDatePicker(
+                        context: dialogContext,
+                        initialDate: selectedDate ?? DateTime.now(),
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2030),
+                        builder: (ctx, child) => Theme(
+                          data: Theme.of(ctx).copyWith(
+                            colorScheme: const ColorScheme.light(
+                              primary: AppColors.primary,
+                              onPrimary: Colors.white,
+                              onSurface: AppColors.onSurface,
+                            ),
+                          ),
+                          child: child!,
+                        ),
+                      );
+                      if (picked != null) {
+                        setDialogState(() => selectedDate = picked);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  // Quantity
+                  TextField(
+                    controller: numberController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: "الكمية",
+                      prefixIcon: const Icon(Icons.numbers,
+                          color: AppColors.secondary),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                            color: AppColors.secondary, width: 2),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text(
+                  "إلغاء",
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final updateData = UpdateRecordModel(
+                    id: item.id,
+                    dateOfPlanted: selectedDate,
+                    treeTypeId: item.treeTypeId,
+                    treeNameId: item.treeNameId,
+                    locationId: item.locationId,
+                    locationTypeId: item.locationTypeId,
+                    number: int.tryParse(numberController.text) ?? item.number,
+                  );
+                  Navigator.pop(dialogContext);
+                  context.read<SearchCubit>().updateRecord(updateData);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.secondary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  "حفظ التعديلات",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
