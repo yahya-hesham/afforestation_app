@@ -1,5 +1,7 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/routes/routes.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../notifications/presentation/pages/notifications_screen.dart';
@@ -37,6 +39,14 @@ class _AdminViewState extends State<AdminView> {
                     builder: (context) => NotificationsScreen(),
                   ),
                 );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.language, color: Colors.black87),
+              onPressed: () {
+                context.isArabic
+                    ? context.setLocale(const Locale('en'))
+                    : context.setLocale(const Locale('ar'));
               },
             ),
             Container(
