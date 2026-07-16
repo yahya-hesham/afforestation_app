@@ -1,8 +1,9 @@
-import 'package:afforestation_app/features/dashboard/presentation/pages/plant_management_screen.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/main_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+//ahmed
+import 'package:afforestation_app/features/dashboard/presentation/pages/admin.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -10,7 +11,7 @@ class LoginView extends StatefulWidget {
   @override
   State<LoginView> createState() => _LoginViewState();
 }
-//dddddddddddddddddddddddddddddddddd
+
 class _LoginViewState extends State<LoginView> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
@@ -25,10 +26,10 @@ class _LoginViewState extends State<LoginView> {
   }
 
   void _submitLogin() {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) =>  PlantManagementScreen(),
+        builder: (context) => const AdminView(adminName: "أحمد"),
       ),
     );
   }
@@ -59,9 +60,7 @@ class _LoginViewState extends State<LoginView> {
                       padding: const EdgeInsets.all(15.0),
                       child: SvgPicture.asset(
                         'assets/icons/tree.svg',
-                        colorFilter:
-                         const ColorFilter.mode(Colors.white,
-                         BlendMode.srcIn),
+                        colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                       ),
                     ),
                   ),
@@ -90,9 +89,7 @@ class _LoginViewState extends State<LoginView> {
                     children: [
                       const Text(
                         "البريد الإلكتروني",
-                        style: TextStyle(fontSize: 14,
-                         fontWeight: FontWeight.bold,
-                          color: Colors.black),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -101,8 +98,7 @@ class _LoginViewState extends State<LoginView> {
                         decoration: InputDecoration(
                           hintText: "example@mail.com",
                           hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16,
-                           vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           filled: true,
                           fillColor: const Color(0xFFF3F3F3),
                           border: OutlineInputBorder(
@@ -119,9 +115,7 @@ class _LoginViewState extends State<LoginView> {
                     children: [
                       const Text(
                         "كلمة المرور",
-                        style: TextStyle(fontSize: 14, 
-                        fontWeight: FontWeight.bold,
-                         color: Colors.black),
+                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                       const SizedBox(height: 8),
                       TextFormField(
@@ -185,7 +179,6 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                   ),
-                  
                   const SizedBox(height: 40),
                 ],
               ),
