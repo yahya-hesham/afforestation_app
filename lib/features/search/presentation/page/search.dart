@@ -4,7 +4,6 @@ import 'package:afforestation_app/features/search/presentation/cubit/search_cubi
 import 'package:afforestation_app/features/search/presentation/cubit/search_state.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/quick_tip_card.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/search_date_field.dart';
-import 'package:afforestation_app/features/search/presentation/widgets/summary_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'search_results.dart';
