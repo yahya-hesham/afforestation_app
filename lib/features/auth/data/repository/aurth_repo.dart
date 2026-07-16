@@ -25,6 +25,7 @@ class AuthRepo {
         var data = AuthParams.fromJson(response.data);
         await SharedPref.saveToken(data.token);
         await SharedPref.saveRole(data.role);
+        await SharedPref.saveCredentials(email, password);
       
         // Construct and save user info locally
         var user = User(
@@ -35,6 +36,7 @@ class AuthRepo {
         await SharedPref.saveUserInfo(user);
         
         return data;
+
       } else {
         return null;
       }

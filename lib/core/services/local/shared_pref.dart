@@ -9,9 +9,12 @@ class SharedPref {
   static const String kToken = 'token';
   static const String kUser = 'user';
   static const String kRole = 'role';
+  static const String kEmail = 'cached_email';
+  static const String kPassword = 'cached_password';
 
+  /// Whether the user has a cached login session
+  static bool get isLoggedIn => prefs.getString(kToken)?.isNotEmpty ?? false;
 
-  
   static Future<void> saveRole(String? role) async {
     if (role == null) return;
     await prefs.setString(kRole, role);
@@ -68,8 +71,26 @@ class SharedPref {
     return prefs.getBool(key) ?? false;
   }
 
- 
- 
+  /// Save email & password so the app can auto-login on next launch
+  static Future<void> saveCredentials(String email, String password) async {
+    await prefs.setString(kEmail, email);
+    await prefs.setString(kPassword, password);
+  }
 
-  
+  /// Get cached credentials, returns null if not available
+  static ({String email, String password})? getCredentials() {
+    final email = prefs.getString(kEmail);
+    final password = prefs.getString(kPassword);
+    if (email == null || password == null || email.isEmpty || password.isEmpty) {
+      return null;
+    }
+    return (email: email, password: password);
+  }
+
+  /// Clear cached credentials (called implicitly by prefs.clear() on logout)
+  static Future<void> clearCredentials() async {
+    await prefs.remove(kEmail);
+    await prefs.remove(kPassword);
+  }
 }
+
