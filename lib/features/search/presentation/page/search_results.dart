@@ -1,10 +1,15 @@
+import 'dart:io';
 import 'package:afforestation_app/core/styles/colors.dart';
+import 'package:afforestation_app/features/search/data/models/search_request_model.dart';
 import 'package:afforestation_app/features/search/data/models/search_result_model.dart';
 import 'package:afforestation_app/features/search/data/models/update_record_model.dart';
+import 'package:afforestation_app/features/search/data/repo/search_repo.dart';
 import 'package:afforestation_app/features/search/presentation/cubit/search_cubit.dart';
 import 'package:afforestation_app/features/search/presentation/cubit/search_state.dart';
 import 'package:afforestation_app/features/search/presentation/page/statistics_summary.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/record_card.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +24,93 @@ class SearchResultsPage extends StatefulWidget {
 class _SearchResultsPageState extends State<SearchResultsPage> {
   static const int _pageSize = 10;
   int _currentPage = 0;
+  bool _isExporting = false;
+
+  Future<void> _exportToExcel() async {
+    if (_isExporting) return;
+
+    setState(() {
+      _isExporting = true;
+    });
+
+    // Show a loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            content: Row(
+              children: [
+                CircularProgressIndicator(color: AppColors.secondary),
+                SizedBox(width: 20),
+                Text("جاري تصدير ملف إكسل..."),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    try {
+      final searchCubit = context.read<SearchCubit>();
+      final request = SearchRequestModel(
+        fromDate: searchCubit.fromDate,
+        toDate: searchCubit.toDate,
+        selectedUserId: searchCubit.selectedUserId,
+        selectedLocationId: searchCubit.selectedLocationId,
+        selectedTreeId: searchCubit.selectedTreeId,
+      );
+
+      // Fetch bytes from API
+      final bytes = await SearchRepo.exportExcel(request: request);
+
+      // Save to a temporary file
+      final tempDir = await getTemporaryDirectory();
+      final fromStr = request.fromDate != null
+          ? "${request.fromDate!.day}-${request.fromDate!.month}-${request.fromDate!.year}"
+          : "All";
+      final toStr = request.toDate != null
+          ? "${request.toDate!.day}-${request.toDate!.month}-${request.toDate!.year}"
+          : "All";
+      final fileName = "Afforestation($fromStr) to ($toStr).xlsx";
+      final filePath = "${tempDir.path}/$fileName";
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
+
+      // Close the loading dialog
+      if (mounted) {
+        Navigator.pop(context);
+      }
+
+      // Share the file using share_plus
+      final xFile = XFile(filePath);
+      await Share.shareXFiles([xFile], text: 'تقرير بيانات التشجير');
+
+    } catch (e) {
+      // Close the loading dialog
+      if (mounted) {
+        Navigator.pop(context);
+      }
+
+      // Show error snackbar
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("فشل التصدير: ${e.toString()}"),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isExporting = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -264,9 +356,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             width: double.infinity,
             height: 48,
             child: ElevatedButton.icon(
-              onPressed: () {
-                // Perform Excel Export Action
-              },
+              onPressed: _exportToExcel,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.secondary,
                 shape: RoundedRectangleBorder(

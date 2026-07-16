@@ -8,4 +8,5 @@ class Apis {
   static const String users = '/User/GetAll';
   static const String locations = '/Location/GetAll';
   static const String treeNames = '/Tree/GetAll';
+  static const String afforestationExport = '/api/afforestation/export';
 }

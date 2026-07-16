@@ -186,5 +186,39 @@ class SearchRepo {
       rethrow;
     }
   }
+
+  /// Calls POST /api/afforestation/export
+  /// Downloads Excel report as binary bytes (List<int>)
+  static Future<List<int>> exportExcel({
+    required SearchRequestModel request,
+  }) async {
+    try {
+      final token = SharedPref.getToken();
+      var response = await DioProvider.dio.post(
+        Apis.afforestationExport,
+        data: request.toJson(),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+          responseType: ResponseType.bytes,
+        ),
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        return response.data as List<int>;
+      } else {
+        throw Exception('فشل في تصدير ملف الإكسل.');
+      }
+    } on DioException catch (e) {
+      debugPrint("Dio error (exportExcel): ${e.response?.data ?? e.message}");
+      final errorMsg =
+          e.response?.data?.toString() ?? e.message ?? 'خطأ في الاتصال بالخادم';
+      throw Exception(errorMsg);
+    } catch (e) {
+      debugPrint("exportExcel error: $e");
+      rethrow;
+    }
+  }
 }
 
