@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:afforestation_app/features/dashboard/data/repository/user_repo.dart';
-import 'package:afforestation_app/features/dashboard/presentation/cubit/user_state.dart';
+import 'package:afforestation_app/features/dashboard/presentation/cubit/user_cudit/user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
   final UserRepo userRepo;
