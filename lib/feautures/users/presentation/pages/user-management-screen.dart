@@ -1,9 +1,8 @@
-// add user management screen with custom SVG assets and RTL layout
-
 import 'package:afforestation_app/core/constants/app_assets.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:afforestation_app/core/services/apis/dio_provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class UserManagementScreen extends StatefulWidget {
@@ -15,184 +14,219 @@ class UserManagementScreen extends StatefulWidget {
 
 class _UserManagementScreenState extends State<UserManagementScreen> {
   String selectedFilter = 'الكل';
+  bool isLoading = false;
+  List<Map<String, dynamic>> allUsers = [];
 
-  final List<Map<String, String>> allUsers = [
-    {
-      'name': 'أحمد محمود',
-      'email': 'ahmed@gmail.com',
-      'role': 'مشرف',
-      'avatar':
-          'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=120',
-    },
-    {
-      'name': 'سارة كمال',
-      'email': 'sara.k@afforest.sa',
-      'role': 'مستخدم',
-      'avatar':
-          'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=120',
-    },
-    {
-      'name': 'ياسين علي',
-      'email': 'yassin.a@outlook.com',
-      'role': 'مستخدم',
-      'avatar':
-          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=120',
-    },
-    {
-      'name': 'ليلى حسن',
-      'email': 'layla.h@afforest.sa',
-      'role': 'مستخدم',
-      'avatar':
-          'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=120',
-    },
-    {
-      'name': 'فهد العتيبي',
-      'email': 'fahad.o@gmail.com',
-      'role': 'مشرف',
-      'avatar':
-          'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=120',
-    },
-  ];
+  @override
+  void initState() {
+    super.initState();
+    fetchUsers();
+  }
+
+  Future<void> fetchUsers() async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final response = await DioProvider.get(path: '/users'); 
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data['data'] ?? response.data;
+        setState(() {
+          allUsers = data.map((user) => {
+            'id': user['id']?.toString() ?? '',
+            'name': user['name']?.toString() ?? '',
+            'email': user['email']?.toString() ?? '',
+            'role': user['role']?.toString() ?? 'مستخدم',
+            'avatar': user['avatar']?.toString() ?? 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=120',
+          }).toList();
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('خطأ أثناء تحميل المستخدمين: $e')),
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  // ميثود لحذف مستخدم عن طريق الـ API
+  Future<void> deleteUser(String userId, int index) async {
+    try {
+      final response = await DioProvider.post(
+        path: '/users/delete',   
+        data: {'id': userId},
+      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        setState(() {
+          allUsers.removeAt(index);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('تم حذف المستخدم بنجاح')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('فشل حذف المستخدم: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, String>> filteredUsers = selectedFilter == 'الكل'
+    List<Map<String, dynamic>> filteredUsers = selectedFilter == 'الكل'
         ? allUsers
         : allUsers
-              .where(
-                (user) => user['role'] == selectedFilter.replaceAll('ون', ''),
-              )
-              .toList();
+            .where(
+              (user) => user['role'] == selectedFilter.replaceAll('ون', ''),
+            )
+            .toList();
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add, color: AppColors.onPrimary, size: 28),
-      ),
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-              backgroundColor: AppColors.surface,
-              elevation: 0,
-              pinned: true,
-              floating: true,
-              forceElevated: innerBoxIsScrolled,
-              actions: [
-                const Icon(Icons.arrow_back, color: AppColors.onSurface),
-                const SizedBox(width: 16),
-              ],
-              title: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'إدارة المستخدمين',
-                    style: TextStyles.loginHeaderStyle.copyWith(
-                      color: AppColors.onSurface,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/addNewUserScreen').then((value) {
+              fetchUsers();
+            });
+          },
+          backgroundColor: AppColors.primary,
+          child: const Icon(Icons.add, color: AppColors.onPrimary, size: 28),
+        ),
+        body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return <Widget>[
+              SliverAppBar(
+                backgroundColor: AppColors.surface,
+                elevation: 0,
+                pinned: true,
+                floating: true,
+                forceElevated: innerBoxIsScrolled,
+                automaticallyImplyLeading: false,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_forward, color: AppColors.onSurface),
+                  onPressed: () => Navigator.maybePop(context),
+                ),
+                actions: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  SvgPicture.asset(
-                    AppAssets.treesvg,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.primary,
-                      BlendMode.srcIn,
+                    child: SvgPicture.asset(
+                      AppAssets.bellsvg,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.onSecondary,
+                        BlendMode.srcIn,
+                      ),
+                      width: 20,
+                      height: 20,
                     ),
-                    width: 24,
-                    height: 24,
                   ),
                 ],
-              ),
-              centerTitle: true,
-              leading: Container(
-                margin: const EdgeInsets.all(8),
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColors.secondary,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: SvgPicture.asset(
-                  AppAssets.bellsvg,
-                  colorFilter: const ColorFilter.mode(
-                    AppColors.onSecondary,
-                    BlendMode.srcIn,
-                  ),
-                  width: 20,
-                  height: 20,
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                title: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildStatCard(
-                            'إجمالي المستخدمين',
-                            '128',
-                            AppAssets.treesvg,
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: _buildStatCard(
-                            'المشرفون',
-                            '12',
-                            AppAssets.plantCropssvg,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        _buildFilterButton('الكل'),
-                        const SizedBox(width: 8),
-                        _buildFilterButton('مشرفون'),
-                        const SizedBox(width: 8),
-                        _buildFilterButton('مستخدمون'),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
                     Text(
-                      'قائمة المستخدمين',
+                      'إدارة المستخدمين',
                       style: TextStyles.loginHeaderStyle.copyWith(
                         color: AppColors.onSurface,
-                        fontSize: 16,
                       ),
+                    ),
+                    const SizedBox(width: 8),
+                    SvgPicture.asset(
+                      AppAssets.treesvg,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.primary,
+                        BlendMode.srcIn,
+                      ),
+                      width: 24,
+                      height: 24,
                     ),
                   ],
                 ),
+                centerTitle: true,
               ),
-            ),
-          ];
-        },
-        body: filteredUsers.isEmpty
-            ? const Center(child: Text('لا يوجد مستخدمين في هذا القسم'))
-            : ListView.separated(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildStatCard(
+                              'إجمالي المستخدمين',
+                              allUsers.length.toString(), 
+                              AppAssets.treesvg,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: _buildStatCard(
+                              'المشرفون',
+                              allUsers.where((u) => u['role'] == 'مشرف').length.toString(),
+                              AppAssets.plantCropssvg,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          _buildFilterButton('الكل'),
+                          const SizedBox(width: 8),
+                          _buildFilterButton('مشرفون'),
+                          const SizedBox(width: 8),
+                          _buildFilterButton('مستخدمون'),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'قائمة المستخدمين',
+                        style: TextStyles.loginHeaderStyle.copyWith(
+                          color: AppColors.onSurface,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                itemCount: filteredUsers.length,
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  final user = filteredUsers[index];
-                  return _buildUserCard(
-                    user['name']!,
-                    user['email']!,
-                    user['role']!,
-                    user['avatar']!,
-                  );
-                },
               ),
+            ];
+          },
+          body: isLoading
+              ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+              : filteredUsers.isEmpty
+                  ? const Center(child: Text('لا يوجد مستخدمين في هذا القسم'))
+                  : ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 8.0,
+                      ),
+                      itemCount: filteredUsers.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final user = filteredUsers[index];
+                        return _buildUserCard(
+                          user['id']!,
+                          user['name']!,
+                          user['email']!,
+                          user['role']!,
+                          user['avatar']!,
+                          index,
+                        );
+                      },
+                    ),
+        ),
       ),
     );
   }
@@ -203,7 +237,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.tertiary.withOpacity(0.2)),
+        border: Border.all(
+          color: AppColors.tertiary.withValues(alpha: 0.2),
+        ),
       ),
       child: Column(
         children: [
@@ -250,7 +286,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           border: Border.all(
             color: isSelected
                 ? Colors.transparent
-                : AppColors.tertiary.withOpacity(0.3),
+                : AppColors.tertiary.withValues(alpha: 0.3),
           ),
         ),
         child: Text(
@@ -265,61 +301,73 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   }
 
   Widget _buildUserCard(
+    String id,
     String name,
     String email,
     String role,
     String avatarUrl,
+    int index,
   ) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.tertiary.withOpacity(0.1)),
+        border: Border.all(color: AppColors.tertiary.withValues(alpha: 0.1)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: AppColors.background,
-                backgroundImage: NetworkImage(avatarUrl),
-              ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: TextStyles.buttonTextStyle.copyWith(
-                      color: AppColors.onSurface,
-                      fontSize: 14,
-                    ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 24,
+                  backgroundColor: AppColors.background,
+                  backgroundImage: NetworkImage(avatarUrl),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyles.buttonTextStyle.copyWith(
+                          color: AppColors.onSurface,
+                          fontSize: 14,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        email,
+                        style: TextStyles.hintTextStyle.copyWith(
+                          color: AppColors.onSurfaceVariant,
+                          fontSize: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        role,
+                        style: TextStyles.textButtonTextStyle.copyWith(
+                          color: AppColors.primary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    email,
-                    style: TextStyles.hintTextStyle.copyWith(
-                      color: AppColors.onSurfaceVariant,
-                      fontSize: 12,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    role,
-                    style: TextStyles.textButtonTextStyle.copyWith(
-                      color: AppColors.primary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
+          const SizedBox(width: 8),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
                 icon: const Icon(
@@ -327,7 +375,8 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                   color: AppColors.onSurfaceVariant,
                   size: 20,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                },
               ),
               IconButton(
                 icon: const Icon(
@@ -335,7 +384,31 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                   color: AppColors.error,
                   size: 20,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: AlertDialog(
+                        title: const Text('حذف مستخدم'),
+                        content: Text('هل أنت متأكد من حذف المستخدم $name؟'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('إلغاء'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              deleteUser(id, index); 
+                            },
+                            child: const Text('حذف', style: TextStyle(color: AppColors.error)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),
