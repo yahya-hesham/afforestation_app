@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:afforestation_app/features/auth/presentation/pages/login.dart';
 import 'package:afforestation_app/features/add/adding_plant/presentation/pages/add_new_operation_screen.dart';
-import 'package:afforestation_app/features/dashboard/presentation/cubit/user_cubit.dart';
-import 'package:afforestation_app/features/dashboard/presentation/cubit/user_state.dart';
+import 'package:afforestation_app/features/dashboard/presentation/cubit/user_cudit/user_cubit.dart';
+import 'package:afforestation_app/features/dashboard/presentation/cubit/user_cudit/user_state.dart';
 class UserView extends StatelessWidget {
   final String userName;
   final String userEmail;
