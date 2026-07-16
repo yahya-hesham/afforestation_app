@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:afforestation_app/features/search_and_analytics/data/models/auth_response/user.dart';
+import 'package:afforestation_app/features/dashboard/data/models/auth_response/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {

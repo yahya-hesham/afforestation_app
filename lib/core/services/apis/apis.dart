@@ -5,7 +5,7 @@ class Apis {
   static const String register = '/User/Register/register';
   static const String afforestationSearch = '/api/afforestation/search';
   static const String afforestation = '/api/afforestation'; // base for /{id} (GET, PUT, DELETE)
-  static const String users = '/api/User/all';
-  static const String locations = '/api/Location/all';
-  static const String treeNames = '/api/TreeName/all';
+  static const String users = '/User/GetAll';
+  static const String locations = '/Location/GetAll';
+  static const String treeNames = '/Tree/GetAll';
 }
