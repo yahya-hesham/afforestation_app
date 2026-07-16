@@ -373,92 +373,10 @@ class _SearchState extends State<Search> {
                 ),
                 const SizedBox(height: 35),
 
-                // 2. Summary Section — Real 30-day data from API
-                const Text(
-                  "ملخص آخر 30 يوماً",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  "نظرة عامة على أنشطة التشجير في الشهر الماضي",
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-                const SizedBox(height: 16),
+               
+                   
 
-                // Summary Stats Cards Row — from API
-                BlocBuilder<SearchCubit, SearchState>(
-                  buildWhen: (prev, curr) =>
-                      curr is SummaryLoading ||
-                      curr is SummaryLoaded ||
-                      curr is SummaryError,
-                  builder: (context, state) {
-                    if (state is SummaryLoading) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20),
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.secondary,
-                            strokeWidth: 2,
-                          ),
-                        ),
-                      );
-                    }
-
-                    if (state is SummaryError) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Column(
-                          children: [
-                            const Icon(Icons.error_outline,
-                                color: Colors.redAccent, size: 28),
-                            const SizedBox(height: 8),
-                            Text(
-                              "فشل في تحميل الملخص",
-                              style: TextStyle(
-                                fontSize: 13,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            TextButton(
-                              onPressed: () =>
-                                  cubit.loadLast30DaysSummary(),
-                              child: const Text("إعادة المحاولة"),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-
-                    // Use cached summary values
-                    final totalByName = cubit.summaryTotalByPlantName;
-                    final totalByType = cubit.summaryTotalByPlantType;
-
-                    return Row(
-                      children: [
-                        Expanded(
-                          child: SummaryCard(
-                            title: "حسب اسم النبات",
-                            value: _formatNumber(totalByName),
-                            icon: Icons.park_outlined,
-                          ),
-                        ),
-                        const SizedBox(width: 15),
-                        Expanded(
-                          child: SummaryCard(
-                            title: "حسب نوع النبات",
-                            value: _formatNumber(totalByType),
-                            icon: Icons.location_on_outlined,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                  
                 const SizedBox(height: 25),
 
                 // 3. Quick Tip Card
@@ -474,20 +392,7 @@ class _SearchState extends State<Search> {
     );
   }
 
-  /// Format a number with comma separators for display
-  String _formatNumber(int number) {
-    if (number < 1000) return number.toString();
-    final str = number.toString();
-    final buffer = StringBuffer();
-    for (int i = 0; i < str.length; i++) {
-      if (i > 0 && (str.length - i) % 3 == 0) {
-        buffer.write(',');
-      }
-      buffer.write(str[i]);
-    }
-    return buffer.toString();
-  }
-
+ 
   /// Build a dropdown field for API-loaded data with an "all" option
   Widget _buildApiDropdown({
     required String label,
