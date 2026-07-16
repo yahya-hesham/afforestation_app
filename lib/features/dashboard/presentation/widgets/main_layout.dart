@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/admin.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/statistics_placeholder.dart';
@@ -37,7 +39,7 @@ class _MainLayoutState extends State<MainLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -70,5 +72,17 @@ class _MainLayoutState extends State<MainLayout> {
         ],
       ),
     );
+
+    // Apply SafeArea only on Android to prevent the bottom navigation bar
+    // from being obscured by the system navigation bar / gesture area
+    if (Platform.isAndroid) {
+      return SafeArea(
+        top: false,
+        child: scaffold,
+      );
+    }
+
+    return scaffold;
   }
 }
+
