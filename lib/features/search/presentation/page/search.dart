@@ -10,7 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'search_results.dart';
 
 class Search extends StatefulWidget {
-  const Search({super.key});
+  final VoidCallback? onBackToHome;
+
+  const Search({super.key, this.onBackToHome});
 
   @override
   State<Search> createState() => _SearchState();
@@ -130,7 +132,13 @@ class _SearchState extends State<Search> {
                 color: AppColors.onSurface,
                 size: 20,
               ),
-              onPressed: () => Navigator.maybePop(context),
+              onPressed: () {
+                if (widget.onBackToHome != null) {
+                  widget.onBackToHome!();
+                } else {
+                  Navigator.maybePop(context);
+                }
+              },
             ),
             title: const Text(
               "البحث المتقدم",

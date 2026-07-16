@@ -31,7 +31,11 @@ class _MainLayoutState extends State<MainLayout> {
       const StatisticsPlaceholderView(), // Index 1: الإحصائيات (Statistics)
       BlocProvider(
         create: (_) => SearchCubit(),
-        child: const Search(),
+        child: Search(
+          onBackToHome: () {
+            setState(() => _currentIndex = 3);
+          },
+        ),
       ),
       AdminView(adminName: name), // Index 3: الرئيسية (Home)
     ];
