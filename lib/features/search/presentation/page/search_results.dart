@@ -5,8 +5,7 @@ import 'package:afforestation_app/features/search/presentation/cubit/search_cubi
 import 'package:afforestation_app/features/search/presentation/cubit/search_state.dart';
 import 'package:afforestation_app/features/search/presentation/page/statistics_summary.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/record_card.dart';
-import 'package:afforestation_app/features/search/presentation/widgets/summary_table.dart';
-import 'package:afforestation_app/features/search/presentation/widgets/total_count_card.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -446,28 +445,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
               ],
             ),
 
-          const SizedBox(height: 12),
-          const Center(
-            child: Text(
-              "نهاية النتائج",
-              style: TextStyle(fontSize: 11, color: Colors.grey),
-            ),
-          ),
-          const SizedBox(height: 25),
-
-          // Summary Table
-          if (allResults.isNotEmpty)
-            SummaryTable(
-              plantType: allResults.first.treeTypeName ?? "",
-              plantName: allResults.first.treeName ?? "",
-              quantity: allResults
-                  .fold<int>(0, (sum, item) => sum + item.number)
-                  .toString(),
-            ),
-          const SizedBox(height: 25),
-
-          // Total Count Card
-          TotalCountCard(totalCount: totalCount.toString()),
           const SizedBox(height: 15),
         ],
       ),
