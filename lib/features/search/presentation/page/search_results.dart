@@ -300,7 +300,10 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const StatisticsSummaryPage(),
+                    // ✅ Passing the actual search results to the statistics page
+                    builder: (context) => StatisticsSummaryPage(
+                      results: allResults,
+                    ),
                   ),
                 );
               },

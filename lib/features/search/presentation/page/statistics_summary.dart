@@ -1,74 +1,104 @@
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
+import 'package:afforestation_app/features/search/data/models/search_result_model.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/category_summary_card.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/grand_total_card.dart';
 import 'package:afforestation_app/features/search/presentation/widgets/smart_alert_card.dart';
 import 'package:flutter/material.dart';
 
 class StatisticsSummaryPage extends StatelessWidget {
-  const StatisticsSummaryPage({super.key});
+  /// ✅ The actual search results passed from the search results page
+  final List<SearchResultModel> results;
+
+  const StatisticsSummaryPage({super.key, required this.results});
+
+  /// Groups search results by treeTypeName and builds category data
+  /// Returns a list of maps, each containing:
+  ///   - 'typeName': the tree type category name
+  ///   - 'items': list of CategorySummaryItem (plant names + quantities)
+  ///   - 'subtotal': total quantity for this category
+  List<Map<String, dynamic>> _buildCategoryData() {
+    // Group results by treeTypeName
+    final Map<String, Map<String, int>> grouped = {};
+
+    for (final result in results) {
+      final typeName = result.treeTypeName ?? 'غير مصنف';
+      final plantName = result.treeName ?? 'غير محدد';
+      final scientificName = result.scientificName ?? '';
+
+      // Use "plantName|scientificName" as key to keep both values
+      final itemKey = '$plantName|$scientificName';
+
+      grouped.putIfAbsent(typeName, () => {});
+      grouped[typeName]!.update(
+        itemKey,
+        (existing) => existing + result.number,
+        ifAbsent: () => result.number,
+      );
+    }
+
+    // Convert to list of category data
+    final categories = <Map<String, dynamic>>[];
+    for (final entry in grouped.entries) {
+      final items = <CategorySummaryItem>[];
+      int subtotal = 0;
+
+      for (final plantEntry in entry.value.entries) {
+        final parts = plantEntry.key.split('|');
+        final nameAr = parts[0];
+        final nameEn = parts.length > 1 ? parts[1] : '';
+
+        items.add(CategorySummaryItem(
+          nameAr: nameAr,
+          nameEn: nameEn,
+          quantity: plantEntry.value,
+        ));
+        subtotal += plantEntry.value;
+      }
+
+      categories.add({
+        'typeName': entry.key,
+        'items': items,
+        'subtotal': subtotal,
+      });
+    }
+
+    return categories;
+  }
+
+  /// Assigns a different green shade to each category for visual variety
+  Color _getCategoryColor(int index) {
+    const colors = [
+      AppColors.secondary,
+      Color(0xFF5CA34C),
+      Color(0xFF458536),
+      Color(0xFF2E7D32),
+      Color(0xFF388E3C),
+      Color(0xFF43A047),
+    ];
+    return colors[index % colors.length];
+  }
+
+  /// Picks an icon for each category
+  IconData _getCategoryIcon(int index) {
+    const icons = [
+      Icons.spa,
+      Icons.park,
+      Icons.forest,
+      Icons.eco,
+      Icons.grass,
+      Icons.local_florist,
+    ];
+    return icons[index % icons.length];
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Sample category data from mockup
-    final greenCovers = [
-      const CategorySummaryItem(
-        nameAr: 'روبينيا',
-        nameEn: 'Ruellia',
-        quantity: 7152,
-      ),
-      const CategorySummaryItem(
-        nameAr: 'اريسين',
-        nameEn: 'Iresine',
-        quantity: 13092,
-      ),
-      const CategorySummaryItem(
-        nameAr: 'ويدليا',
-        nameEn: 'Wedelia',
-        quantity: 6800,
-      ),
-    ];
-
-    final trees = [
-      const CategorySummaryItem(
-        nameAr: 'اللوز الهندي - غاف البحر',
-        nameEn: 'Prosopis juliflora',
-        quantity: 30,
-      ),
-      const CategorySummaryItem(
-        nameAr: 'اللبخ',
-        nameEn: 'Albizia lebbeck',
-        quantity: 85,
-      ),
-      const CategorySummaryItem(
-        nameAr: 'النيم',
-        nameEn: 'Azadirachta indica',
-        quantity: 146,
-      ),
-    ];
-
-    final shrubs = [
-      const CategorySummaryItem(
-        nameAr: 'كف مريم',
-        nameEn: 'Vitex agnus-castus',
-        quantity: 8,
-      ),
-      const CategorySummaryItem(
-        nameAr: 'اكاسيا جلوكا',
-        nameEn: 'Acacia glauca',
-        quantity: 235,
-      ),
-      const CategorySummaryItem(
-        nameAr: 'الجافتروفا',
-        nameEn: 'Jatropha',
-        quantity: 200,
-      ),
-      const CategorySummaryItem(
-        nameAr: 'القنب - الوايتكس',
-        nameEn: 'Vitex',
-        quantity: 773,
-      ),
-    ];
+    final categories = _buildCategoryData();
+    final grandTotal = categories.fold<int>(
+      0,
+      (sum, cat) => sum + (cat['subtotal'] as int),
+    );
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -108,71 +138,64 @@ class StatisticsSummaryPage extends StatelessWidget {
           ],
         ),
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 15.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header section
-                const Text(
-                  "إحصائيات التشجير",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.onSurface,
+          child: results.isEmpty
+              ? const Center(
+                  child: Text(
+                    'لا توجد بيانات لعرض الملخص',
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                )
+              : SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 15.0,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Header section
+                      const Text(
+                        "إحصائيات التشجير",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "عرض توزيع النباتات والكميات المزروعة حسب الفئة العلمية (${results.length} سجل)",
+                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 25),
+
+                      // Dynamic Category Cards — built from actual search results
+                      ...categories.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final cat = entry.value;
+                        return CategorySummaryCard(
+                          categoryTitle: cat['typeName'] as String,
+                          categoryIcon: _getCategoryIcon(index),
+                          items: cat['items'] as List<CategorySummaryItem>,
+                          subtotal: cat['subtotal'] as int,
+                          bannerColor: _getCategoryColor(index),
+                        );
+                      }),
+
+                      // Grand Total Card
+                      GrandTotalCard(totalCount: grandTotal),
+                      const SizedBox(height: 20),
+
+                      // Smart Alert Card
+                      SmartAlertCard(
+                        title: "ملخص",
+                        message:
+                            "تم العثور على ${results.length} سجل بإجمالي $grandTotal شتلة موزعة على ${categories.length} فئة.",
+                      ),
+                      const SizedBox(height: 25),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 4),
-                const Text(
-                  "عرض توزيع النباتات والكميات المزروعة حسب الفئة العلمية",
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
-                ),
-                const SizedBox(height: 25),
-
-                // Category 1: Green Covers
-                CategorySummaryCard(
-                  categoryTitle: "أغلفة خضراء",
-                  categoryIcon: Icons.spa,
-                  items: greenCovers,
-                  subtotal: 27044,
-                  bannerColor: AppColors.secondary,
-                ),
-
-                // Category 2: Trees
-                CategorySummaryCard(
-                  categoryTitle: "الأشجار",
-                  categoryIcon: Icons.park,
-                  items: trees,
-                  subtotal: 261,
-                  bannerColor: const Color(0xFF5CA34C),
-                ),
-
-                // Category 3: Shrubs
-                CategorySummaryCard(
-                  categoryTitle: "شجيرات / أشجار فرعية",
-                  categoryIcon: Icons.forest,
-                  items: shrubs,
-                  subtotal: 1216,
-                  bannerColor: const Color(0xFF458536),
-                ),
-
-                // Grand Total Card
-                const GrandTotalCard(totalCount: 28521),
-                const SizedBox(height: 20),
-
-                // Smart Alert Card
-                const SmartAlertCard(
-                  title: "تنبيه ذكي",
-                  message:
-                      "تمت زيادة معدل التشجير في منطقة \"أغلفة خضراء\" بنسبة 12% مقارنة بالشهر الماضي.",
-                ),
-                const SizedBox(height: 25),
-              ],
-            ),
-          ),
         ),
       ),
     );
