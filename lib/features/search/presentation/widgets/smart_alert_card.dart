@@ -5,11 +5,7 @@ class SmartAlertCard extends StatelessWidget {
   final String title;
   final String message;
 
-  const SmartAlertCard({
-    super.key,
-    required this.title,
-    required this.message,
-  });
+  const SmartAlertCard({super.key, required this.title, required this.message});
 
   @override
   Widget build(BuildContext context) {

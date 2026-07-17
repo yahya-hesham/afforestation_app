@@ -36,7 +36,9 @@ class SummaryTable extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.tertiary.withValues(alpha: 0.1)),
+            border: Border.all(
+              color: AppColors.tertiary.withValues(alpha: 0.1),
+            ),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withValues(alpha: 0.015),
@@ -49,7 +51,10 @@ class SummaryTable extends StatelessWidget {
             children: [
               // Expandable/Header Bar
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: const BoxDecoration(
                   color: AppColors.secondary,
                   borderRadius: BorderRadius.only(
@@ -60,7 +65,11 @@ class SummaryTable extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Icon(Icons.keyboard_arrow_down, color: Colors.white, size: 20),
+                    const Icon(
+                      Icons.keyboard_arrow_down,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                     Row(
                       children: [
                         Text(
@@ -72,7 +81,11 @@ class SummaryTable extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Icon(Icons.park_outlined, color: Colors.white, size: 18),
+                        const Icon(
+                          Icons.park_outlined,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                       ],
                     ),
                   ],
@@ -81,7 +94,10 @@ class SummaryTable extends StatelessWidget {
 
               // Table Content
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 12.0,
+                ),
                 child: Column(
                   children: [
                     // Column Headers
@@ -90,11 +106,19 @@ class SummaryTable extends StatelessWidget {
                       children: [
                         Text(
                           "الكمية",
-                          style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         Text(
                           "اسم النبات",
-                          style: TextStyle(fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),

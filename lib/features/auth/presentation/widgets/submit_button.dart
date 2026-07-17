@@ -1,12 +1,12 @@
- // Extracted Submit button method since it uses the view state validations
-  import 'package:afforestation_app/core/styles/colors.dart';
+// Extracted Submit button method since it uses the view state validations
+import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class BuildSubmitButton extends StatelessWidget {
   final VoidCallback? onTap;
   // final void Function()? onTap;
-  const BuildSubmitButton({super.key,this.onTap});
+  const BuildSubmitButton({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {

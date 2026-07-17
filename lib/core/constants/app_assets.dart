@@ -10,8 +10,8 @@ class AppAssets {
   static const String uptrendsvg = 'assets/icons/uptrend.svg';
   static const String homesvg = 'assets/icons/home.svg';
   static const String plussvg = 'assets/icons/plus.svg';
-  static const String pluscirclesvg = 'assets/icons/plus_circle.svg';
+  static const String pluscirclesvg = 'assets/icons/pluscircle.svg';
   static const String accountsvg = 'assets/icons/account.svg';
   static const String account1svg = 'assets/icons/account1.svg';
-  static const String backsvg = 'assets/icons/back.svg';
+  static const String backsvg = 'assets/icons/back-svgrepo-com.svg';
 }

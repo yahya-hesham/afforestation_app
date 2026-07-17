@@ -1,4 +1,3 @@
-
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/widgets/build_field_label.dart';
 import 'package:afforestation_app/core/widgets/custom_textForm_field.dart';
@@ -24,7 +23,7 @@ class AddUserScreen extends StatelessWidget {
   final passwordController = TextEditingController();
 
   // Dropdown Configuration
-
+  // yahya
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -156,7 +155,7 @@ class AddUserScreen extends StatelessWidget {
                               // --- Submit Button ---
                               BlocConsumer<AuthCubit, AuthState>(
                                 listener: (context, state) {
-                                  if (state is RegisterSuccess) {
+                                  if (state is AuthSucess) {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
@@ -164,17 +163,15 @@ class AddUserScreen extends StatelessWidget {
                                       ),
                                     );
                                   }
-                                  if (state is RegisterFailure) {
+                                  if (state is AuthError) {
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(state.errorMessage),
-                                      ),
+                                      SnackBar(content: Text(state.message)),
                                     );
                                   }
                                 },
                                 builder: (context, state) {
                                   var cubit = context.read<AuthCubit>();
-                                  return state is! RegisterLoading
+                                  return state is! AuthLoading
                                       ? BuildSubmitButton(
                                           onTap: () {
                                             if (formKey.currentState!

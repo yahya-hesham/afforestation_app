@@ -50,7 +50,9 @@ class SearchDateField extends StatelessWidget {
                   value,
                   style: TextStyle(
                     fontSize: 14,
-                    color: value == "dd/mm/yyyy" ? Colors.grey : AppColors.onSurface,
+                    color: value == "dd/mm/yyyy"
+                        ? Colors.grey
+                        : AppColors.onSurface,
                   ),
                 ),
               ],

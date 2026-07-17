@@ -4,42 +4,41 @@ import 'package:google_fonts/google_fonts.dart';
 
 abstract class TextStyles {
   static final TextStyle loginHeaderStyle = GoogleFonts.inter(
-    fontSize: 20.0,                
-    fontWeight: FontWeight.w700, 
-    color: AppColors.primary   
-);
+    fontSize: 20.0,
+    fontWeight: FontWeight.w700,
+    color: AppColors.primary,
+  );
 
   static final TextStyle hintTextStyle = GoogleFonts.inter(
-    fontSize: 20.0,               
-    fontWeight: FontWeight.w400, 
-    color: AppColors.primary   
+    fontSize: 20.0,
+    fontWeight: FontWeight.w400,
+    color: AppColors.primary,
   );
 
   static final TextStyle errorTextStyle = GoogleFonts.inter(
-    fontSize: 12.0,               
-    fontWeight: FontWeight.w400, 
-    color: AppColors.primary   
+    fontSize: 12.0,
+    fontWeight: FontWeight.w400,
+    color: AppColors.primary,
   );
 
   static final TextStyle buttonTextStyle = GoogleFonts.inter(
-    fontSize: 18.0,               
-    fontWeight: FontWeight.w700, 
-    color: AppColors.onSecondary   
+    fontSize: 18.0,
+    fontWeight: FontWeight.w700,
+    color: AppColors.onSecondary,
   );
 
   static final TextStyle textButtonTextStyle = GoogleFonts.inter(
-    fontSize: 14.0,               
-    fontWeight: FontWeight.w500, 
-    color: AppColors.onSecondary   
+    fontSize: 14.0,
+    fontWeight: FontWeight.w500,
+    color: AppColors.onSecondary,
   );
 
   static final TextStyle footerTextTextStyle = GoogleFonts.inter(
-    fontSize: 12.0,               
-    fontWeight: FontWeight.w400, 
-    color: AppColors.onSecondary   
+    fontSize: 12.0,
+    fontWeight: FontWeight.w400,
+    color: AppColors.onSecondary,
   );
 
-  // New styles explicitly mapped for the Plant Management Screen
   static final TextStyle appBarTitleStyle = GoogleFonts.inter(
     fontSize: 18.0,
     fontWeight: FontWeight.w700,

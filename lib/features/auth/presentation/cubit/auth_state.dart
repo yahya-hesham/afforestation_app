@@ -1,22 +1,15 @@
 class AuthState {}
 
-class AuthInitialState extends AuthState {}
+class AuthInitial extends AuthState {}
 
-//login states
-class LoginLoading extends AuthState {}
+class AuthLoading extends AuthState {}
 
-class LoginError extends AuthState {}
+class AuthSucess extends AuthState {}
 
-class LoginSuccess extends AuthState {}
+class AuthError extends AuthState {
+  final String message;
 
-// register states
-class RegisterLoading extends AuthState {}
-
-class RegisterSuccess extends AuthState {}
+  AuthError(this.message);
+}
 
 class RoleChangedState extends AuthState {}
-
-class RegisterFailure extends AuthState {
-  final String errorMessage;
-  RegisterFailure(this.errorMessage);
-}

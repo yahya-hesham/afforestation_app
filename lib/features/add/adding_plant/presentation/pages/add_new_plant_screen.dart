@@ -14,10 +14,16 @@ class AddNewPlantScreen extends StatefulWidget {
 class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _arabicNameController = TextEditingController();
-  final TextEditingController _scientificNameController = TextEditingController();
+  final TextEditingController _scientificNameController =
+      TextEditingController();
   String? _selectedPlantType;
 
-  final List<String> _plantTypes = ['أشجار', 'شجيرات', 'نباتات عشبية', 'متسلقات'];
+  final List<String> _plantTypes = [
+    'أشجار',
+    'شجيرات',
+    'نباتات عشبية',
+    'متسلقات',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +40,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
         ],
         title: Text(
           'إضافة نبات جديد',
-          style: TextStyles.loginHeaderStyle.copyWith(color: AppColors.onSurface, fontSize: 18),
+          style: TextStyles.loginHeaderStyle.copyWith(
+            color: AppColors.onSurface,
+            fontSize: 18,
+          ),
         ),
         centerTitle: true,
         leading: Container(
@@ -46,7 +55,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
           ),
           child: SvgPicture.asset(
             AppAssets.bellsvg,
-            colorFilter: const ColorFilter.mode(AppColors.onSecondary, BlendMode.srcIn),
+            colorFilter: const ColorFilter.mode(
+              AppColors.onSecondary,
+              BlendMode.srcIn,
+            ),
             width: 20,
             height: 20,
           ),
@@ -60,7 +72,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
             children: [
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24,
+                  horizontal: 16,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(16),
@@ -72,7 +87,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                       backgroundColor: Colors.white.withOpacity(0.2),
                       child: SvgPicture.asset(
                         AppAssets.plantCropssvg,
-                        colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                        colorFilter: const ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
                         width: 32,
                         height: 32,
                       ),
@@ -80,19 +98,24 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                     const SizedBox(height: 12),
                     Text(
                       'إضافة نبات جديد',
-                      style: TextStyles.loginHeaderStyle.copyWith(color: Colors.white, fontSize: 20),
+                      style: TextStyles.loginHeaderStyle.copyWith(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       'أدخل تفاصيل النبات بدقة في الحقول أدناه',
-                      style: TextStyles.hintTextStyle.copyWith(color: Colors.white.withOpacity(0.8), fontSize: 12),
+                      style: TextStyles.hintTextStyle.copyWith(
+                        color: Colors.white.withOpacity(0.8),
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 24),
 
-             
               Align(
                 alignment: Alignment.centerRight,
                 child: Directionality(
@@ -107,8 +130,11 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                         hint: 'أدخل اسم النبات هنا...',
                       ),
                       const SizedBox(height: 20),
-                      
-                      _buildLabel('الاسم العلمي Scientific Name', Icons.language),
+
+                      _buildLabel(
+                        'الاسم العلمي Scientific Name',
+                        Icons.language,
+                      ),
                       const SizedBox(height: 8),
                       _buildTextField(
                         controller: _scientificNameController,
@@ -116,7 +142,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                         isEnglish: true,
                       ),
                       const SizedBox(height: 20),
-                      
+
                       _buildLabel('اختر نوع النبتة', Icons.eco),
                       const SizedBox(height: 8),
                       _buildDropdownField(),
@@ -128,8 +154,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
 
               ElevatedButton(
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                  }
+                  if (_formKey.currentState!.validate()) {}
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
@@ -145,7 +170,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                     const SizedBox(width: 8),
                     Text(
                       'إضافة النبات',
-                      style: TextStyles.buttonTextStyle.copyWith(color: Colors.white, fontSize: 16),
+                      style: TextStyles.buttonTextStyle.copyWith(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
@@ -173,7 +201,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               AppAssets.treesvg,
-              colorFilter: const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+              colorFilter: const ColorFilter.mode(
+                AppColors.primary,
+                BlendMode.srcIn,
+              ),
               width: 24,
               height: 24,
             ),
@@ -196,7 +227,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
         const SizedBox(width: 6),
         Text(
           text,
-          style: TextStyles.buttonTextStyle.copyWith(color: AppColors.onSurface, fontSize: 14),
+          style: TextStyles.buttonTextStyle.copyWith(
+            color: AppColors.onSurface,
+            fontSize: 14,
+          ),
         ),
       ],
     );
@@ -216,7 +250,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
         hintStyle: TextStyles.hintTextStyle.copyWith(fontSize: 13),
         fillColor: AppColors.surface,
         filled: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: AppColors.tertiary.withOpacity(0.2)),
@@ -248,7 +285,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
       decoration: InputDecoration(
         fillColor: AppColors.surface,
         filled: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: AppColors.tertiary.withOpacity(0.2)),
@@ -263,7 +303,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
           value: type,
           child: Align(
             alignment: Alignment.centerRight,
-            child: Text(type, style: TextStyles.buttonTextStyle.copyWith(fontSize: 14)),
+            child: Text(
+              type,
+              style: TextStyles.buttonTextStyle.copyWith(fontSize: 14),
+            ),
           ),
         );
       }).toList(),

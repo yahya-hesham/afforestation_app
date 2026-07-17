@@ -8,9 +8,17 @@ class ScreenHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('كافة النباتات', style: TextStyles.screenHeaderTitleStyle, textAlign: TextAlign.center),
+        Text(
+          'كافة النباتات',
+          style: TextStyles.screenHeaderTitleStyle,
+          textAlign: TextAlign.center,
+        ),
         const SizedBox(height: 4),
-        Text('تصفح وإدارة النباتات حسب النوع', style: TextStyles.screenHeaderSubtitleStyle, textAlign: TextAlign.center),
+        Text(
+          'تصفح وإدارة النباتات حسب النوع',
+          style: TextStyles.screenHeaderSubtitleStyle,
+          textAlign: TextAlign.center,
+        ),
       ],
     );
   }

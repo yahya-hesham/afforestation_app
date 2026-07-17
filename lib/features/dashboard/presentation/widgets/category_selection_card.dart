@@ -1,8 +1,8 @@
-import 'package:afforestation_app/features/dashboard/data/repository/models/plant_model.dart';
+import 'package:afforestation_app/features/dashboard/presentation/models/plant_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
-
 
 class CategorySelectionCard extends StatelessWidget {
   final List<PlantCategory> categories;
@@ -31,7 +31,11 @@ class CategorySelectionCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.eco_outlined, color: AppColors.primary, size: 20),
+              const Icon(
+                Icons.eco_outlined,
+                color: AppColors.primary,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Text('أنواع النباتات', style: TextStyles.cardSectionTitleStyle),
             ],
@@ -49,18 +53,29 @@ class CategorySelectionCard extends StatelessWidget {
                   onTap: () => onCategorySelected(index),
                   borderRadius: BorderRadius.circular(30),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 16,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? AppColors.secondary : AppColors.surface,
+                      color: isSelected
+                          ? AppColors.secondary
+                          : AppColors.surface,
                       borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: isSelected ? Colors.transparent : Colors.black12),
+                      border: Border.all(
+                        color: isSelected ? Colors.transparent : Colors.black12,
+                      ),
                     ),
                     child: Center(
                       child: Text(
                         "${categories[index].titleAr} (${categories[index].titleEn})",
                         style: TextStyles.textButtonTextStyle.copyWith(
-                          fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400,
-                          color: isSelected ? AppColors.onSecondary : AppColors.onSurfaceVariant,
+                          fontWeight: isSelected
+                              ? FontWeight.w700
+                              : FontWeight.w400,
+                          color: isSelected
+                              ? AppColors.onSecondary
+                              : AppColors.onSurfaceVariant,
                         ),
                       ),
                     ),

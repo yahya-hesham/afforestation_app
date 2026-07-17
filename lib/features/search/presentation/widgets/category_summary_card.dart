@@ -31,7 +31,10 @@ class CategorySummaryCard extends StatelessWidget {
 
   String _formatNumber(int number) {
     final RegExp reg = RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))');
-    return number.toString().replaceAllMapped(reg, (Match match) => '${match[1]},');
+    return number.toString().replaceAllMapped(
+      reg,
+      (Match match) => '${match[1]},',
+    );
   }
 
   @override
@@ -122,7 +125,10 @@ class CategorySummaryCard extends StatelessWidget {
             itemBuilder: (context, index) {
               final item = items[index];
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

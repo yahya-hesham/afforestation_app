@@ -41,13 +41,19 @@ class SearchDropdownField<T> extends StatelessWidget {
             child: DropdownButton<T>(
               value: value,
               isExpanded: true,
-              icon: Icon(Icons.keyboard_arrow_down, color: Colors.black.withValues(alpha: 0.5)),
+              icon: Icon(
+                Icons.keyboard_arrow_down,
+                color: Colors.black.withValues(alpha: 0.5),
+              ),
               items: items.map((T item) {
                 return DropdownMenuItem<T>(
                   value: item,
                   child: Text(
                     item.toString(),
-                    style: const TextStyle(fontSize: 14, color: AppColors.onSurface),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.onSurface,
+                    ),
                   ),
                 );
               }).toList(),

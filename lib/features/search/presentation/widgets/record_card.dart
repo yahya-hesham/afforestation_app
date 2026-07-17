@@ -62,7 +62,10 @@ class RecordCard extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.secondary,
                         borderRadius: BorderRadius.circular(12),
@@ -87,7 +90,11 @@ class RecordCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Icon(Icons.park_outlined, color: AppColors.primary, size: 20),
+                const Icon(
+                  Icons.park_outlined,
+                  color: AppColors.primary,
+                  size: 20,
+                ),
               ],
             ),
           ),
@@ -164,10 +171,18 @@ class RecordCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     CircleAvatar(
                       radius: 14,
-                      backgroundColor: AppColors.secondary.withValues(alpha: 0.2),
-                      backgroundImage: userAvatarUrl != null ? NetworkImage(userAvatarUrl!) : null,
+                      backgroundColor: AppColors.secondary.withValues(
+                        alpha: 0.2,
+                      ),
+                      backgroundImage: userAvatarUrl != null
+                          ? NetworkImage(userAvatarUrl!)
+                          : null,
                       child: userAvatarUrl == null
-                          ? const Icon(Icons.person, size: 16, color: AppColors.primary)
+                          ? const Icon(
+                              Icons.person,
+                              size: 16,
+                              color: AppColors.primary,
+                            )
                           : null,
                     ),
                   ],
@@ -188,7 +203,11 @@ class RecordCard extends StatelessWidget {
                 // تعديل (Edit)
                 TextButton.icon(
                   onPressed: onEdit,
-                  icon: const Icon(Icons.edit_outlined, color: AppColors.tertiary, size: 16),
+                  icon: const Icon(
+                    Icons.edit_outlined,
+                    color: AppColors.tertiary,
+                    size: 16,
+                  ),
                   label: const Text(
                     "تعديل",
                     style: TextStyle(
@@ -203,7 +222,11 @@ class RecordCard extends StatelessWidget {
                 // حذف (Delete)
                 TextButton.icon(
                   onPressed: onDelete,
-                  icon: const Icon(Icons.delete_outline, color: AppColors.error, size: 16),
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    color: AppColors.error,
+                    size: 16,
+                  ),
                   label: const Text(
                     "حذف",
                     style: TextStyle(
@@ -238,14 +261,19 @@ class RecordCard extends StatelessWidget {
               style: const TextStyle(fontSize: 11, color: Colors.grey),
             ),
             const SizedBox(width: 6),
-            Icon(icon, size: 14, color: AppColors.primary.withValues(alpha: 0.7)),
+            Icon(
+              icon,
+              size: 14,
+              color: AppColors.primary.withValues(alpha: 0.7),
+            ),
           ],
         ),
         const SizedBox(height: 4),
         Text(
           value,
           textAlign: TextAlign.end,
-          style: valueStyle ??
+          style:
+              valueStyle ??
               const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,

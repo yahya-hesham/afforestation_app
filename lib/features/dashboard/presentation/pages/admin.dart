@@ -1,6 +1,11 @@
 import 'package:afforestation_app/core/functions/extenstion.dart';
+import 'package:afforestation_app/core/routes/routes.dart';
+import 'package:afforestation_app/core/services/local/shared_pref.dart';
+import 'package:afforestation_app/features/location/page/add_new_location_type.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../notifications/presentation/pages/notifications_screen.dart';
 
 // 👇 1. استيراد صفحات الـ Auth (اللوجن) من أجل زرار الخروج
 import 'package:afforestation_app/features/auth/presentation/pages/login.dart';
@@ -216,6 +221,19 @@ class _AdminViewState extends State<AdminView> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            IconButton(
+              icon: const Icon(
+                Icons.notifications_none_outlined,
+                color: Colors.black87,
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationsScreen(),
+                  ),
+                );
+              },
             Row(
               children: [
                 IconButton(
@@ -240,10 +258,196 @@ class _AdminViewState extends State<AdminView> {
               ),
               child: const Icon(Icons.park_outlined, color: Colors.white, size: 20),
             ),
+            IconButton(
+              icon: const Icon(Icons.language, color: Colors.black87),
+              onPressed: () {
+                context.isArabic
+                    ? context.setLocale(const Locale('en'))
+                    : context.setLocale(const Locale('ar'));
+              },
+            ),
           ],
         ),
       ),
       body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const Center(
+                child: Column(
+                  children: [
+                    Text(
+                      "لوحة تحكم المسؤول",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF1B3A1E),
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "قم بإدارة نظام التشجير الخاص بك بكفاءة",
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton.icon(
+                    onPressed: () async {
+                      await SharedPref.prefs.clear();
+                      if (context.mounted) {
+                        context.go(Routes.login);
+                      }
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFEBEE),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
+                    ),
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.redAccent,
+                      size: 16,
+                    ),
+                    label: const Text(
+                      "خروج",
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        "${widget.adminName} ،مرحباً بك مجدداً",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1B3A1E),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        "جاهز لإحداث فرق اليوم؟",
+                        style: TextStyle(fontSize: 13, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+              const Text(
+                "مسؤول النظام",
+                style: TextStyle(
+                  color: Color(0xFF53B157),
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 25),
+
+              _buildSectionHeader(
+                title: "إضافة أنواع",
+                icon: Icons.add_circle_outline,
+              ),
+              _buildDashboardButton(
+                title: "إضافة نوع نبات جديد",
+                icon: Icons.eco_outlined,
+                onTap: () {},
+              ),
+              _buildDashboardButton(
+                title: "إضافة نوع موقع جديد",
+                icon: Icons.location_on_outlined,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LocationTypesScreen(),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 25),
+
+              _buildSectionHeader(
+                title: "إضافة عناصر",
+                icon: Icons.assignment_outlined,
+              ),
+              _buildDashboardButton(
+                title: "إضافة عملية تشجير",
+                icon: Icons.grass,
+                onTap: () {},
+              ),
+              _buildDashboardButton(
+                title: "إضافة نبات",
+                icon: Icons.local_florist_outlined,
+                onTap: () {},
+              ),
+              _buildDashboardButton(
+                title: "إضافة الموقع",
+                icon: Icons.map_outlined,
+                onTap: () {},
+              ),
+
+              const SizedBox(height: 25),
+
+              _buildSectionHeader(
+                title: "إدارة المستخدمين",
+                icon: Icons.people_outline,
+              ),
+              _buildDashboardButton(
+                title: "إضافة مستخدم",
+                icon: Icons.person_add_alt_1_outlined,
+                onTap: () {},
+              ),
+              _buildDashboardButton(
+                title: "إظهار جميع المستخدمين",
+                icon: Icons.supervised_user_circle_outlined,
+                onTap: () {},
+              ),
+
+              const SizedBox(height: 25),
+
+              _buildSectionHeader(
+                title: "بحث وعرض البيانات",
+                icon: Icons.storage_outlined,
+              ),
+              _buildDashboardButton(
+                title: "البحث المتقدم",
+                icon: Icons.search,
+                onTap: () {},
+              ),
+              _buildDashboardButton(
+                title: "إظهار جميع النباتات",
+                icon: Icons.format_list_bulleted_outlined,
+                onTap: () {},
+              ),
+              _buildDashboardButton(
+                title: "إظهار جميع المواقع",
+                icon: Icons.layers_outlined,
+                onTap: () {},
+              ),
+
+              const SizedBox(height: 40),
+            ],
+          ),
         child: IndexedStack(
           index: _currentIndex,
           children: pages,
