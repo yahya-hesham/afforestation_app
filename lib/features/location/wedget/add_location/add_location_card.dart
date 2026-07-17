@@ -7,16 +7,12 @@ class build_location_card extends StatelessWidget {
     required this.date,
     required this.locationsCount,
     required this.progress,
-    this.onEdit,
-    this.onDelete,
   });
 
   final String title;
   final String date;
   final int locationsCount;
   final double progress;
-  final VoidCallback? onEdit;
-  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -67,29 +63,23 @@ class build_location_card extends StatelessWidget {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: onEdit,
-                child: CircleAvatar(
-                  backgroundColor: Colors.grey.shade100,
-                  radius: 18,
-                  child: Icon(
-                    Icons.edit_outlined,
-                    size: 18,
-                    color: Colors.grey.shade700,
-                  ),
+              CircleAvatar(
+                backgroundColor: Colors.grey.shade100,
+                radius: 18,
+                child: Icon(
+                  Icons.edit_outlined,
+                  size: 18,
+                  color: Colors.grey.shade700,
                 ),
               ),
               const SizedBox(width: 8),
-              GestureDetector(
-                onTap: onDelete,
-                child: const CircleAvatar(
-                  backgroundColor: Color(0xFFFFF0F0),
-                  radius: 18,
-                  child: Icon(
-                    Icons.delete_outline,
-                    size: 18,
-                    color: Colors.redAccent,
-                  ),
+              const CircleAvatar(
+                backgroundColor: Color(0xFFFFF0F0),
+                radius: 18,
+                child: Icon(
+                  Icons.delete_outline,
+                  size: 18,
+                  color: Colors.redAccent,
                 ),
               ),
             ],

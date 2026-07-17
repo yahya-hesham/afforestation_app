@@ -13,4 +13,3 @@ class AuthError extends AuthState {
 }
 
 class RoleChangedState extends AuthState {}
-

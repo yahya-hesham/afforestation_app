@@ -13,21 +13,19 @@ class AuthCubit extends Cubit<AuthState> {
     emit(RoleChangedState());
   }
 
-  Future<void> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     emit(AuthLoading());
     try {
-      var result = await AuthRepo.login(
-        email: email,
-        password: password,
-      );
+      var result = await AuthRepo.login(email: email, password: password);
 
       if (result != null) {
         emit(AuthSucess());
       } else {
-        emit(AuthError('فشل تسجيل الدخول. يرجى التحقق من صحة البريد الإلكتروني أو كلمة المرور.'));
+        emit(
+          AuthError(
+            'فشل تسجيل الدخول. يرجى التحقق من صحة البريد الإلكتروني أو كلمة المرور.',
+          ),
+        );
       }
     } catch (error) {
       emit(AuthError(error.toString()));

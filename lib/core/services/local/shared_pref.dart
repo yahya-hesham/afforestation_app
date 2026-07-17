@@ -23,7 +23,6 @@ class SharedPref {
   static String getRole() {
     return prefs.getString(kRole) ?? '';
   }
- 
 
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -81,7 +80,10 @@ class SharedPref {
   static ({String email, String password})? getCredentials() {
     final email = prefs.getString(kEmail);
     final password = prefs.getString(kPassword);
-    if (email == null || password == null || email.isEmpty || password.isEmpty) {
+    if (email == null ||
+        password == null ||
+        email.isEmpty ||
+        password.isEmpty) {
       return null;
     }
     return (email: email, password: password);
@@ -93,4 +95,3 @@ class SharedPref {
     await prefs.remove(kPassword);
   }
 }
-

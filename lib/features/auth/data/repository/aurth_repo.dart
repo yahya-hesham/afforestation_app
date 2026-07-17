@@ -15,10 +15,7 @@ class AuthRepo {
     try {
       var response = await DioProvider.post(
         endpoint: Apis.login,
-        data: {
-          'email': email,
-          'password': password,
-        },
+        data: {'email': email, 'password': password},
       );
 
       if (response.statusCode == 200) {
@@ -26,17 +23,12 @@ class AuthRepo {
         await SharedPref.saveToken(data.token);
         await SharedPref.saveRole(data.role);
         await SharedPref.saveCredentials(email, password);
-      
-        // Construct and save user info locally
-        var user = User(
-          id: data.id,
-          email: data.email,
-   
-        );
-        await SharedPref.saveUserInfo(user);
-        
-        return data;
 
+        // Construct and save user info locally
+        var user = User(id: data.id, email: data.email);
+        await SharedPref.saveUserInfo(user);
+
+        return data;
       } else {
         return null;
       }

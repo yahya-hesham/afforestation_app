@@ -44,7 +44,8 @@ class _SplashScreenState extends State<SplashScreen> {
               context.go(
                 Routes.user,
                 extra: {
-                  'userName': user?.name ?? user?.email?.split('@').first ?? "مستخدم",
+                  'userName':
+                      user?.name ?? user?.email?.split('@').first ?? "مستخدم",
                   'userEmail': user?.email ?? "",
                 },
               );
@@ -97,4 +98,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-

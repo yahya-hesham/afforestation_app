@@ -51,15 +51,16 @@ class _LoginViewState extends State<LoginView> {
               context.go(
                 Routes.user,
                 extra: {
-                  'userName': user?.name ?? user?.email?.split('@').first ?? "مستخدم",
+                  'userName':
+                      user?.name ?? user?.email?.split('@').first ?? "مستخدم",
                   'userEmail': user?.email ?? "",
                 },
               );
             }
           } else if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
@@ -211,7 +212,9 @@ class _LoginViewState extends State<LoginView> {
                               elevation: 0,
                             ),
                             child: state is AuthLoading
-                                ? const CircularProgressIndicator(color: Colors.white)
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
                                 : const Text(
                                     "تسجيل الدخول",
                                     style: TextStyle(
@@ -253,7 +256,10 @@ class _LoginViewState extends State<LoginView> {
                             ),
                             const Text(
                               "ليس لديك حساب؟",
-                              style: TextStyle(color: Colors.grey, fontSize: 14),
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
                             ),
                           ],
                         ),

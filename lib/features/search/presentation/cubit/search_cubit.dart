@@ -48,11 +48,13 @@ class SearchCubit extends Cubit<SearchState> {
       treeNames = results[2];
       areDropdownsLoaded = true;
 
-      emit(DropdownsLoaded(
-        users: users,
-        locations: locations,
-        treeNames: treeNames,
-      ));
+      emit(
+        DropdownsLoaded(
+          users: users,
+          locations: locations,
+          treeNames: treeNames,
+        ),
+      );
     } catch (e) {
       emit(DropdownsError(e.toString()));
     }
@@ -65,22 +67,28 @@ class SearchCubit extends Cubit<SearchState> {
       final now = DateTime.now();
       final thirtyDaysAgo = now.subtract(const Duration(days: 30));
 
-      final request = SearchRequestModel(
-        fromDate: thirtyDaysAgo,
-        toDate: now,
-      );
+      final request = SearchRequestModel(fromDate: thirtyDaysAgo, toDate: now);
 
       final results = await SearchRepo.search(request: request);
 
       // Compute summary stats
-      summaryTotalByPlantName = results.fold<int>(0, (sum, item) => sum + item.number);
+      summaryTotalByPlantName = results.fold<int>(
+        0,
+        (sum, item) => sum + item.number,
+      );
 
       // Count distinct plant names
-      final plantNameSet = results.map((e) => e.treeName).whereType<String>().toSet();
+      final plantNameSet = results
+          .map((e) => e.treeName)
+          .whereType<String>()
+          .toSet();
       summaryDistinctPlantNames = plantNameSet.length;
 
       // Count distinct plant types
-      final plantTypeSet = results.map((e) => e.treeTypeName).whereType<String>().toSet();
+      final plantTypeSet = results
+          .map((e) => e.treeTypeName)
+          .whereType<String>()
+          .toSet();
       summaryDistinctPlantTypes = plantTypeSet.length;
 
       // Total by plant type (same total, just a different grouping perspective)
@@ -88,12 +96,14 @@ class SearchCubit extends Cubit<SearchState> {
 
       isSummaryLoaded = true;
 
-      emit(SummaryLoaded(
-        totalByPlantName: summaryTotalByPlantName,
-        totalByPlantType: summaryTotalByPlantType,
-        distinctPlantNames: summaryDistinctPlantNames,
-        distinctPlantTypes: summaryDistinctPlantTypes,
-      ));
+      emit(
+        SummaryLoaded(
+          totalByPlantName: summaryTotalByPlantName,
+          totalByPlantType: summaryTotalByPlantType,
+          distinctPlantNames: summaryDistinctPlantNames,
+          distinctPlantTypes: summaryDistinctPlantTypes,
+        ),
+      );
     } catch (e) {
       emit(SummaryError(e.toString()));
     }

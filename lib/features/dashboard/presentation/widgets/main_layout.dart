@@ -27,7 +27,10 @@ class _MainLayoutState extends State<MainLayout> {
     final user = SharedPref.getUserInfo();
     final name = user?.name ?? user?.email?.split('@').first ?? "أحمد";
     _screens = [
-      UserView(userName: name, userEmail: user?.email ?? ""), // Index 0: الملف الشخصي (Profile)
+      UserView(
+        userName: name,
+        userEmail: user?.email ?? "",
+      ), // Index 0: الملف الشخصي (Profile)
       const StatisticsPlaceholderView(), // Index 1: الإحصائيات (Statistics)
       BlocProvider(
         create: (_) => SearchCubit(),
@@ -80,13 +83,9 @@ class _MainLayoutState extends State<MainLayout> {
     // Apply SafeArea only on Android to prevent the bottom navigation bar
     // from being obscured by the system navigation bar / gesture area
     if (Platform.isAndroid) {
-      return SafeArea(
-        top: false,
-        child: scaffold,
-      );
+      return SafeArea(top: false, child: scaffold);
     }
 
     return scaffold;
   }
 }
-

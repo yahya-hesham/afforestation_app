@@ -1,6 +1,7 @@
 import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/routes/routes.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
+import 'package:afforestation_app/features/location/page/add_new_location_type.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -169,7 +170,14 @@ class _AdminViewState extends State<AdminView> {
               _buildDashboardButton(
                 title: "إضافة نوع موقع جديد",
                 icon: Icons.location_on_outlined,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LocationTypesScreen(),
+                    ),
+                  );
+                },
               ),
 
               const SizedBox(height: 25),
