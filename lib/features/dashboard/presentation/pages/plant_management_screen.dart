@@ -1,3 +1,4 @@
+import 'package:afforestation_app/features/dashboard/data/models/plant_names_response.dart';
 import 'package:afforestation_app/features/dashboard/presentation/cubit/plant_manage_cubit/plant_manage_cubit.dart';
 import 'package:afforestation_app/features/dashboard/presentation/cubit/plant_manage_cubit/plant_manage_state.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,10 @@ class PlantManagementView extends StatelessWidget {
           },
           // Restrict UI rebuilding to only structural dashboard states
           buildWhen: (previous, current) {
+            if (current is PlantManagementFailure &&
+                previous is PlantManagementSuccess) {
+              return false;
+            }
             return current is PlantManagementInitial ||
                 current is PlantManagementLoading ||
                 current is PlantManagementSuccess ||
@@ -129,13 +134,16 @@ class PlantManagementView extends StatelessWidget {
                       plants: state
                           .plants, // Passes List<PlantNamesResponse> containing scientific names and IDs
                       onEdit: (plant) {
-                        // Ignored as requested
+                        _showEditPlantSheet(context, plant);
                       },
                       onDelete: (plant) {
-                        // Ignored as requested
+                        _confirmDeletePlant(context, plant);
                       },
                       onAddPlant: () {
-                        // Ignored as requested
+                        _showAddPlantSheet(
+                          context,
+                          state.selectedCategory.type ?? '',
+                        );
                       },
                     ),
                     const SizedBox(height: 20),
@@ -172,5 +180,206 @@ class PlantManagementView extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Future<void> _showAddPlantSheet(
+  BuildContext context,
+  String categoryTypeName,
+) async {
+  final cubit = context.read<PlantManageCubit>();
+  final nameController = TextEditingController();
+  final sciNameController = TextEditingController();
+
+  final result = await showModalBottomSheet<Map<String, String>>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (sheetContext) {
+      return Padding(
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
+        ),
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'إضافة نبات جديد ($categoryTypeName)',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: nameController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: 'اسم النبات *',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: sciNameController,
+                decoration: InputDecoration(
+                  labelText: 'الاسم العلمي',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => Navigator.of(sheetContext).pop({
+                  'name': nameController.text.trim(),
+                  'scientificName': sciNameController.text.trim(),
+                }),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('إضافة', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+
+  if (result != null && (result['name']?.isNotEmpty ?? false)) {
+    cubit.addPlant(
+      name: result['name']!,
+      scientificName: result['scientificName'],
+    );
+  }
+}
+
+Future<void> _showEditPlantSheet(
+  BuildContext context,
+  PlantNamesResponse plant,
+) async {
+  final cubit = context.read<PlantManageCubit>();
+  final nameController = TextEditingController(text: plant.name);
+  final sciNameController = TextEditingController(text: plant.scientificName);
+
+  final result = await showModalBottomSheet<Map<String, String>>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (sheetContext) {
+      return Padding(
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
+        ),
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text(
+                'تعديل بيانات النبات',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: nameController,
+                autofocus: true,
+                decoration: InputDecoration(
+                  labelText: 'اسم النبات',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: sciNameController,
+                decoration: InputDecoration(
+                  labelText: 'الاسم العلمي',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => Navigator.of(sheetContext).pop({
+                  'name': nameController.text.trim(),
+                  'scientificName': sciNameController.text.trim(),
+                }),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('حفظ التعديلات', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+
+  if (result != null && (result['name']?.isNotEmpty ?? false)) {
+    cubit.editPlant(
+      id: plant.id ?? 0,
+      newName: result['name']!,
+      scientificName: result['scientificName'],
+    );
+  }
+}
+
+Future<void> _confirmDeletePlant(
+  BuildContext context,
+  PlantNamesResponse plant,
+) async {
+  final cubit = context.read<PlantManageCubit>();
+
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => Directionality(
+      textDirection: TextDirection.rtl,
+      child: AlertDialog(
+        title: const Text('حذف النبات'),
+        content: Text('هل أنت متأكد أنك تريد حذف "${plant.name ?? ''}"؟'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('إلغاء'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('حذف', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  if (confirmed == true) {
+    cubit.deletePlant(plant.id ?? 0);
   }
 }

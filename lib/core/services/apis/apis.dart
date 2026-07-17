@@ -22,6 +22,10 @@ class Apis {
   static const String locationUpdate = '/Location/UpdateLocation';
   static const String locationDelete = '/Location/Delete';
 
+  static const String treeAdd = '/Tree/Add';
+  static const String treeUpdate = '/Tree/UpdateTree';
+  static const String treeDelete = '/Tree/Delete';
+
         static const String addLocation = '/Location/Add';
   static const String addLocationType = '/LocationType/AddNewType';
   static const String deleteLocationType = '/Location/Delete/1';

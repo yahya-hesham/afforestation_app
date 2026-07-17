@@ -8,8 +8,8 @@ import 'package:afforestation_app/core/styles/text_styles.dart';
 class PlantsListContainer extends StatelessWidget {
   final String categoryTitle;
   final List<PlantNamesResponse> plants;
-  final Function(PlantItem) onEdit;
-  final Function(PlantItem) onDelete;
+  final Function(PlantNamesResponse) onEdit;
+  final Function(PlantNamesResponse) onDelete;
   final VoidCallback onAddPlant;
 
   const PlantsListContainer({
@@ -151,31 +151,31 @@ class PlantsListContainer extends StatelessWidget {
                               ),
                             ),
                           ),
-                          // Expanded(
-                          //   flex: 2,
-                          //   child: Row(
-                          //     mainAxisAlignment: MainAxisAlignment.center,
-                          //     children: [
-                          //       GestureDetector(
-                          //         onTap: () => onEdit(plant),
-                          //         child: const Icon(
-                          //           Icons.edit_outlined,
-                          //           size: 18,
-                          //           color: AppColors.onSurface,
-                          //         ),
-                          //       ),
-                          //       const SizedBox(width: 12),
-                          //       GestureDetector(
-                          //         onTap: () => onDelete(plant),
-                          //         child: const Icon(
-                          //           Icons.delete_outline,
-                          //           size: 18,
-                          //           color: AppColors.error,
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
+                          Expanded(
+                            flex: 2,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () => onEdit(plant),
+                                  child: const Icon(
+                                    Icons.edit_outlined,
+                                    size: 18,
+                                    color: AppColors.onSurface,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                GestureDetector(
+                                  onTap: () => onDelete(plant),
+                                  child: const Icon(
+                                    Icons.delete_outline,
+                                    size: 18,
+                                    color: AppColors.error,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     );

@@ -222,4 +222,90 @@ class MangeRepo {
       rethrow;
     }
   }
+
+  static Future<void> updateTree({
+    required int id,
+    required String name,
+    String? scientificName,
+  }) async {
+    try {
+      final token = SharedPref.getToken();
+      final response = await DioProvider.put(
+        endpoint: Apis.treeUpdate,
+        data: {
+          'id': id,
+          'name': name,
+          if (scientificName != null) 'scientificName': scientificName,
+        },
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw Exception('فشل في تعديل النبات.');
+      }
+    } on DioException catch (e) {
+      debugPrint("Dio error (updateTree): ${e.response?.data ?? e.message}");
+      final errorMsg =
+          e.response?.data?.toString() ?? e.message ?? 'خطأ في تعديل النبات';
+      throw Exception(errorMsg);
+    } catch (e) {
+      debugPrint("updateTree error: $e");
+      rethrow;
+    }
+  }
+
+  static Future<void> deleteTree(int id) async {
+    try {
+      final token = SharedPref.getToken();
+      final response = await DioProvider.delete(
+        endpoint: '${Apis.treeDelete}/$id',
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      if (response.statusCode != 200 && response.statusCode != 204) {
+        throw Exception('فشل في حذف النبات.');
+      }
+    } on DioException catch (e) {
+      debugPrint("Dio error (deleteTree): ${e.response?.data ?? e.message}");
+      if (e.response?.statusCode == 500 || e.response?.statusCode == 400) {
+        throw Exception(
+          'النبات مسجل بعملية لا يمكنك مسح هذا النبات قم بمسح العملية أولاً',
+        );
+      }
+      final errorMsg =
+          e.response?.data?.toString() ?? e.message ?? 'خطأ في حذف النبات';
+      throw Exception(errorMsg);
+    } catch (e) {
+      debugPrint("deleteTree error: $e");
+      rethrow;
+    }
+  }
+
+  static Future<void> addTree({
+    required String name,
+    required String typeName,
+    String? scientificName,
+  }) async {
+    try {
+      final token = SharedPref.getToken();
+      final response = await DioProvider.post(
+        endpoint: Apis.treeAdd,
+        data: {
+          'treeName': name,
+          'treeTypeName': typeName,
+          if (scientificName != null) 'scientificName': scientificName,
+        },
+        headers: {'Authorization': 'Bearer $token'},
+      );
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('فشل في إضافة النبات.');
+      }
+    } on DioException catch (e) {
+      debugPrint("Dio error (addTree): ${e.response?.data ?? e.message}");
+      final errorMsg =
+          e.response?.data?.toString() ?? e.message ?? 'خطأ في إضافة النبات';
+      throw Exception(errorMsg);
+    } catch (e) {
+      debugPrint("addTree error: $e");
+      rethrow;
+    }
+  }
 }

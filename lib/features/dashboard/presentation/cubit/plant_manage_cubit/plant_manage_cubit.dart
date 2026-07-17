@@ -69,4 +69,84 @@ class PlantManageCubit extends Cubit<PlantManagementState> {
       }
     }
   }
+
+  Future<void> editPlant({
+    required int id,
+    required String newName,
+    String? scientificName,
+  }) async {
+    if (state is! PlantManagementSuccess) return;
+    final currentState = state as PlantManagementSuccess;
+
+    try {
+      await MangeRepo.updateTree(
+        id: id,
+        name: newName,
+        scientificName: scientificName,
+      );
+      final updatedList = await MangeRepo.fetchTreeNamesByType(
+        currentState.selectedCategory.id ?? 0,
+      );
+      emit(
+        PlantManagementSuccess(
+          categories: currentState.categories,
+          selectedCategory: currentState.selectedCategory,
+          plants: updatedList,
+        ),
+      );
+    } catch (e) {
+      emit(PlantManagementFailure("فشل في تعديل النبات: ${e.toString()}"));
+    }
+  }
+
+  Future<void> deletePlant(int id) async {
+    if (state is! PlantManagementSuccess) return;
+    final currentState = state as PlantManagementSuccess;
+
+    try {
+      await MangeRepo.deleteTree(id);
+      final updatedList = await MangeRepo.fetchTreeNamesByType(
+        currentState.selectedCategory.id ?? 0,
+      );
+      emit(
+        PlantManagementSuccess(
+          categories: currentState.categories,
+          selectedCategory: currentState.selectedCategory,
+          plants: updatedList,
+        ),
+      );
+    } catch (e) {
+      final msg = e.toString().replaceFirst("Exception: ", "");
+      emit(PlantManagementFailure(msg));
+    }
+  }
+
+  Future<void> addPlant({
+    required String name,
+    String? scientificName,
+  }) async {
+    if (state is! PlantManagementSuccess) return;
+    final currentState = state as PlantManagementSuccess;
+
+    try {
+      await MangeRepo.addTree(
+        name: name,
+        typeName: currentState.selectedCategory.type ?? '',
+        scientificName: scientificName,
+      );
+      final updatedList = await MangeRepo.fetchTreeNamesByType(
+        currentState.selectedCategory.id ?? 0,
+      );
+      emit(
+        PlantManagementSuccess(
+          categories: currentState.categories,
+          selectedCategory: currentState.selectedCategory,
+          plants: updatedList,
+        ),
+      );
+    } catch (e) {
+      final msg = e.toString().replaceFirst("Exception: ", "");
+      emit(PlantManagementFailure(msg));
+    }
+  }
 }
