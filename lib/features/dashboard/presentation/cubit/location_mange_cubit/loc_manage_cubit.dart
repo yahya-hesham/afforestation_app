@@ -95,7 +95,11 @@ class LocationManageCubit extends Cubit<LocationManagementState> {
     emit(currentState.copyWith(isMutating: true));
 
     try {
-      await MangeRepo.updateLocation(id: id, name: newName);
+      await MangeRepo.updateLocation(
+        id: id,
+        name: newName,
+        locationTypeId: currentState.selectedCategory.id,
+      );
       await _refresh();
     } catch (e) {
       emit(LocationManagementFailure("فشل في تعديل الموقع: ${e.toString()}"));

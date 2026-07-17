@@ -168,15 +168,23 @@ class MangeRepo {
   static Future<void> updateLocation({
     required int id,
     required String name,
+    int? locationTypeId,
   }) async {
     try {
       final token = SharedPref.getToken();
+      final Map<String, dynamic> body = {
+        'id': id,
+        'name': name,
+      };
+      if (locationTypeId != null && locationTypeId > 0) {
+        body['locationTypeId'] = locationTypeId;
+      }
       final response = await DioProvider.put(
-        endpoint: '${Apis.locationUpdate}/$id',
-        data: {'name': name},
+        endpoint: Apis.locationUpdate,
+        data: body,
         headers: {'Authorization': 'Bearer $token'},
       );
-      if (response.statusCode != 200) {
+      if (response.statusCode != 200 && response.statusCode != 204) {
         throw Exception('فشل في تعديل الموقع.');
       }
     } on DioException catch (e) {

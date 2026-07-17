@@ -206,7 +206,9 @@ class _AdminViewState extends State<AdminView> {
               _buildDashboardButton(
                 title: "إضافة مستخدم",
                 icon: Icons.person_add_alt_1_outlined,
-                onTap: () {},
+                onTap: () {
+                  pushTo(context, Routes.addUser);
+                },
               ),
               _buildDashboardButton(
                 title: "إظهار جميع المستخدمين",

@@ -46,6 +46,10 @@ class AppRouter {
         builder: (context, state) => const NotificationsScreen(),
       ),
       GoRoute(
+        path: Routes.addUser,
+        builder: (context, state) => AddUserScreen(),
+      ),
+      GoRoute(
         path: Routes.search,
         builder: (context, state) => BlocProvider(
           create: (context) => SearchCubit(),
@@ -55,4 +59,3 @@ class AppRouter {
     ],
   );
 }
-
