@@ -48,11 +48,13 @@ class StatisticsSummaryPage extends StatelessWidget {
         final nameAr = parts[0];
         final nameEn = parts.length > 1 ? parts[1] : '';
 
-        items.add(CategorySummaryItem(
-          nameAr: nameAr,
-          nameEn: nameEn,
-          quantity: plantEntry.value,
-        ));
+        items.add(
+          CategorySummaryItem(
+            nameAr: nameAr,
+            nameEn: nameEn,
+            quantity: plantEntry.value,
+          ),
+        );
         subtotal += plantEntry.value;
       }
 
@@ -165,7 +167,10 @@ class StatisticsSummaryPage extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         "عرض توزيع النباتات والكميات المزروعة حسب الفئة العلمية (${results.length} سجل)",
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
                       const SizedBox(height: 25),
 

@@ -1,4 +1,4 @@
-import 'package:afforestation_app/features/dashboard/presentation/models/plant_model.dart';
+import 'package:afforestation_app/features/dashboard/presentation/dumy_data/plant_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';

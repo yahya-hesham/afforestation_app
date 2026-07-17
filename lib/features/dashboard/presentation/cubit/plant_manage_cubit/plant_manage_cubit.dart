@@ -1,8 +1,9 @@
 import 'package:afforestation_app/features/auth/presentation/cubit/auth_state.dart';
+import 'package:afforestation_app/features/dashboard/presentation/cubit/plant_manage_cubit/plant_manage_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AuthCubit extends Cubit<AuthState> {
-  AuthCubit() : super(AuthInitial());
+class PlantManageCubit extends Cubit<PlantManagementState> {
+  PlantManageCubit() : super(PlantManagementInitial());
 
   String currentRole = 'مستخدم عادي (User)';
   List<String> roles = ['مستخدم عادي (User)', 'مستخدم مسؤول (Admin)'];
@@ -12,20 +13,17 @@ class AuthCubit extends Cubit<AuthState> {
   //   emit(RoleChangedState());
   // }
 
-  Future<void> register({
-    required String fullName,
-    required String email,
-    required String password,
-    required String role,
-  }) async {
-    emit(AuthLoading());
+  Future<void> loadDashboard() async {
+    emit(PlantManagementLoading());
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      final plant_types = await await Future.delayed(
+        const Duration(seconds: 2),
+      );
       //api call
 
-      emit(AuthSucess());
+      emit(PlantManagementSuccess());
     } catch (error) {
-      emit(AuthError(error.toString()));
+      emit(PlantManagementFailure());
     }
   }
 }

@@ -271,8 +271,11 @@ class _SearchState extends State<Search> {
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               child: Column(
                                 children: [
-                                  const Icon(Icons.error_outline,
-                                      color: Colors.redAccent, size: 28),
+                                  const Icon(
+                                    Icons.error_outline,
+                                    color: Colors.redAccent,
+                                    size: 28,
+                                  ),
                                   const SizedBox(height: 8),
                                   Text(
                                     "فشل في تحميل البيانات",
@@ -320,8 +323,7 @@ class _SearchState extends State<Search> {
                                       items: locationItems,
                                       selectedItem: _selectedLocation,
                                       onChanged: (val) {
-                                        setState(
-                                            () => _selectedLocation = val);
+                                        setState(() => _selectedLocation = val);
                                       },
                                     ),
                                   ),
@@ -380,10 +382,6 @@ class _SearchState extends State<Search> {
                 ),
                 const SizedBox(height: 35),
 
-               
-                   
-
-                  
                 const SizedBox(height: 25),
 
                 // 3. Quick Tip Card
@@ -399,7 +397,6 @@ class _SearchState extends State<Search> {
     );
   }
 
- 
   /// Build a dropdown field for API-loaded data with an "all" option
   Widget _buildApiDropdown({
     required String label,

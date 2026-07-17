@@ -19,9 +19,7 @@ class SearchRepo {
       var response = await DioProvider.post(
         endpoint: Apis.afforestationSearch,
         data: request.toJson(),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
@@ -49,9 +47,7 @@ class SearchRepo {
       final token = SharedPref.getToken();
       var response = await DioProvider.delete(
         endpoint: '${Apis.afforestation}/$id',
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode != 200) {
@@ -78,9 +74,7 @@ class SearchRepo {
       var response = await DioProvider.put(
         endpoint: '${Apis.afforestation}/$id',
         data: data.toJson(),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode != 200) {
@@ -103,9 +97,7 @@ class SearchRepo {
       final token = SharedPref.getToken();
       var response = await DioProvider.get(
         endpoint: Apis.users,
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
@@ -119,7 +111,9 @@ class SearchRepo {
     } on DioException catch (e) {
       debugPrint("Dio error (fetchUsers): ${e.response?.data ?? e.message}");
       final errorMsg =
-          e.response?.data?.toString() ?? e.message ?? 'خطأ في تحميل المستخدمين';
+          e.response?.data?.toString() ??
+          e.message ??
+          'خطأ في تحميل المستخدمين';
       throw Exception(errorMsg);
     } catch (e) {
       debugPrint("fetchUsers error: $e");
@@ -133,9 +127,7 @@ class SearchRepo {
       final token = SharedPref.getToken();
       var response = await DioProvider.get(
         endpoint: Apis.locations,
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
@@ -147,7 +139,9 @@ class SearchRepo {
         throw Exception('فشل في تحميل المواقع.');
       }
     } on DioException catch (e) {
-      debugPrint("Dio error (fetchLocations): ${e.response?.data ?? e.message}");
+      debugPrint(
+        "Dio error (fetchLocations): ${e.response?.data ?? e.message}",
+      );
       final errorMsg =
           e.response?.data?.toString() ?? e.message ?? 'خطأ في تحميل المواقع';
       throw Exception(errorMsg);
@@ -163,9 +157,7 @@ class SearchRepo {
       final token = SharedPref.getToken();
       var response = await DioProvider.get(
         endpoint: Apis.treeNames,
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
@@ -177,7 +169,9 @@ class SearchRepo {
         throw Exception('فشل في تحميل أسماء النباتات.');
       }
     } on DioException catch (e) {
-      debugPrint("Dio error (fetchTreeNames): ${e.response?.data ?? e.message}");
+      debugPrint(
+        "Dio error (fetchTreeNames): ${e.response?.data ?? e.message}",
+      );
       final errorMsg =
           e.response?.data?.toString() ?? e.message ?? 'خطأ في تحميل النباتات';
       throw Exception(errorMsg);
@@ -198,9 +192,7 @@ class SearchRepo {
         Apis.afforestationExport,
         data: request.toJson(),
         options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-          },
+          headers: {'Authorization': 'Bearer $token'},
           responseType: ResponseType.bytes,
         ),
       );
@@ -221,4 +213,3 @@ class SearchRepo {
     }
   }
 }
-

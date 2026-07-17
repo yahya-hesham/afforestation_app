@@ -2,7 +2,7 @@ import 'package:afforestation_app/core/services/apis/apis.dart';
 import 'package:afforestation_app/core/services/apis/dio_provider.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/features/auth/data/models/auth_params.dart';
-import 'package:afforestation_app/features/dashboard/data/models/auth_response/user.dart';
+import 'package:afforestation_app/features/auth/data/models/auth_response/user.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
@@ -15,10 +15,7 @@ class AuthRepo {
     try {
       var response = await DioProvider.post(
         endpoint: Apis.login,
-        data: {
-          'email': email,
-          'password': password,
-        },
+        data: {'email': email, 'password': password},
       );
 
       if (response.statusCode == 200) {
@@ -26,17 +23,12 @@ class AuthRepo {
         await SharedPref.saveToken(data.token);
         await SharedPref.saveRole(data.role);
         await SharedPref.saveCredentials(email, password);
-      
-        // Construct and save user info locally
-        var user = User(
-          id: data.id,
-          email: data.email,
-   
-        );
-        await SharedPref.saveUserInfo(user);
-        
-        return data;
 
+        // Construct and save user info locally
+        var user = User(id: data.id, email: data.email);
+        await SharedPref.saveUserInfo(user);
+
+        return data;
       } else {
         return null;
       }

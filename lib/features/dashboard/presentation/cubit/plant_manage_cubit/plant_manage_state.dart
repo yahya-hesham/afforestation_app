@@ -1,11 +1,16 @@
-class PlantManageState {}
+class PlantManagementState {}
 
-class AuthInitialState extends PlantManageState {}
+class PlantManagementInitial extends PlantManagementState {}
 
-class PlantLoadingState extends PlantManageState {}
+class PlantManagementLoading extends PlantManagementState {}
 
-class PlantLoadedState extends PlantManageState {}
+class PlantManagementSuccess extends PlantManagementState {}
 
-class PlantErrorState extends PlantManageState {}
+class PlantManagementFailure extends PlantManagementState {}
 
-class SelectedPlantState extends PlantManageState {}
+// for buttons
+class SelectedPlantState extends PlantManagementState {}
+
+class PlantActionSuccess extends PlantManagementState {}
+
+class PlantActionFailure extends PlantManagementState {}

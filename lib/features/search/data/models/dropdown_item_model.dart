@@ -5,10 +5,7 @@ class DropdownItemModel {
   DropdownItemModel({required this.id, required this.name});
 
   factory DropdownItemModel.fromJson(Map<String, dynamic> json) {
-    return DropdownItemModel(
-      id: json['id'] ?? 0,
-      name: json['name'] ?? '',
-    );
+    return DropdownItemModel(id: json['id'] ?? 0, name: json['name'] ?? '');
   }
 
   @override
