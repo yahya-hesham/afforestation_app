@@ -6,34 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlantManageCubit extends Cubit<PlantManagementState> {
   PlantManageCubit() : super(PlantManagementInitial());
-
-  String currentRole = 'مستخدم عادي (User)';
-  List<String> roles = ['مستخدم عادي (User)', 'مستخدم مسؤول (Admin)'];
-
-  // void changeRole(String newRole) {
-  //   currentRole = newRole;
-  //   emit(RoleChangedState());
-  // }
-
-  // Future<void> loadDashboard() async {
-  //   emit(PlantManagementLoading());
-  //   try {
-  //     final plant_types = await MangeRepo.fetchPlantTypes();
-  //     await Future.delayed(const Duration(seconds: 2));
-  //     //api call
-
-  //     emit(PlantManagementSuccess());
-  //   } catch (error) {
-  //     emit(PlantManagementFailure());
-  //   }
-  // }
   Future<void> loadDashboard() async {
     emit(PlantManagementLoading());
     try {
-      final categories = await MangeRepo.fetchPlantTypes();
+      final types = await MangeRepo.fetchPlantTypes();
 
-      if (categories.isNotEmpty) {
-        final defaultCategory = categories.first;
+      if (types.isNotEmpty) {
+        final defaultCategory = types.first;
         // Fetch and filter plants for the default category
         final plants = await MangeRepo.fetchTreeNamesByType(
           defaultCategory.id ?? 0,
@@ -41,7 +20,7 @@ class PlantManageCubit extends Cubit<PlantManagementState> {
 
         emit(
           PlantManagementSuccess(
-            categories: categories,
+            categories: types,
             selectedCategory: defaultCategory,
             plants: plants,
           ),

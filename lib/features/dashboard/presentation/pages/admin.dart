@@ -226,11 +226,14 @@ class _AdminViewState extends State<AdminView> {
               _buildDashboardButton(
                 title: "إظهار جميع النباتات",
                 icon: Icons.format_list_bulleted_outlined,
-                onTap: () {Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => const PlantManagementScreen ()),
-);
-},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const PlantManagementScreen(),
+                    ),
+                  );
+                },
               ),
               _buildDashboardButton(
                 title: "إظهار جميع المواقع",

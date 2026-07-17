@@ -1,11 +1,11 @@
-class PlantNamesResponse {
+class LocNamesResponse {
   int? id;
   String? name;
   String? type;
   int? typeId;
   String? scientificName;
 
-  PlantNamesResponse({
+  LocNamesResponse({
     this.id,
     this.name,
     this.type,
@@ -13,8 +13,8 @@ class PlantNamesResponse {
     this.scientificName,
   });
 
-  factory PlantNamesResponse.fromJson(Map<String, dynamic> json) {
-    return PlantNamesResponse(
+  factory LocNamesResponse.fromJson(Map<String, dynamic> json) {
+    return LocNamesResponse(
       id: json['id'] as int?,
       name: json['name'] as String?,
       type: json['type'] as String?,
