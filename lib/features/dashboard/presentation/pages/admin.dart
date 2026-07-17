@@ -1,6 +1,7 @@
 import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/routes/routes.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
+import 'package:afforestation_app/features/dashboard/presentation/pages/plant_management_screen.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -225,7 +226,11 @@ class _AdminViewState extends State<AdminView> {
               _buildDashboardButton(
                 title: "إظهار جميع النباتات",
                 icon: Icons.format_list_bulleted_outlined,
-                onTap: () {},
+                onTap: () {Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => const PlantManagementScreen ()),
+);
+},
               ),
               _buildDashboardButton(
                 title: "إظهار جميع المواقع",

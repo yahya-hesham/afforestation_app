@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 class MangeRepo {
-  Future<List<PlantTypesResponse>> fetchPlantTypes() async {
+  static Future<List<PlantTypesResponse>> fetchPlantTypes() async {
     try {
       final token = SharedPref.getToken();
       var response = await DioProvider.get(
@@ -18,7 +18,7 @@ class MangeRepo {
         final List<dynamic> data = response.data;
         return data.map((json) => PlantTypesResponse.fromJson(json)).toList();
       } else {
-        throw Exception('فشل في تحميل المستخدمين.');
+        throw Exception('فشل في تحميل أنواع النباتات.');
       }
     } on DioException catch (e) {
       debugPrint("Dio error (fetchUsers): ${e.response?.data ?? e.message}");
@@ -33,28 +33,37 @@ class MangeRepo {
     }
   }
 
-  Future<List<PlantNamesResponse>> fetchPlantNames() async {
+  static Future<List<PlantNamesResponse>> fetchTreeNamesByType(
+    int plantId,
+  ) async {
     try {
       final token = SharedPref.getToken();
       var response = await DioProvider.get(
         endpoint: Apis.treeNames,
         headers: {'Authorization': 'Bearer $token'},
       );
+
       if (response.statusCode == 200) {
-        final List<dynamic> data = response.data;
-        return data.map((json) => PlantNamesResponse.fromJson(json)).toList();
+        final list = response.data as List<dynamic>;
+        final allPlants = list
+            .map((e) => PlantNamesResponse.fromJson(e as Map<String, dynamic>))
+            .toList();
+        final filteredPlants = allPlants
+            .where((plant) => plant.typeId == plantId)
+            .toList();
+        return filteredPlants;
       } else {
-        throw Exception('فشل في تحميل المستخدمين.');
+        throw Exception('فشل في تحميل أسماء النباتات.');
       }
     } on DioException catch (e) {
-      debugPrint("Dio error (fetchUsers): ${e.response?.data ?? e.message}");
+      debugPrint(
+        "Dio error (fetchTreeNames): ${e.response?.data ?? e.message}",
+      );
       final errorMsg =
-          e.response?.data?.toString() ??
-          e.message ??
-          'خطأ في تحميل المستخدمين';
+          e.response?.data?.toString() ?? e.message ?? 'خطأ في تحميل النباتات';
       throw Exception(errorMsg);
     } catch (e) {
-      debugPrint("fetchUsers error: $e");
+      debugPrint("fetchTreeNames error: $e");
       rethrow;
     }
   }
