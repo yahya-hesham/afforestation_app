@@ -5,6 +5,8 @@ import 'package:afforestation_app/core/styles/themes.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter/material.dart';
+import 'package:afforestation_app/feautures/users/presentation/pages/add_new_operation_screen.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,10 +31,13 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: AppThemes.lightTheme,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
+      locale: const Locale('ar'),
+      supportedLocales: const [
+        Locale('ar'),
+      ],
+      home: const AddNewOperationScreen(), 
       routerConfig: AppRouter.routes,
+
     );
   }
 }
