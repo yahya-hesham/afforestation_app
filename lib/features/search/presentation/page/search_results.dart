@@ -87,7 +87,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       // Share the file using share_plus
       final xFile = XFile(filePath);
       await Share.shareXFiles([xFile], text: 'تقرير بيانات التشجير');
-
     } catch (e) {
       // Close the loading dialog
       if (mounted) {
@@ -203,9 +202,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             builder: (context, state) {
               if (state is SearchLoading) {
                 return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.secondary,
-                  ),
+                  child: CircularProgressIndicator(color: AppColors.secondary),
                 );
               }
 
@@ -294,9 +291,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
               }
 
               return const Center(
-                child: CircularProgressIndicator(
-                  color: AppColors.secondary,
-                ),
+                child: CircularProgressIndicator(color: AppColors.secondary),
               );
             },
           ),
@@ -320,8 +315,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       _currentPage = 0;
     }
     final startIndex = _currentPage * _pageSize;
-    final endIndex =
-        (startIndex + _pageSize > totalCount) ? totalCount : startIndex + _pageSize;
+    final endIndex = (startIndex + _pageSize > totalCount)
+        ? totalCount
+        : startIndex + _pageSize;
     final pageResults = allResults.sublist(startIndex, endIndex);
 
     return SingleChildScrollView(
@@ -364,11 +360,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 ),
                 elevation: 0,
               ),
-              icon: const Icon(
-                Icons.download,
-                color: Colors.white,
-                size: 20,
-              ),
+              icon: const Icon(Icons.download, color: Colors.white, size: 20),
               label: const Text(
                 "تصدير إلى إكسل",
                 style: TextStyle(
@@ -391,9 +383,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   context,
                   MaterialPageRoute(
                     // ✅ Passing the actual search results to the statistics page
-                    builder: (context) => StatisticsSummaryPage(
-                      results: allResults,
-                    ),
+                    builder: (context) =>
+                        StatisticsSummaryPage(results: allResults),
                   ),
                 );
               },
@@ -401,10 +392,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 backgroundColor: Colors.white,
                 foregroundColor: AppColors.primary,
                 elevation: 0,
-                side: const BorderSide(
-                  color: AppColors.secondary,
-                  width: 1.5,
-                ),
+                side: const BorderSide(color: AppColors.secondary, width: 1.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
@@ -481,49 +469,46 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   disabledColor: Colors.grey.shade300,
                 ),
                 // Page numbers
-                ...List.generate(
-                  totalPages > 5 ? 5 : totalPages,
-                  (i) {
-                    // Show pages around current
-                    int pageIndex;
-                    if (totalPages <= 5) {
-                      pageIndex = i;
-                    } else if (_currentPage < 3) {
-                      pageIndex = i;
-                    } else if (_currentPage > totalPages - 4) {
-                      pageIndex = totalPages - 5 + i;
-                    } else {
-                      pageIndex = _currentPage - 2 + i;
-                    }
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() => _currentPage = pageIndex);
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: 36,
-                        height: 36,
-                        decoration: BoxDecoration(
+                ...List.generate(totalPages > 5 ? 5 : totalPages, (i) {
+                  // Show pages around current
+                  int pageIndex;
+                  if (totalPages <= 5) {
+                    pageIndex = i;
+                  } else if (_currentPage < 3) {
+                    pageIndex = i;
+                  } else if (_currentPage > totalPages - 4) {
+                    pageIndex = totalPages - 5 + i;
+                  } else {
+                    pageIndex = _currentPage - 2 + i;
+                  }
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() => _currentPage = pageIndex);
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: _currentPage == pageIndex
+                            ? AppColors.secondary
+                            : Colors.grey.shade100,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '${pageIndex + 1}',
+                        style: TextStyle(
                           color: _currentPage == pageIndex
-                              ? AppColors.secondary
-                              : Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${pageIndex + 1}',
-                          style: TextStyle(
-                            color: _currentPage == pageIndex
-                                ? Colors.white
-                                : AppColors.onSurface,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
+                              ? Colors.white
+                              : AppColors.onSurface,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                }),
                 // Next
                 IconButton(
                   onPressed: _currentPage < totalPages - 1
@@ -551,8 +536,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       builder: (dialogContext) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: const Text(
             "تأكيد الحذف",
             style: TextStyle(
@@ -566,10 +552,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext),
-              child: const Text(
-                "إلغاء",
-                style: TextStyle(color: Colors.grey),
-              ),
+              child: const Text("إلغاء", style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -582,10 +565,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text(
-                "حذف",
-                style: TextStyle(color: Colors.white),
-              ),
+              child: const Text("حذف", style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -595,8 +575,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   // ─── Edit Dialog ───
   void _showEditDialog(BuildContext context, SearchResultModel item) {
-    final numberController =
-        TextEditingController(text: item.number.toString());
+    final numberController = TextEditingController(
+      text: item.number.toString(),
+    );
     DateTime? selectedDate = item.dateOfPlanted;
 
     showDialog(
@@ -606,7 +587,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           textDirection: TextDirection.rtl,
           child: AlertDialog(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)),
+              borderRadius: BorderRadius.circular(20),
+            ),
             title: const Text(
               "تعديل السجل",
               style: TextStyle(
@@ -621,8 +603,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   // Plant name (read-only info)
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading:
-                        const Icon(Icons.park, color: AppColors.secondary),
+                    leading: const Icon(Icons.park, color: AppColors.secondary),
                     title: Text(item.treeName ?? "غير محدد"),
                     subtitle: Text(item.scientificName ?? ""),
                   ),
@@ -630,8 +611,10 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   // Date picker
                   ListTile(
                     contentPadding: EdgeInsets.zero,
-                    leading: const Icon(Icons.calendar_today,
-                        color: AppColors.secondary),
+                    leading: const Icon(
+                      Icons.calendar_today,
+                      color: AppColors.secondary,
+                    ),
                     title: const Text("تاريخ الزراعة"),
                     subtitle: Text(
                       "${selectedDate?.year}-${selectedDate?.month.toString().padLeft(2, '0')}-${selectedDate?.day.toString().padLeft(2, '0')}",
@@ -665,15 +648,19 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: "الكمية",
-                      prefixIcon: const Icon(Icons.numbers,
-                          color: AppColors.secondary),
+                      prefixIcon: const Icon(
+                        Icons.numbers,
+                        color: AppColors.secondary,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(
-                            color: AppColors.secondary, width: 2),
+                          color: AppColors.secondary,
+                          width: 2,
+                        ),
                       ),
                     ),
                   ),

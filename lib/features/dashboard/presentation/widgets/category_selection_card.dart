@@ -1,17 +1,18 @@
-import 'package:afforestation_app/features/dashboard/presentation/models/plant_model.dart';
+import 'package:afforestation_app/features/dashboard/data/models/plant_types_response.dart';
+import 'package:afforestation_app/features/dashboard/presentation/dumy_data/plant_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 
 class CategorySelectionCard extends StatelessWidget {
-  final List<PlantCategory> categories;
+  final List<PlantTypesResponse> types;
   final int selectedIndex;
   final ValueChanged<int> onCategorySelected;
 
   const CategorySelectionCard({
     super.key,
-    required this.categories,
+    required this.types,
     required this.selectedIndex,
     required this.onCategorySelected,
   });
@@ -44,7 +45,7 @@ class CategorySelectionCard extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: categories.length,
+            itemCount: types.length,
             itemBuilder: (context, index) {
               final isSelected = index == selectedIndex;
               return Padding(
@@ -68,7 +69,7 @@ class CategorySelectionCard extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        "${categories[index].titleAr} (${categories[index].titleEn})",
+                        "${types[index].type}",
                         style: TextStyles.textButtonTextStyle.copyWith(
                           fontWeight: isSelected
                               ? FontWeight.w700
