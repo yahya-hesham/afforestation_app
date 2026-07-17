@@ -1,11 +1,32 @@
-class PlantManageState {}
+import 'package:afforestation_app/features/dashboard/data/models/plant_names_response.dart';
+import 'package:afforestation_app/features/dashboard/data/models/plant_types_response.dart';
 
-class AuthInitialState extends PlantManageState {}
+class PlantManagementState {}
 
-class PlantLoadingState extends PlantManageState {}
+class PlantManagementInitial extends PlantManagementState {}
 
-class PlantLoadedState extends PlantManageState {}
+class PlantManagementLoading extends PlantManagementState {}
 
-class PlantErrorState extends PlantManageState {}
+class PlantManagementSuccess extends PlantManagementState {
+  final List<PlantTypesResponse> categories;
+  final PlantTypesResponse selectedCategory;
+  final List<PlantNamesResponse> plants;
 
-class SelectedPlantState extends PlantManageState {}
+  PlantManagementSuccess({
+    required this.categories,
+    required this.selectedCategory,
+    required this.plants,
+  });
+}
+
+class PlantManagementFailure extends PlantManagementState {
+  final String errorMessage;
+  PlantManagementFailure(this.errorMessage);
+}
+
+// for buttons
+class SelectedPlantState extends PlantManagementState {}
+
+class PlantActionSuccess extends PlantManagementState {}
+
+class PlantActionFailure extends PlantManagementState {}

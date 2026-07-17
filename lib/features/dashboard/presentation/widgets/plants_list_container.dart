@@ -1,4 +1,5 @@
-import 'package:afforestation_app/features/dashboard/presentation/models/plant_model.dart';
+import 'package:afforestation_app/features/dashboard/data/models/plant_names_response.dart';
+import 'package:afforestation_app/features/dashboard/presentation/dumy_data/plant_model.dart';
 
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
@@ -6,7 +7,7 @@ import 'package:afforestation_app/core/styles/text_styles.dart';
 
 class PlantsListContainer extends StatelessWidget {
   final String categoryTitle;
-  final List<PlantItem> plants;
+  final List<PlantNamesResponse> plants;
   final Function(PlantItem) onEdit;
   final Function(PlantItem) onDelete;
   final VoidCallback onAddPlant;
@@ -137,44 +138,44 @@ class PlantsListContainer extends StatelessWidget {
                           Expanded(
                             flex: 3,
                             child: Text(
-                              plant.nameAr,
+                              plant.scientificName?? "",
                               style: TextStyles.listRowTitleStyle,
                             ),
                           ),
                           Expanded(
                             flex: 4,
                             child: Text(
-                              plant.nameEn,
+                              plant.name??"",
                               style: TextStyles.listRowSubtitleStyle.copyWith(
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () => onEdit(plant),
-                                  child: const Icon(
-                                    Icons.edit_outlined,
-                                    size: 18,
-                                    color: AppColors.onSurface,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                GestureDetector(
-                                  onTap: () => onDelete(plant),
-                                  child: const Icon(
-                                    Icons.delete_outline,
-                                    size: 18,
-                                    color: AppColors.error,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          // Expanded(
+                          //   flex: 2,
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.center,
+                          //     children: [
+                          //       GestureDetector(
+                          //         onTap: () => onEdit(plant),
+                          //         child: const Icon(
+                          //           Icons.edit_outlined,
+                          //           size: 18,
+                          //           color: AppColors.onSurface,
+                          //         ),
+                          //       ),
+                          //       const SizedBox(width: 12),
+                          //       GestureDetector(
+                          //         onTap: () => onDelete(plant),
+                          //         child: const Icon(
+                          //           Icons.delete_outline,
+                          //           size: 18,
+                          //           color: AppColors.error,
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                         ],
                       ),
                     );

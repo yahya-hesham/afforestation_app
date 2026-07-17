@@ -2,7 +2,7 @@ import 'package:afforestation_app/core/services/apis/apis.dart';
 import 'package:afforestation_app/core/services/apis/dio_provider.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/features/auth/data/models/auth_params.dart';
-import 'package:afforestation_app/features/dashboard/data/models/auth_response/user.dart';
+import 'package:afforestation_app/features/auth/data/models/auth_response/user.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';

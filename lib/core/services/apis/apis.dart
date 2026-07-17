@@ -15,4 +15,5 @@ class Apis {
   static const String addLocationType = '/LocationType/AddNewType';
   static const String deleteLocationType = '/Location/Delete/1';
   static const String editLocationType = '/Location/UpdateLocation';
+  static const String treeTypes = '/TreeType/GetAllTreeType';
 }
