@@ -21,12 +21,11 @@ class PlantManagementScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       // FIXED: Added the cascade operator (..loadDashboard()) to trigger the API fetch immediately
-      create: (context) => PlantManageCubit()..loadDashboard(), 
+      create: (context) => PlantManageCubit()..loadDashboard(),
       child: const PlantManagementView(),
     );
   }
 }
-
 
 class PlantManagementView extends StatelessWidget {
   const PlantManagementView({super.key});

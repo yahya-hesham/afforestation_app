@@ -138,14 +138,14 @@ class PlantsListContainer extends StatelessWidget {
                           Expanded(
                             flex: 3,
                             child: Text(
-                              plant.scientificName?? "",
+                              plant.scientificName ?? "",
                               style: TextStyles.listRowTitleStyle,
                             ),
                           ),
                           Expanded(
                             flex: 4,
                             child: Text(
-                              plant.name??"",
+                              plant.name ?? "",
                               style: TextStyles.listRowSubtitleStyle.copyWith(
                                 fontStyle: FontStyle.italic,
                               ),

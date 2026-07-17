@@ -23,10 +23,3 @@ class PlantManagementFailure extends PlantManagementState {
   final String errorMessage;
   PlantManagementFailure(this.errorMessage);
 }
-
-// for buttons
-class SelectedPlantState extends PlantManagementState {}
-
-class PlantActionSuccess extends PlantManagementState {}
-
-class PlantActionFailure extends PlantManagementState {}
