@@ -23,4 +23,10 @@ class Apis {
       '/Location/Update'; // called as PUT '$locationUpdate/{id}'
   static const String locationDelete =
       '/Location/Delete'; // called as DELETE '$locationDelete/{id}'
+
+        static const String addLocation = '/Location/Add';
+  static const String addLocationType = '/LocationType/AddNewType';
+  static const String deleteLocationType = '/Location/Delete/1';
+  static const String editLocationType = '/Location/UpdateLocation';
+ 
 }
