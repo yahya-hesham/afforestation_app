@@ -17,7 +17,7 @@ class LocationManageCubit extends Cubit<LocationManagementState> {
       if (types.isNotEmpty) {
         final defaultCategory = types.first;
         final filtered = allLocations
-            .where((loc) => loc.typeId == defaultCategory.id)
+            .where((loc) => loc.locationTypeId == defaultCategory.id)
             .toList();
 
         emit(
@@ -53,8 +53,9 @@ class LocationManageCubit extends Cubit<LocationManagementState> {
 
     try {
       final allLocations = await MangeRepo.fetchAllLocations();
-      final filtered =
-          allLocations.where((loc) => loc.typeId == category.id).toList();
+      final filtered = allLocations
+          .where((loc) => loc.locationTypeId == category.id)
+          .toList();
 
       emit(
         LocationManagementSuccess(
@@ -120,7 +121,7 @@ class LocationManageCubit extends Cubit<LocationManagementState> {
 
     final allLocations = await MangeRepo.fetchAllLocations();
     final filtered = allLocations
-        .where((loc) => loc.typeId == currentState.selectedCategory.id)
+        .where((loc) => loc.locationTypeId == currentState.selectedCategory.id)
         .toList();
 
     emit(

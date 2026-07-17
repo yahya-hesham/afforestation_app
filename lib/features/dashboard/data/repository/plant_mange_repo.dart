@@ -130,7 +130,7 @@ class MangeRepo {
     // BUG FIX: this used to call Apis.treeNames, so it was fetching trees
     // and filtering them by a location typeId. Now it fetches locations.
     final all = await fetchAllLocations();
-    return all.where((location) => location.typeId == locId).toList();
+    return all.where((location) => location.locationTypeId == locId).toList();
   }
 
   // --- The three methods below hit endpoints I couldn't verify against
@@ -148,7 +148,7 @@ class MangeRepo {
       final token = SharedPref.getToken();
       final response = await DioProvider.post(
         endpoint: Apis.locationAdd,
-        data: {'name': name, 'typeId': typeId},
+        data: {'name': name, 'locationTypeId': typeId},
         headers: {'Authorization': 'Bearer $token'},
       );
       if (response.statusCode != 200 && response.statusCode != 201) {

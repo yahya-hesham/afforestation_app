@@ -1,22 +1,11 @@
+import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/features/dashboard/data/models/loc_names_response.dart';
 import 'package:afforestation_app/features/dashboard/presentation/cubit/location_mange_cubit/loc_manage_cubit.dart';
 import 'package:afforestation_app/features/dashboard/presentation/cubit/location_mange_cubit/loc_manage_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class _AppColors {
-  static const background = Color(0xFFF2F9F2);
-  static const primaryGreen = Color(0xFF4CAF6B);
-  static const darkGreen = Color(0xFF2E7D4F);
-  static const cardWhite = Colors.white;
-  static const chipBorder = Color(0xFFBFE3C4);
-  static const editBg = Color(0xFFFCEBB6);
-  static const editText = Color(0xFF9A7B1E);
-  static const deleteBg = Color(0xFFF9D4D4);
-  static const deleteText = Color(0xFFC0392B);
-  static const textDark = Color(0xFF2B2B2B);
-  static const textGrey = Color(0xFF8C978D);
-}
+
 
 class LocationManagementScreen extends StatelessWidget {
   const LocationManagementScreen({super.key});
@@ -38,7 +27,7 @@ class _LocationManagementView extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: _AppColors.background,
+        backgroundColor: AppColors.background,
         body: SafeArea(
           child: BlocConsumer<LocationManageCubit, LocationManagementState>(
             listener: (context, state) {
@@ -53,7 +42,7 @@ class _LocationManagementView extends StatelessWidget {
                   state is LocationManagementInitial) {
                 return const Center(
                   child: CircularProgressIndicator(
-                    color: _AppColors.primaryGreen,
+                    color: AppColors.primaryGreen,
                   ),
                 );
               }
@@ -86,7 +75,7 @@ class _ErrorView extends StatelessWidget {
           children: [
             const Icon(
               Icons.error_outline,
-              color: _AppColors.deleteText,
+              color: AppColors.deleteText,
               size: 40,
             ),
             const SizedBox(height: 12),
@@ -96,7 +85,7 @@ class _ErrorView extends StatelessWidget {
               onPressed: () =>
                   context.read<LocationManageCubit>().loadDashboard(),
               style: ElevatedButton.styleFrom(
-                backgroundColor: _AppColors.primaryGreen,
+                backgroundColor: AppColors.primaryGreen,
               ),
               child: const Text(
                 'إعادة المحاولة',
@@ -121,7 +110,7 @@ class _DashboardBody extends StatelessWidget {
         const _Header(),
         Expanded(
           child: RefreshIndicator(
-            color: _AppColors.primaryGreen,
+            color: AppColors.primaryGreen,
             onRefresh: () => context.read<LocationManageCubit>().loadDashboard(),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -136,14 +125,14 @@ class _DashboardBody extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: _AppColors.textDark,
+                      color: AppColors.textDark,
                     ),
                   ),
                   const SizedBox(height: 4),
                   const Text(
                     'تصفح وإدارة المواقع حسب النوع',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13, color: _AppColors.textGrey),
+                    style: TextStyle(fontSize: 13, color: AppColors.textGrey),
                   ),
                   const SizedBox(height: 16),
                   _TypesCard(state: state),
@@ -172,7 +161,7 @@ class _Header extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.chevron_right, color: _AppColors.textDark),
+            icon: const Icon(Icons.chevron_right, color: AppColors.textDark),
             onPressed: () => Navigator.of(context).maybePop(),
           ),
           const Expanded(
@@ -182,12 +171,12 @@ class _Header extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: _AppColors.textDark,
+                color: AppColors.textDark,
               ),
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.search, color: _AppColors.primaryGreen),
+            icon: const Icon(Icons.search, color: AppColors.primaryGreen),
             onPressed: () {},
           ),
         ],
@@ -205,7 +194,7 @@ class _TypesCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: _AppColors.cardWhite,
+        color: AppColors.cardWhite,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -225,13 +214,13 @@ class _TypesCard extends StatelessWidget {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
-                  color: _AppColors.textDark,
+                  color: AppColors.textDark,
                 ),
               ),
               Spacer(),
               Icon(
                 Icons.location_on_outlined,
-                color: _AppColors.primaryGreen,
+                color: AppColors.primaryGreen,
                 size: 20,
               ),
             ],
@@ -240,7 +229,7 @@ class _TypesCard extends StatelessWidget {
           if (state.categories.isEmpty)
             const Text(
               'لا توجد أنواع مواقع بعد',
-              style: TextStyle(color: _AppColors.textGrey, fontSize: 13),
+              style: TextStyle(color: AppColors.textGrey, fontSize: 13),
             )
           else
             Wrap(
@@ -286,16 +275,16 @@ class _TypeChip extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? _AppColors.primaryGreen : Colors.white,
+          color: isSelected ? AppColors.primaryGreen : Colors.white,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? _AppColors.primaryGreen : _AppColors.chipBorder,
+            color: isSelected ? AppColors.primaryGreen : AppColors.chipBorder,
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? Colors.white : _AppColors.darkGreen,
+            color: isSelected ? Colors.white : AppColors.darkGreen,
             fontWeight: FontWeight.w600,
             fontSize: 13,
           ),
@@ -314,7 +303,7 @@ class _SelectedCategoryHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: const BoxDecoration(
-        color: _AppColors.primaryGreen,
+        color: AppColors.primaryGreen,
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Row(
@@ -339,11 +328,11 @@ class _SelectedCategoryHeader extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            icon: const Icon(Icons.add, size: 16, color: _AppColors.primaryGreen),
+            icon: const Icon(Icons.add, size: 16, color: AppColors.primaryGreen),
             label: const Text(
               'إضافة موقع',
               style: TextStyle(
-                color: _AppColors.primaryGreen,
+                color: AppColors.primaryGreen,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -362,7 +351,7 @@ class _LocationsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: _AppColors.cardWhite,
+        color: AppColors.cardWhite,
         borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
       ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -376,7 +365,7 @@ class _LocationsList extends StatelessWidget {
                   'اسم الموقع',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: _AppColors.textGrey,
+                    color: AppColors.textGrey,
                     fontSize: 13,
                   ),
                 ),
@@ -385,7 +374,7 @@ class _LocationsList extends StatelessWidget {
                 'إدارة',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: _AppColors.textGrey,
+                  color: AppColors.textGrey,
                   fontSize: 13,
                 ),
               ),
@@ -398,7 +387,7 @@ class _LocationsList extends StatelessWidget {
               child: Text(
                 'لا توجد مواقع من هذا النوع بعد',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: _AppColors.textGrey),
+                style: TextStyle(color: AppColors.textGrey),
               ),
             )
           else
@@ -412,7 +401,7 @@ class _LocationsList extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.only(top: 8),
               child: LinearProgressIndicator(
-                color: _AppColors.primaryGreen,
+                color: AppColors.primaryGreen,
                 minHeight: 2,
               ),
             ),
@@ -436,22 +425,22 @@ class _LocationRow extends StatelessWidget {
             location.name ?? '',
             style: const TextStyle(
               fontSize: 14,
-              color: _AppColors.textDark,
+              color: AppColors.textDark,
               fontWeight: FontWeight.w500,
             ),
           ),
         ),
         _PillButton(
           label: 'تعديل',
-          background: _AppColors.editBg,
-          foreground: _AppColors.editText,
+          background: AppColors.editBg,
+          foreground: AppColors.editText,
           onTap: () => _showEditLocationSheet(context, location),
         ),
         const SizedBox(width: 8),
         _PillButton(
           label: 'حذف',
-          background: _AppColors.deleteBg,
-          foreground: _AppColors.deleteText,
+          background: AppColors.deleteBg,
+          foreground: AppColors.deleteText,
           onTap: () => _confirmDelete(context, location),
         ),
       ],
@@ -513,7 +502,7 @@ class _TotalSummaryCard extends StatelessWidget {
           const Text(
             'إجمالي المواقع المسجلة',
             style: TextStyle(
-              color: _AppColors.textDark,
+              color: AppColors.textDark,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -523,13 +512,13 @@ class _TotalSummaryCard extends StatelessWidget {
               Text(
                 'موقعاً $count',
                 style: const TextStyle(
-                  color: _AppColors.darkGreen,
+                  color: AppColors.darkGreen,
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),
               ),
               const SizedBox(width: 6),
-              const Icon(Icons.bar_chart_rounded, color: _AppColors.primaryGreen),
+              const Icon(Icons.bar_chart_rounded, color: AppColors.primaryGreen),
             ],
           ),
         ],
@@ -586,7 +575,7 @@ Future<void> _showAddLocationSheet(BuildContext context) async {
                 onPressed: () =>
                     Navigator.of(sheetContext).pop(controller.text.trim()),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _AppColors.primaryGreen,
+                  backgroundColor: AppColors.primaryGreen,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -657,7 +646,7 @@ Future<void> _showEditLocationSheet(
                 onPressed: () =>
                     Navigator.of(sheetContext).pop(controller.text.trim()),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: _AppColors.editText,
+                  backgroundColor: AppColors.editText,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -697,7 +686,7 @@ Future<void> _confirmDelete(
           ),
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('حذف', style: TextStyle(color: _AppColors.deleteText)),
+            child: const Text('حذف', style: TextStyle(color: AppColors.deleteText)),
           ),
         ],
       ),
