@@ -5,4 +5,5 @@ class Routes {
   static const String splash = '/splash';
   static const String user = '/user';
   static const String notifications = '/notifications';
+  static const String search = '/search';
 }

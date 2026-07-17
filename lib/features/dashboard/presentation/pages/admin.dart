@@ -1,4 +1,5 @@
 import 'package:afforestation_app/core/functions/extenstion.dart';
+import 'package:afforestation_app/core/functions/navigations.dart';
 import 'package:afforestation_app/core/routes/routes.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/location_management_screen.dart';
@@ -222,7 +223,9 @@ class _AdminViewState extends State<AdminView> {
               _buildDashboardButton(
                 title: "البحث المتقدم",
                 icon: Icons.search,
-                onTap: () {},
+                onTap: () {
+                  pushTo(context, Routes.search);
+                },
               ),
               _buildDashboardButton(
                 title: "إظهار جميع النباتات",
