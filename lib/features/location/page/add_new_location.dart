@@ -4,9 +4,9 @@ import 'package:afforestation_app/features/location/cubit/location_cubit_state.d
 import 'package:afforestation_app/features/location/cubit/location_type_cubit.dart';
 import 'package:afforestation_app/features/location/data/model/location_model.dart';
 import 'package:afforestation_app/features/location/data/model/location_type_model.dart';
-import 'package:afforestation_app/features/location/wedget/add_location/build_current_types_header.dart';
-import 'package:afforestation_app/features/location/wedget/wedget_location_type/build_app_bar.dart';
-import 'package:afforestation_app/features/location/wedget/wedget_location_type/build_location_card.dart';
+import 'package:afforestation_app/features/location/page/wedget/add_location/build_current_types_header.dart';
+import 'package:afforestation_app/features/location/page/wedget/wedget_location_type/build_app_bar.dart';
+import 'package:afforestation_app/features/location/page/wedget/wedget_location_type/build_location_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

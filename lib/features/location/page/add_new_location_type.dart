@@ -1,9 +1,9 @@
 import 'package:afforestation_app/features/dashboard/presentation/widgets/plant_bottom_nav_bar.dart';
-import 'package:afforestation_app/features/location/wedget/wedget_location_type/build_add_new_card.dart';
-import 'package:afforestation_app/features/location/wedget/wedget_location_type/build_app_bar.dart';
-import 'package:afforestation_app/features/location/wedget/wedget_location_type/build_current.dart';
-import 'package:afforestation_app/features/location/wedget/wedget_location_type/build_location_card.dart';
-import 'package:afforestation_app/features/location/wedget/wedget_location_type/screen_title.dart';
+import 'package:afforestation_app/features/location/page/wedget/wedget_location_type/build_add_new_card.dart';
+import 'package:afforestation_app/features/location/page/wedget/wedget_location_type/build_app_bar.dart';
+import 'package:afforestation_app/features/location/page/wedget/wedget_location_type/build_current.dart';
+import 'package:afforestation_app/features/location/page/wedget/wedget_location_type/build_location_card.dart';
+import 'package:afforestation_app/features/location/page/wedget/wedget_location_type/screen_title.dart';
 import 'package:afforestation_app/features/location/cubit/location_type_cubit.dart';
 import 'package:afforestation_app/features/location/cubit/location_cubit_state.dart/location_type_state.dart';
 import 'package:afforestation_app/features/location/data/model/location_type_model.dart';
