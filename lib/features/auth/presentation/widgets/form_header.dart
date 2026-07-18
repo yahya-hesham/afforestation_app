@@ -3,7 +3,14 @@ import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class FormHeader extends StatelessWidget {
-  const FormHeader({super.key});
+  final String title;
+  final String subtitle;
+
+  const FormHeader({
+    super.key,
+    this.title = 'إنشاء حساب جديد',
+    this.subtitle = 'قم بإنشاء حساب جديد للانضمام إلى نظام التشجير',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +21,14 @@ class FormHeader extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'إنشاء حساب جديد',
+            title,
             style: TextStyles.loginHeaderStyle.copyWith(
               color: AppColors.onSecondary,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'قم بإنشاء حساب جديد للانضمام إلى نظام التشجير',
+            subtitle,
             style: TextStyles.footerTextTextStyle.copyWith(
               color: AppColors.onSecondary,
             ),

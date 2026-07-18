@@ -213,7 +213,9 @@ class _AdminViewState extends State<AdminView> {
               _buildDashboardButton(
                 title: "إظهار جميع المستخدمين",
                 icon: Icons.supervised_user_circle_outlined,
-                onTap: () {},
+                onTap: () {
+                  pushTo(context, Routes.manageUsers);
+                },
               ),
 
               const SizedBox(height: 25),
@@ -244,12 +246,14 @@ class _AdminViewState extends State<AdminView> {
               _buildDashboardButton(
                 title: "إظهار جميع المواقع",
                 icon: Icons.layers_outlined,
-                onTap: () {Navigator.push(
+                onTap: () {
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const LocationManagementScreen(),
                     ),
-                  );},
+                  );
+                },
               ),
 
               const SizedBox(height: 40),

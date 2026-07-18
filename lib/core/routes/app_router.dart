@@ -7,6 +7,7 @@ import 'package:afforestation_app/features/notifications/presentation/pages/noti
 import 'package:afforestation_app/features/search/presentation/cubit/search_cubit.dart';
 import 'package:afforestation_app/features/search/presentation/page/search.dart';
 import 'package:afforestation_app/features/splash/presentation/page/splash_screen.dart';
+import 'package:afforestation_app/features/users/presentation/pages/user_management_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +26,7 @@ class AppRouter {
       ),
       GoRoute(
         path: Routes.register,
-        builder: (context, state) => AddUserScreen(),
+        builder: (context, state) => AddUserScreen(isAdminMode: false),
       ),
       GoRoute(
         path: Routes.admin,
@@ -47,7 +48,11 @@ class AppRouter {
       ),
       GoRoute(
         path: Routes.addUser,
-        builder: (context, state) => AddUserScreen(),
+        builder: (context, state) => AddUserScreen(isAdminMode: true),
+      ),
+      GoRoute(
+        path: Routes.manageUsers,
+        builder: (context, state) => const UserManagementScreen(),
       ),
       GoRoute(
         path: Routes.search,
