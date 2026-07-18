@@ -211,6 +211,7 @@ class _SearchState extends State<Search> {
 
                       // Dates row (من تاريخ / إلى تاريخ)
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             child: Column(

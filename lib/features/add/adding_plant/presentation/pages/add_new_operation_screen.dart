@@ -1,4 +1,7 @@
+import 'package:afforestation_app/features/auth/presentation/cubit/add_operation_cubit.dart';
+import 'package:afforestation_app/features/auth/presentation/cubit/add_operation_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddNewOperationScreen extends StatefulWidget {
   const AddNewOperationScreen({super.key});
@@ -14,12 +17,9 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
   String? _selectedPlantName;
   String? _selectedLocationType;
   String? _selectedLocationAddress;
-  final TextEditingController _plantCountController = TextEditingController(
-    text: '0',
-  );
-  final TextEditingController _dateController = TextEditingController(
-    text: '2024-05-21',
-  );
+  
+  final TextEditingController _plantCountController = TextEditingController(text: '0');
+  final TextEditingController _dateController = TextEditingController(text: '2026-07-18'); 
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,6 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // الكارت الأخضر العلوي
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(
@@ -101,7 +100,6 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // القسم الأول: بيانات النبات
                 _buildSectionHeader('بيانات النبات', Icons.eco_outlined),
                 const SizedBox(height: 12),
                 _buildLabel('نوع النبات'),
@@ -124,7 +122,6 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                 const Divider(height: 1, color: Colors.black12),
                 const SizedBox(height: 20),
 
-                // القسم الثاني: بيانات الموقع
                 _buildSectionHeader(
                   'بيانات الموقع',
                   Icons.location_on_outlined,
@@ -148,7 +145,6 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
 
                 const SizedBox(height: 24),
 
-                // صف (تاريخ الزراعة وعدد النباتات)
                 Row(
                   children: [
                     Expanded(
@@ -184,37 +180,81 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                 ),
                 const SizedBox(height: 28),
 
-                // زرار إضافة العملية
-                ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
+                BlocConsumer<AddOperationCubit, AddOperationState>(
+                  listener: (context, state) {
+                    if (state is AddOperationSuccess) {
+                     
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('تم تسجيل العملية بنجاح! 🎉'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    } else if (state is AddOperationError) {
+                      
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('خطأ: ${state.message}'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF56B76C),
-                    minimumSize: const Size(double.infinity, 52),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add, color: Colors.white, size: 20),
-                      SizedBox(width: 6),
-                      Text(
-                        'إضافة العملية',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
+                  builder: (context, state) {
+                    return ElevatedButton(
+                      onPressed: state is AddOperationLoading
+                          ? null 
+                          : () {
+                              if (_formKey.currentState!.validate()) {
+                               
+                                context.read<AddOperationCubit>().addNewOperation(
+                                      dateOfPlanted: _dateController.text, // "2026-07-18"
+                                      treeTypeId: _selectedPlantType == 'أشجار' ? 1 : 2, // تحويل الاختيار لـ ID رقمي متوافق مع الـ Backend
+                                      treeNameId: _selectedPlantName == 'جاكراندا' ? 1 : 2,
+                                      locationTypeId: _selectedLocationType == 'حديقة عامة' ? 1 : 2,
+                                      locationNameId: _selectedLocationAddress == 'المنطقة الشمالية' ? 1 : 2,
+                                      userId: 1, // الـ ID بتاع اليوزر الحالي من الـ Auth/Login
+                                      number: int.tryParse(_plantCountController.text) ?? 0,
+                                      token: "YOUR_CURRENT_TOKEN", // توكن المستخدم الحالي المحفوظ كـ Bearer token
+                                    );
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF56B76C),
+                        minimumSize: const Size(double.infinity, 52),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                    ],
-                  ),
+                      child: state is AddOperationLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.add, color: Colors.white, size: 20),
+                                SizedBox(width: 6),
+                                Text(
+                                  'إضافة العملية',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    );
+                  },
                 ),
                 const SizedBox(height: 24),
 
-                // نصيحة سريعة
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
@@ -330,6 +370,7 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
         style: const TextStyle(fontSize: 12, color: Colors.black38),
       ),
       isExpanded: true,
+      validator: (value) => value == null ? 'هذا الحقل مطلوب' : null, 
       decoration: InputDecoration(
         fillColor: Colors.white,
         filled: true,
@@ -369,6 +410,7 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
       readOnly: isReadOnly,
       textAlign: isCenter ? TextAlign.center : TextAlign.right,
       style: const TextStyle(fontSize: 13),
+      validator: (value) => (value == null || value.isEmpty) ? 'هذا الحقل مطلوب' : null,
       decoration: InputDecoration(
         fillColor: Colors.white,
         filled: true,

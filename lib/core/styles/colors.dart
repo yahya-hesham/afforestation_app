@@ -52,4 +52,15 @@ class AppColors {
     0xFFE74C3C,
   ); // darkRed: Trash bin icons, validation flags, delete actions
   static const Color onError = Color(0xFFFFFFFF);
+  //  static const background = Color(0xFFF2F9F2);
+  static const primaryGreen = Color(0xFF4CAF6B);
+  static const darkGreen = Color(0xFF2E7D4F);
+  static const cardWhite = Colors.white;
+  static const chipBorder = Color(0xFFBFE3C4);
+  static const editBg = Color(0xFFFCEBB6);
+  static const editText = Color(0xFF9A7B1E);
+  static const deleteBg = Color(0xFFF9D4D4);
+  static const deleteText = Color(0xFFC0392B);
+  static const textDark = Color(0xFF2B2B2B);
+  static const textGrey = Color(0xFF8C978D);
 }
