@@ -400,9 +400,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
   }
 
   void _showEditDialog(BuildContext context, UserModel user) {
-    final nameCtrl = TextEditingController(text: user.name);
-    final emailCtrl = TextEditingController(text: user.email);
-    int selectedRole = user.roleId;
+    final passwordCtrl = TextEditingController();
+    bool isObscured = true;
+    final formKeyDialog = GlobalKey<FormState>();
 
     showDialog(
       context: context,
@@ -410,42 +410,77 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
         return StatefulBuilder(
           builder: (context, setStateDialog) {
             return AlertDialog(
-              title: const Text('تعديل بيانات المستخدم'),
+              title: const Text('تغيير كلمة المرور'),
               content: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextField(
-                      controller: nameCtrl,
-                      decoration:
-                          const InputDecoration(labelText: 'الاسم الكامل'),
-                    ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: emailCtrl,
-                      decoration:
-                          const InputDecoration(labelText: 'البريد الإلكتروني'),
-                    ),
-                    const SizedBox(height: 16),
-                    DropdownButtonFormField<int>(
-                      initialValue: selectedRole,
-                      decoration:
-                          const InputDecoration(labelText: 'الدور الوظيفي'),
-                      items: const [
-                        DropdownMenuItem(
-                            value: 0, child: Text('مشرف (Admin)')),
-                        DropdownMenuItem(
-                            value: 1, child: Text('مستخدم (User)')),
-                      ],
-                      onChanged: (val) {
-                        if (val != null) {
-                          setStateDialog(() {
-                            selectedRole = val;
-                          });
-                        }
-                      },
-                    ),
-                  ],
+                child: Form(
+                  key: formKeyDialog,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              user.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            Text(
+                              user.email,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: passwordCtrl,
+                        obscureText: isObscured,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'يرجى إدخال كلمة المرور الجديدة';
+                          }
+                          if (value.trim().length < 6) {
+                            return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          labelText: 'كلمة المرور الجديدة',
+                          prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              isObscured
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              setStateDialog(() {
+                                isObscured = !isObscured;
+                              });
+                            },
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               actions: [
@@ -455,15 +490,15 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (user.id != null) {
-                      context.read<UserCubit>().updateUser(
-                            id: user.id!,
-                            name: nameCtrl.text,
-                            email: emailCtrl.text,
-                            role: selectedRole,
-                          );
+                    if (formKeyDialog.currentState!.validate()) {
+                      if (user.id != null) {
+                        context.read<UserCubit>().updateUserPassword(
+                              id: user.id!,
+                              password: passwordCtrl.text.trim(),
+                            );
+                      }
+                      Navigator.pop(dialogContext);
                     }
-                    Navigator.pop(dialogContext);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,

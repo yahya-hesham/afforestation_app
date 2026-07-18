@@ -29,20 +29,16 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
-  Future<void> updateUser({
+  Future<void> updateUserPassword({
     required int id,
-    required String name,
-    required String email,
-    required int role,
+    required String password,
   }) async {
     try {
-      await UserManagementRepo.updateUser(
+      await UserManagementRepo.updateUserPassword(
         id: id,
-        name: name,
-        email: email,
-        role: role,
+        password: password,
       );
-      emit(UserActionSuccessState('تم تحديث بيانات المستخدم بنجاح'));
+      emit(UserActionSuccessState('تم تغيير كلمة المرور بنجاح'));
       await getUsers();
     } catch (e) {
       emit(UserErrorState(e.toString().replaceAll('Exception: ', '')));

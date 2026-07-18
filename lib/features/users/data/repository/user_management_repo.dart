@@ -68,11 +68,9 @@ class UserManagementRepo {
     }
   }
 
-  static Future<void> updateUser({
+  static Future<void> updateUserPassword({
     required int id,
-    required String name,
-    required String email,
-    required int role,
+    required String password,
   }) async {
     try {
       final token = SharedPref.getToken();
@@ -80,23 +78,22 @@ class UserManagementRepo {
         endpoint: Apis.userUpdate,
         data: {
           'id': id,
-          'name': name,
-          'email': email,
-          'role': role,
+          'password': password,
         },
         headers: token.isNotEmpty ? {'Authorization': 'Bearer $token'} : null,
       );
 
       if (response.statusCode != 200 && response.statusCode != 204) {
-        throw Exception('فشل في تحديث بيانات المستخدم.');
+        throw Exception('فشل في تغيير كلمة المرور.');
       }
     } on DioException catch (e) {
-      debugPrint("Dio error (updateUser): ${e.response?.data ?? e.message}");
+      debugPrint(
+          "Dio error (updateUserPassword): ${e.response?.data ?? e.message}");
       final errorMsg =
-          e.response?.data?.toString() ?? e.message ?? 'خطأ في تحديث البيانات';
+          e.response?.data?.toString() ?? e.message ?? 'خطأ في تغيير كلمة المرور';
       throw Exception(errorMsg);
     } catch (e) {
-      debugPrint("updateUser error: $e");
+      debugPrint("updateUserPassword error: $e");
       rethrow;
     }
   }
