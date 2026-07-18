@@ -13,9 +13,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddUserScreen extends StatelessWidget {
+  final bool isAdminMode;
   final formKey = GlobalKey<FormState>();
 
-  AddUserScreen({super.key});
+  AddUserScreen({super.key, this.isAdminMode = false});
 
   // Controllers
   final nameController = TextEditingController();
@@ -59,7 +60,14 @@ class AddUserScreen extends StatelessWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const FormHeader(),
+                        FormHeader(
+                          title: isAdminMode
+                              ? 'إضافة مستخدم جديد'
+                              : 'إنشاء حساب جديد',
+                          subtitle: isAdminMode
+                              ? 'قم بإضافة مستخدم جديد إلى نظام التشجير'
+                              : 'قم بإنشاء حساب جديد للانضمام إلى نظام التشجير',
+                        ),
                         Padding(
                           padding: const EdgeInsets.all(20.0),
                           child: Column(
@@ -156,12 +164,30 @@ class AddUserScreen extends StatelessWidget {
                               BlocConsumer<AuthCubit, AuthState>(
                                 listener: (context, state) {
                                   if (state is AuthSucess) {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const LoginView(),
-                                      ),
-                                    );
+                                    if (isAdminMode) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('تم إضافة المستخدم بنجاح'),
+                                          backgroundColor: Color(0xFF53B157),
+                                        ),
+                                      );
+                                      nameController.clear();
+                                      emailController.clear();
+                                      passwordController.clear();
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('تم إنشاء الحساب بنجاح'),
+                                          backgroundColor: Color(0xFF53B157),
+                                        ),
+                                      );
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const LoginView(),
+                                        ),
+                                      );
+                                    }
                                   }
                                   if (state is AuthError) {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -173,6 +199,9 @@ class AddUserScreen extends StatelessWidget {
                                   var cubit = context.read<AuthCubit>();
                                   return state is! AuthLoading
                                       ? BuildSubmitButton(
+                                          buttonText: isAdminMode
+                                              ? 'إضافة المستخدم'
+                                              : null,
                                           onTap: () {
                                             if (formKey.currentState!
                                                 .validate()) {
@@ -198,11 +227,11 @@ class AddUserScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                // --- Moved Footer inside the scroll view here ---
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24.0),
-                  child: FormFooter(),
-                ),
+                if (!isAdminMode)
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24.0),
+                    child: FormFooter(),
+                  ),
               ],
             ),
           ),

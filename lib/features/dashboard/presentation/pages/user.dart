@@ -3,11 +3,6 @@ import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:afforestation_app/features/auth/presentation/pages/login.dart';
-import 'package:afforestation_app/features/add/adding_plant/presentation/pages/add_new_operation_screen.dart';
-import 'package:afforestation_app/features/dashboard/presentation/cubit/user_cudit/user_cubit.dart';
-import 'package:afforestation_app/features/dashboard/presentation/cubit/user_cudit/user_state.dart';
 class UserView extends StatelessWidget {
   final String userName;
   final String userEmail;
@@ -54,59 +49,10 @@ class UserView extends StatelessWidget {
                       }
                     },
                   ),
-    return BlocConsumer<UserCubit, UserState>(
-      listener: (context, state) {
-        if (state is LogoutLoading) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => const Center(
-              child: CircularProgressIndicator(color: Color(0xFF53B157)),
-            ),
-          );
-        } else if (state is LogoutSuccess) {
-          Navigator.pop(context); // إغلاق اللودينج ديايلوج
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginView()),
-            (route) => false,
-          );
-        } else if (state is LogoutError) {
-          Navigator.pop(context); // إغلاق اللودينج ديايلوج
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
-          );
-        }
-      },
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: const Color(0xFFF7F9FA),
-          appBar: AppBar(
-            backgroundColor: const Color(0xFFF7F9FA),
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            title: const Text(
-              "لوحة المستخدم",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E)),
-            ),
-            centerTitle: true,
-          ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.logout, color: Colors.redAccent),
-                        onPressed: () {
-                          context.read<UserCubit>().logout();
-                        },
-                      ),
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
                             "مرحباً مجدداً، $userName",
@@ -122,94 +68,38 @@ class UserView extends StatelessWidget {
                               fontSize: 13,
                               color: Colors.grey,
                             ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                "مرحباً مجدداً، $userName",
-                                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E)),
-                              ),
-                              Text(
-                                userEmail,
-                                style: const TextStyle(fontSize: 13, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(width: 12),
-                          const CircleAvatar(
-                            radius: 28,
-                            backgroundColor: Colors.grey,
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 25),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildStatCard(
-                          title: "إجمالي الأعمال",
-                          value: "145",
-                          unit: "شتلة",
-                          icon: Icons.analytics_outlined,
-                        ),
-                      ),
-                      const SizedBox(width: 15),
-                      Expanded(
-                        child: _buildStatCard(
-                          title: "نشاطك الأسبوعي",
-                          value: "12",
-                          unit: "عملية",
-                          icon: Icons.insights_outlined,
-                        ),
+                      const SizedBox(width: 12),
+                      const CircleAvatar(
+                        radius: 28,
+                        backgroundColor: Colors.grey,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 30),
-                  const Text(
-                    "العمليات السريعة",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E)),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildActionCard(
-                    title: "إضافة عملية تشجير جديدة",
-                    subtitle: "سجل بيانات شتلات جديدة في المواقع الميدانية المعتمدة",
-                    icon: Icons.add_circle_outline,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AddNewOperationScreen()),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 25),
-                  const Text(
-                    "عرض البيانات المضافة",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF1B3A1E)),
-                  ),
-                  const SizedBox(height: 12),
-                  _buildActionCard(
-                    title: "عرض البيانات المضافة",
-                    subtitle: "راجع سجلاتك السابقة وتتبع حالة نمو النباتات التي قمت بزراعتها",
-                    icon: Icons.storage_outlined,
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 30),
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFE8F5E9),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Text(
-                      "تساهم جهودك في زيادة الغطاء النباتي. شكراً لمساهمتك في حماية البيئة وتطوير المناطق الخضراء.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 13, color: Color(0xFF2E7D32), height: 1.5),
+                ],
+              ),
+              const SizedBox(height: 25),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildStatCard(
+                      title: "إجمالي الأعمال",
+                      value: "145",
+                      unit: "شتلة",
+                      icon: Icons.analytics_outlined,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: _buildStatCard(
+                      title: "نشاطك الأسبوعي",
+                      value: "12",
+                      unit: "عملية",
+                      icon: Icons.insights_outlined,
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 30),
@@ -266,10 +156,9 @@ class UserView extends StatelessWidget {
               ),
               const SizedBox(height: 20),
             ],
-            ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 

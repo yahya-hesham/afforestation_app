@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 class BuildSubmitButton extends StatelessWidget {
   final VoidCallback? onTap;
+  final String? buttonText;
   // final void Function()? onTap;
-  const BuildSubmitButton({super.key, this.onTap});
+  const BuildSubmitButton({super.key, this.onTap, this.buttonText});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class BuildSubmitButton extends StatelessWidget {
         ),
         icon: const Icon(Icons.person_add_alt_1_outlined, size: 22),
         label: Text(
-          'تسجيل الحساب الجديد',
+          buttonText ?? 'تسجيل الحساب الجديد',
           style: TextStyles.buttonTextStyle.copyWith(
             color: AppColors.onSecondary,
           ),
