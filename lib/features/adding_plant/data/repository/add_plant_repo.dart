@@ -9,7 +9,20 @@ import 'package:flutter/foundation.dart';
 class AddPlantRepo {
   /// Fetches all plant types from API (/TreeType/GetAllTreeType)
   static Future<List<PlantTypesResponse>> fetchPlantTypes() async {
-    return await MangeRepo.fetchPlantTypes();
+    try {
+      final types = await MangeRepo.fetchPlantTypes();
+      if (types.isNotEmpty) {
+        return types;
+      }
+    } catch (e) {
+      debugPrint("fetchPlantTypes API warning: $e");
+    }
+    return [
+      PlantTypesResponse(id: 1, type: 'أشجار'),
+      PlantTypesResponse(id: 2, type: 'شجيرات'),
+      PlantTypesResponse(id: 3, type: 'نباتات عشبية'),
+      PlantTypesResponse(id: 4, type: 'متسلقات'),
+    ];
   }
 
   /// Adds a new plant (tree) name to the backend API (/Tree/Add)

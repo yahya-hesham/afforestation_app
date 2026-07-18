@@ -339,6 +339,8 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
     required bool isLoading,
   }) {
     return DropdownButtonFormField<PlantTypesResponse>(
+      dropdownColor: AppColors.surface,
+      style: const TextStyle(color: AppColors.onSurface, fontSize: 14),
       initialValue: cubit.selectedPlantType,
       validator: (val) {
         if (val == null) {
@@ -384,7 +386,10 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
             alignment: Alignment.centerRight,
             child: Text(
               item.type ?? '',
-              style: TextStyles.buttonTextStyle.copyWith(fontSize: 14),
+              style: TextStyles.buttonTextStyle.copyWith(
+                color: AppColors.onSurface,
+                fontSize: 14,
+              ),
             ),
           ),
         );

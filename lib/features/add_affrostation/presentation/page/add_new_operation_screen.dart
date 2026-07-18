@@ -413,6 +413,8 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
     required ValueChanged<T?> onChanged,
   }) {
     return DropdownButtonFormField<T>(
+      dropdownColor: Colors.white,
+      style: const TextStyle(color: Colors.black87, fontSize: 13),
       initialValue: value,
       hint: Text(
         hint,
@@ -439,7 +441,10 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
           .map(
             (e) => DropdownMenuItem<T>(
               value: e,
-              child: Text(getLabel(e), style: const TextStyle(fontSize: 13)),
+              child: Text(
+                getLabel(e),
+                style: const TextStyle(fontSize: 13, color: Colors.black87),
+              ),
             ),
           )
           .toList(),
