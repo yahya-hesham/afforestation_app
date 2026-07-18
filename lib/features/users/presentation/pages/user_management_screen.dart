@@ -428,7 +428,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                     ),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<int>(
-                      value: selectedRole,
+                      initialValue: selectedRole,
                       decoration:
                           const InputDecoration(labelText: 'الدور الوظيفي'),
                       items: const [

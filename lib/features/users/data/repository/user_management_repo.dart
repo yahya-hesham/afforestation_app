@@ -11,9 +11,7 @@ class UserManagementRepo {
       final token = SharedPref.getToken();
       var response = await DioProvider.get(
         endpoint: Apis.users,
-        headers: token != null && token.isNotEmpty
-            ? {'Authorization': 'Bearer $token'}
-            : null,
+        headers: token.isNotEmpty ? {'Authorization': 'Bearer $token'} : null,
       );
 
       if (response.statusCode == 200) {
@@ -41,9 +39,7 @@ class UserManagementRepo {
       final token = SharedPref.getToken();
       final response = await DioProvider.delete(
         endpoint: '${Apis.userDelete}/$id',
-        headers: token != null && token.isNotEmpty
-            ? {'Authorization': 'Bearer $token'}
-            : null,
+        headers: token.isNotEmpty ? {'Authorization': 'Bearer $token'} : null,
       );
 
       if (response.statusCode != 200 && response.statusCode != 204) {
@@ -55,9 +51,7 @@ class UserManagementRepo {
         final response = await DioProvider.delete(
           endpoint: Apis.userDelete,
           queryParameters: {'id': id},
-          headers: token != null && token.isNotEmpty
-              ? {'Authorization': 'Bearer $token'}
-              : null,
+          headers: token.isNotEmpty ? {'Authorization': 'Bearer $token'} : null,
         );
         if (response.statusCode != 200 && response.statusCode != 204) {
           throw Exception('فشل في حذف المستخدم.');
@@ -90,9 +84,7 @@ class UserManagementRepo {
           'email': email,
           'role': role,
         },
-        headers: token != null && token.isNotEmpty
-            ? {'Authorization': 'Bearer $token'}
-            : null,
+        headers: token.isNotEmpty ? {'Authorization': 'Bearer $token'} : null,
       );
 
       if (response.statusCode != 200 && response.statusCode != 204) {
