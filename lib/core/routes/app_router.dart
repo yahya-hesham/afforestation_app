@@ -1,4 +1,5 @@
 import 'package:afforestation_app/core/routes/routes.dart';
+import 'package:afforestation_app/features/add_affrostation/presentation/page/add_new_operation_screen.dart';
 import 'package:afforestation_app/features/auth/presentation/pages/login.dart';
 import 'package:afforestation_app/features/auth/presentation/pages/register_screen.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/user.dart';
@@ -53,6 +54,10 @@ class AppRouter {
       GoRoute(
         path: Routes.manageUsers,
         builder: (context, state) => const UserManagementScreen(),
+      ),
+       GoRoute(
+        path: Routes.addAfforestation,
+        builder: (context, state) => const AddNewOperationScreen(),
       ),
       GoRoute(
         path: Routes.search,

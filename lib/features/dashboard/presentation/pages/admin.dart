@@ -97,8 +97,11 @@ class _AdminViewState extends State<AdminView> {
                 ],
               ),
               child: IconButton(
-                icon: const Icon(Icons.language_rounded,
-                    color: Color(0xFF1B3A1E), size: 22),
+                icon: const Icon(
+                  Icons.language_rounded,
+                  color: Color(0xFF1B3A1E),
+                  size: 22,
+                ),
                 onPressed: () {
                   context.isArabic
                       ? context.setLocale(const Locale('en'))
@@ -139,8 +142,10 @@ class _AdminViewState extends State<AdminView> {
 
               // Welcome card
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 18,
+                ),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFF1B3A1E), Color(0xFF2D5A27)],
@@ -212,7 +217,9 @@ class _AdminViewState extends State<AdminView> {
                         const SizedBox(height: 6),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4),
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: const Color(0xFF53B157),
                             borderRadius: BorderRadius.circular(20),
@@ -266,7 +273,9 @@ class _AdminViewState extends State<AdminView> {
                 icon: Icons.grass,
                 iconColor: const Color(0xFF2E7D32),
                 iconBgColor: const Color(0xFFE8F5E9),
-                onTap: () {},
+                onTap: () {
+                  pushTo(context, Routes.addAfforestation);
+                },
               ),
               _buildDashboardButton(
                 title: "إضافة نبات",
@@ -413,7 +422,8 @@ class _AdminViewState extends State<AdminView> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                  color: const Color(0xFF1B3A1E).withValues(alpha: 0.06)),
+                color: const Color(0xFF1B3A1E).withValues(alpha: 0.06),
+              ),
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xFF1B3A1E).withValues(alpha: 0.04),
@@ -431,8 +441,11 @@ class _AdminViewState extends State<AdminView> {
                     color: const Color(0xFFF4F7F5),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.arrow_back_ios,
-                      size: 12, color: Color(0xFF9E9E9E)),
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    size: 12,
+                    color: Color(0xFF9E9E9E),
+                  ),
                 ),
                 Row(
                   children: [
