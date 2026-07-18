@@ -9,4 +9,5 @@ class Routes {
   static const String addUser = '/add-user';
   static const String manageUsers = '/manage-users';
   static const String addAfforestation = '/add-afforestation';
+  static const String addPlant = '/add-plant';
 }

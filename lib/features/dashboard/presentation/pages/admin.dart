@@ -282,7 +282,9 @@ class _AdminViewState extends State<AdminView> {
                 icon: Icons.local_florist_outlined,
                 iconColor: const Color(0xFFE91E63),
                 iconBgColor: const Color(0xFFFCE4EC),
-                onTap: () {},
+                onTap: () {
+                  pushTo(context, Routes.addPlant);
+                },
               ),
               _buildDashboardButton(
                 title: "إضافة الموقع",
