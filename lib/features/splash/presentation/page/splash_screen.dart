@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/routes/routes.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/features/auth/data/repository/aurth_repo.dart';
@@ -225,7 +226,7 @@ class _SplashScreenState extends State<SplashScreen>
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'جاري التحميل...',
+                          'loading'.tr(),
                           style: GoogleFonts.inter(
                             fontSize: 13,
                             color: Colors.white.withOpacity(0.6),

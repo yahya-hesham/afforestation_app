@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/admin.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/statistics_placeholder.dart';
@@ -17,7 +18,7 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  int _currentIndex = 3; // Defaults to index 3 (الرئيسية)
+  int _currentIndex = 0; // Defaults to index 0 (Home)
 
   late final List<Widget> _screens;
 
@@ -27,20 +28,20 @@ class _MainLayoutState extends State<MainLayout> {
     final user = SharedPref.getUserInfo();
     final name = user?.name ?? user?.email?.split('@').first ?? "أحمد";
     _screens = [
-      UserView(
-        userName: name,
-        userEmail: user?.email ?? "",
-      ), // Index 0: الملف الشخصي
-      const StatisticsPlaceholderView(), // Index 1: الإحصائيات
+      AdminView(adminName: name), // Index 0: Home / الرئيسية
       BlocProvider(
         create: (_) => SearchCubit(),
         child: Search(
           onBackToHome: () {
-            setState(() => _currentIndex = 3);
+            setState(() => _currentIndex = 0);
           },
         ),
-      ),
-      AdminView(adminName: name), // Index 3: الرئيسية
+      ), // Index 1: Search / البحث
+      const StatisticsPlaceholderView(), // Index 2: Statistics / الإحصائيات
+      UserView(
+        userName: name,
+        userEmail: user?.email ?? "",
+      ), // Index 3: Profile / الملف الشخصي
     ];
   }
 
@@ -60,25 +61,25 @@ class _MainLayoutState extends State<MainLayout> {
             _currentIndex = index;
           });
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'الملف الشخصي',
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: const Icon(Icons.home),
+            label: 'nav_home'.tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_outlined),
-            activeIcon: Icon(Icons.bar_chart),
-            label: 'الإحصائيات',
+            icon: const Icon(Icons.search),
+            label: 'nav_search'.tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'البحث',
+            icon: const Icon(Icons.bar_chart_outlined),
+            activeIcon: const Icon(Icons.bar_chart),
+            label: 'nav_statistics'.tr(),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'الرئيسية',
+            icon: const Icon(Icons.person_outline),
+            activeIcon: const Icon(Icons.person),
+            label: 'nav_profile'.tr(),
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,10 @@ class RoleDropdownField extends StatelessWidget {
   });
 
   String _formatRole(String role) {
-    if (role.contains('Admin') || role.contains('مسؤول')) {
-      return 'مستخدم مسؤول (Admin)';
+    if (role.contains('Admin') || role.contains('مسؤول') || role.contains('مشرف')) {
+      return 'role_admin_user'.tr();
     }
-    return 'مستخدم عادي (User)';
+    return 'role_regular_user'.tr();
   }
 
   @override

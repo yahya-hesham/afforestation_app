@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/features/dashboard/data/models/plant_names_response.dart';
 import 'package:afforestation_app/features/dashboard/presentation/cubit/plant_manage_cubit/plant_manage_cubit.dart';
 import 'package:afforestation_app/features/dashboard/presentation/cubit/plant_manage_cubit/plant_manage_state.dart';
@@ -31,111 +32,108 @@ class PlantManagementView extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final scaffoldBg = isDark ? const Color(0xFF121212) : AppColors.background;
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: scaffoldBg,
-        appBar: const PlantAppBar(),
-        body: BlocConsumer<PlantManageCubit, PlantManagementState>(
-          listener: (context, state) {
-            if (state is PlantManagementFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.errorMessage),
-                  backgroundColor: Colors.red,
-                ),
-              );
-            }
-          },
-          buildWhen: (previous, current) {
-            if (current is PlantManagementFailure &&
-                previous is PlantManagementSuccess) {
-              return false;
-            }
-            return current is PlantManagementInitial ||
-                current is PlantManagementLoading ||
-                current is PlantManagementSuccess ||
-                current is PlantManagementFailure;
-          },
-          builder: (context, state) {
-            if (state is PlantManagementLoading) {
-              return const Center(
-                child: CircularProgressIndicator(color: AppColors.primary),
-              );
-            }
+    return Scaffold(
+      backgroundColor: scaffoldBg,
+      appBar: const PlantAppBar(),
+      body: BlocConsumer<PlantManageCubit, PlantManagementState>(
+        listener: (context, state) {
+          if (state is PlantManagementFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        buildWhen: (previous, current) {
+          if (current is PlantManagementFailure &&
+              previous is PlantManagementSuccess) {
+            return false;
+          }
+          return current is PlantManagementInitial ||
+              current is PlantManagementLoading ||
+              current is PlantManagementSuccess ||
+              current is PlantManagementFailure;
+        },
+        builder: (context, state) {
+          if (state is PlantManagementLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            );
+          }
 
-            if (state is PlantManagementFailure) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'حدث خطأ ما أثناء تحميل البيانات.',
-                      style: TextStyles.buttonTextStyle.copyWith(
-                        color: isDark ? Colors.white : Colors.black,
-                      ),
+          if (state is PlantManagementFailure) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'error_occurred'.tr(),
+                    style: TextStyles.buttonTextStyle.copyWith(
+                      color: isDark ? Colors.white : Colors.black,
                     ),
-                    const SizedBox(height: 12),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<PlantManageCubit>().loadDashboard();
-                      },
-                      child: const Text('إعادة المحاولة'),
-                    ),
-                  ],
-                ),
-              );
-            }
+                  ),
+                  const SizedBox(height: 12),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<PlantManageCubit>().loadDashboard();
+                    },
+                    child: Text('retry'.tr()),
+                  ),
+                ],
+              ),
+            );
+          }
 
-            if (state is PlantManagementSuccess) {
-              final selectedIndex = state.categories.indexWhere(
-                (cat) => cat.id == state.selectedCategory.id,
-              );
+          if (state is PlantManagementSuccess) {
+            final selectedIndex = state.categories.indexWhere(
+              (cat) => cat.id == state.selectedCategory.id,
+            );
 
-              return SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 12.0,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const ScreenHeader(),
-                    const SizedBox(height: 20),
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 12.0,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const ScreenHeader(),
+                  const SizedBox(height: 20),
 
-                    // Category Selection
-                    CategorySelectionCard(
-                      types: state.categories,
-                      selectedIndex: selectedIndex == -1 ? 0 : selectedIndex,
-                      onCategorySelected: (index) {
-                        final chosenCategory = state.categories[index];
-                        context.read<PlantManageCubit>().selectCategory(
-                          chosenCategory,
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 20),
+                  // Category Selection
+                  CategorySelectionCard(
+                    types: state.categories,
+                    selectedIndex: selectedIndex == -1 ? 0 : selectedIndex,
+                    onCategorySelected: (index) {
+                      final chosenCategory = state.categories[index];
+                      context.read<PlantManageCubit>().selectCategory(
+                        chosenCategory,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 20),
 
-                    // Plants List
-                    PlantsListContainer(
-                      categoryTitle: state.selectedCategory.type ?? '',
-                      plants: state.plants,
-                      onEdit: (plant) => _showEditPlantSheet(context, plant),
-                      onDelete: (plant) => _confirmDelete(context, plant),
-                      onAddPlant: () => _showAddPlantSheet(context, state),
-                    ),
-                    const SizedBox(height: 20),
+                  // Plants List
+                  PlantsListContainer(
+                    categoryTitle: state.selectedCategory.type ?? '',
+                    plants: state.plants,
+                    onEdit: (plant) => _showEditPlantSheet(context, plant),
+                    onDelete: (plant) => _confirmDelete(context, plant),
+                    onAddPlant: () => _showAddPlantSheet(context, state),
+                  ),
+                  const SizedBox(height: 20),
 
-                    // Detailed Reports Action Card
-                    _buildReportActionCard(context, isDark),
-                  ],
-                ),
-              );
-            }
+                  // Detailed Reports Action Card
+                  _buildReportActionCard(context, isDark),
+                ],
+              ),
+            );
+          }
 
-            return const SizedBox.shrink();
-          },
-        ),
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
@@ -183,7 +181,7 @@ class PlantManagementView extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'عرض التقارير التفصيلية',
+                  'detailed_reports'.tr(),
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
@@ -193,7 +191,7 @@ class PlantManagementView extends StatelessWidget {
               ],
             ),
             Icon(
-              Icons.arrow_back_ios,
+              context.isArabic ? Icons.arrow_back_ios : Icons.arrow_forward_ios,
               size: 14,
               color: isDark ? Colors.white38 : Colors.grey,
             ),
@@ -228,63 +226,60 @@ Future<void> _showAddPlantSheet(
           top: 20,
           bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
         ),
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'إضافة نبات جديد (${state.selectedCategory.type})',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : Colors.black87,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'add_new_plant_with_type'.tr(args: [state.selectedCategory.type ?? '']),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: isDark ? Colors.white : Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: nameController,
+              autofocus: true,
+              style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+              decoration: InputDecoration(
+                labelText: 'plant_name_required'.tr(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: nameController,
-                autofocus: true,
-                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
-                decoration: InputDecoration(
-                  labelText: 'اسم النبات *',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: sciNameController,
+              style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+              decoration: InputDecoration(
+                labelText: 'scientific_name'.tr(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: sciNameController,
-                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
-                decoration: InputDecoration(
-                  labelText: 'الاسم العلمي',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => Navigator.of(sheetContext).pop({
+                'name': nameController.text.trim(),
+                'scientificName': sciNameController.text.trim(),
+              }),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => Navigator.of(sheetContext).pop({
-                  'name': nameController.text.trim(),
-                  'scientificName': sciNameController.text.trim(),
-                }),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  'إضافة',
-                  style: TextStyle(color: Colors.white),
-                ),
+              child: Text(
+                'add'.tr(),
+                style: const TextStyle(color: Colors.white),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     },
@@ -322,63 +317,60 @@ Future<void> _showEditPlantSheet(
           top: 20,
           bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
         ),
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'تعديل بيانات النبات',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: isDark ? Colors.white : Colors.black87,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'edit_plant_data'.tr(),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: isDark ? Colors.white : Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: nameController,
+              autofocus: true,
+              style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+              decoration: InputDecoration(
+                labelText: 'plant_name'.tr(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: nameController,
-                autofocus: true,
-                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
-                decoration: InputDecoration(
-                  labelText: 'اسم النبات',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: sciNameController,
+              style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+              decoration: InputDecoration(
+                labelText: 'scientific_name'.tr(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: sciNameController,
-                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
-                decoration: InputDecoration(
-                  labelText: 'الاسم العلمي',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => Navigator.of(sheetContext).pop({
+                'name': nameController.text.trim(),
+                'scientificName': sciNameController.text.trim(),
+              }),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => Navigator.of(sheetContext).pop({
-                  'name': nameController.text.trim(),
-                  'scientificName': sciNameController.text.trim(),
-                }),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  'حفظ التعديلات',
-                  style: TextStyle(color: Colors.white),
-                ),
+              child: Text(
+                'save_changes'.tr(),
+                style: const TextStyle(color: Colors.white),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     },
@@ -401,22 +393,19 @@ Future<void> _confirmDelete(
 
   final confirmed = await showDialog<bool>(
     context: context,
-    builder: (dialogContext) => Directionality(
-      textDirection: TextDirection.rtl,
-      child: AlertDialog(
-        title: const Text('حذف النبات'),
-        content: Text('هل أنت متأكد أنك تريد حذف "${plant.name ?? ''}"؟'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('إلغاء'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('حذف', style: TextStyle(color: Colors.red)),
-          ),
-        ],
-      ),
+    builder: (dialogContext) => AlertDialog(
+      title: Text('delete_plant_title'.tr()),
+      content: Text('delete_plant_confirm'.tr(args: [plant.name ?? ''])),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(false),
+          child: Text('cancel'.tr()),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          child: Text('delete'.tr(), style: const TextStyle(color: Colors.red)),
+        ),
+      ],
     ),
   );
 

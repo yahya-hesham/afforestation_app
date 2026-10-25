@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -27,13 +28,19 @@ class QuickTipCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Icon(
+            Icons.info_outline,
+            color: isDark ? const Color(0xFF81C784) : AppColors.secondary,
+            size: 22,
+          ),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "نصيحة سريعة",
-                  style: TextStyle(
+                Text(
+                  "quick_tip_title".tr(),
+                  style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF2E7D32),
@@ -42,7 +49,6 @@ class QuickTipCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   tipText,
-                  textAlign: TextAlign.right,
                   style: TextStyle(
                     fontSize: 12,
                     color: isDark ? Colors.white70 : Colors.black54,
@@ -51,12 +57,6 @@ class QuickTipCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          const SizedBox(width: 12),
-          Icon(
-            Icons.info_outline,
-            color: isDark ? const Color(0xFF81C784) : AppColors.secondary,
-            size: 22,
           ),
         ],
       ),

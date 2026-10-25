@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/features/dashboard/data/models/plant_names_response.dart';
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
@@ -54,7 +55,7 @@ class PlantsListContainer extends StatelessWidget {
                     color: AppColors.primary,
                   ),
                   label: Text(
-                    'إضافة نبات',
+                    'add_plant'.tr(),
                     style: TextStyles.textButtonTextStyle.copyWith(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w700,
@@ -86,7 +87,7 @@ class PlantsListContainer extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Text(
-                    'اسم النبات',
+                    'plant_name'.tr(),
                     style: TextStyles.listRowSubtitleStyle.copyWith(
                       fontWeight: FontWeight.w700,
                       color: isDark ? const Color(0xFF81C784) : AppColors.primary,
@@ -96,7 +97,7 @@ class PlantsListContainer extends StatelessWidget {
                 Expanded(
                   flex: 4,
                   child: Text(
-                    'الاسم العلمي',
+                    'scientific_name'.tr(),
                     style: TextStyles.listRowSubtitleStyle.copyWith(
                       fontWeight: FontWeight.w700,
                       color: isDark ? const Color(0xFF81C784) : AppColors.primary,
@@ -106,7 +107,7 @@ class PlantsListContainer extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Text(
-                    'إدارة',
+                    'manage'.tr(),
                     style: TextStyles.listRowSubtitleStyle.copyWith(
                       fontWeight: FontWeight.w700,
                       color: isDark ? const Color(0xFF81C784) : AppColors.primary,
@@ -121,7 +122,7 @@ class PlantsListContainer extends StatelessWidget {
               ? Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Text(
-                    "لا توجد نباتات في هذا القسم",
+                    "no_plants_in_section".tr(),
                     style: TextStyles.listRowSubtitleStyle.copyWith(
                       color: isDark ? Colors.white60 : null,
                     ),
@@ -147,7 +148,7 @@ class PlantsListContainer extends StatelessWidget {
                           Expanded(
                             flex: 3,
                             child: Text(
-                              plant.scientificName ?? "",
+                              plant.name ?? "",
                               style: TextStyles.listRowTitleStyle.copyWith(
                                 color: isDark ? Colors.white : AppColors.onSurface,
                               ),
@@ -156,7 +157,7 @@ class PlantsListContainer extends StatelessWidget {
                           Expanded(
                             flex: 4,
                             child: Text(
-                              plant.name ?? "",
+                              plant.scientificName ?? "",
                               style: TextStyles.listRowSubtitleStyle.copyWith(
                                 fontStyle: FontStyle.italic,
                                 color: isDark ? Colors.white70 : AppColors.onSurfaceVariant,

@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 
@@ -7,7 +8,7 @@ class PlantBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final navBg = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+    final navBg = isDark ? const Color(0xFF1E1E1E) : Colors.white;
 
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
@@ -15,26 +16,26 @@ class PlantBottomNavigationBar extends StatelessWidget {
       selectedItemColor: isDark ? const Color(0xFF81C784) : AppColors.primary,
       unselectedItemColor: isDark
           ? Colors.white60
-          : AppColors.onSurfaceVariant.withOpacity(0.6),
-      currentIndex: 1,
+          : AppColors.onSurfaceVariant.withValues(alpha: 0.6),
+      currentIndex: 2,
       selectedFontSize: 12,
       unselectedFontSize: 12,
-      items: const [
+      items: [
         BottomNavigationBarItem(
-          icon: Icon(Icons.person_outline),
-          label: 'حسابي',
+          icon: const Icon(Icons.home_outlined),
+          label: 'nav_home'.tr(),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.bar_chart_outlined),
-          label: 'الإحصائيات',
+          icon: const Icon(Icons.forest_outlined),
+          label: 'nav_plants'.tr(),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.forest_outlined),
-          label: 'النباتات',
+          icon: const Icon(Icons.bar_chart_outlined),
+          label: 'nav_statistics'.tr(),
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          label: 'الرئيسية',
+          icon: const Icon(Icons.person_outline),
+          label: 'nav_my_account'.tr(),
         ),
       ],
     );

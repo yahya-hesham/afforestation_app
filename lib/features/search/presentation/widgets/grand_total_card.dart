@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:flutter/material.dart';
 
 class GrandTotalCard extends StatelessWidget {
@@ -54,9 +55,9 @@ class GrandTotalCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              const Text(
-                "المجموع الكلي للمزروعات",
-                style: TextStyle(
+              Text(
+                "grand_total_plants".tr(),
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -81,9 +82,9 @@ class GrandTotalCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 6),
-              const Text(
-                "شتلة",
-                style: TextStyle(
+              Text(
+                "unit_seedling".tr(),
+                style: const TextStyle(
                   color: Colors.white70,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,

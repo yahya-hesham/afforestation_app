@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 
@@ -9,13 +10,13 @@ class ScreenHeader extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'كافة النباتات',
+          'all_plants'.tr(),
           style: TextStyles.screenHeaderTitleStyle,
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 4),
         Text(
-          'تصفح وإدارة النباتات حسب النوع',
+          'browse_plants_by_type'.tr(),
           style: TextStyles.screenHeaderSubtitleStyle,
           textAlign: TextAlign.center,
         ),

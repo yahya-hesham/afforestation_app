@@ -1,4 +1,5 @@
 import 'package:afforestation_app/core/constants/app_assets.dart';
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:afforestation_app/features/adding_plant/presentation/cubit/add_plant_cubit.dart';
@@ -50,7 +51,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            'إضافة نبات جديد',
+            'add_new_plant_header'.tr(),
             style: TextStyles.loginHeaderStyle.copyWith(
               color: isDark ? Colors.white : AppColors.onSurface,
               fontSize: 18,
@@ -85,7 +86,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                   content: Text(
                     state.message.isNotEmpty
                         ? state.message
-                        : 'حدث خطأ غير متوقع',
+                        : 'unexpected_error'.tr(),
                   ),
                   backgroundColor: AppColors.error,
                 ),
@@ -139,7 +140,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            'إضافة نبات جديد',
+                            'add_new_plant_header'.tr(),
                             style: TextStyles.loginHeaderStyle.copyWith(
                               color: Colors.white,
                               fontSize: 20,
@@ -147,7 +148,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'أدخل تفاصيل النبات بدقة في الحقول أدناه',
+                            'add_plant_instructions'.tr(),
                             style: TextStyles.hintTextStyle.copyWith(
                               color: Colors.white.withValues(alpha: 0.8),
                               fontSize: 12,
@@ -158,108 +159,105 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                     ),
                     const SizedBox(height: 24),
 
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLabel(
-                            'اسم النبات باللغة العربية',
-                            Icons.edit,
-                            isDark,
-                          ),
-                          const SizedBox(height: 8),
-                          _buildTextField(
-                            controller: _arabicNameController,
-                            hint: 'أدخل اسم النبات هنا...',
-                            isDark: isDark,
-                            surfaceColor: surfaceColor,
-                            validator: (val) {
-                              if (val == null || val.trim().isEmpty) {
-                                return 'اسم النبات مطلوب';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildLabel(
+                          'plant_name_arabic'.tr(),
+                          Icons.edit,
+                          isDark,
+                        ),
+                        const SizedBox(height: 8),
+                        _buildTextField(
+                          controller: _arabicNameController,
+                          hint: 'plant_name_arabic_hint'.tr(),
+                          isDark: isDark,
+                          surfaceColor: surfaceColor,
+                          validator: (val) {
+                            if (val == null || val.trim().isEmpty) {
+                              return 'plant_name_is_required'.tr();
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
 
-                          _buildLabel(
-                            'الاسم العلمي Scientific Name',
-                            Icons.language,
-                            isDark,
-                          ),
-                          const SizedBox(height: 8),
-                          _buildTextField(
-                            controller: _scientificNameController,
-                            hint: 'مثال: Acacia arabica...',
-                            isEnglish: true,
-                            isDark: isDark,
-                            surfaceColor: surfaceColor,
-                          ),
-                          const SizedBox(height: 20),
+                        _buildLabel(
+                          'scientific_name_label'.tr(),
+                          Icons.language,
+                          isDark,
+                        ),
+                        const SizedBox(height: 8),
+                        _buildTextField(
+                          controller: _scientificNameController,
+                          hint: 'scientific_name_hint'.tr(),
+                          isEnglish: true,
+                          isDark: isDark,
+                          surfaceColor: surfaceColor,
+                        ),
+                        const SizedBox(height: 20),
 
-                          _buildLabel(
-                            'اختر نوع النبتة',
-                            Icons.forest_outlined,
-                            isDark,
-                          ),
-                          const SizedBox(height: 8),
-                          _buildDropdownField(
-                            cubit: cubit,
-                            isLoading: isLoadingTypes,
-                            isDark: isDark,
-                            surfaceColor: surfaceColor,
-                          ),
-                          const SizedBox(height: 32),
+                        _buildLabel(
+                          'choose_plant_type'.tr(),
+                          Icons.forest_outlined,
+                          isDark,
+                        ),
+                        const SizedBox(height: 8),
+                        _buildDropdownField(
+                          cubit: cubit,
+                          isLoading: isLoadingTypes,
+                          isDark: isDark,
+                          surfaceColor: surfaceColor,
+                        ),
+                        const SizedBox(height: 32),
 
-                          ElevatedButton(
-                            onPressed: isSubmitting
-                                ? null
-                                : () {
-                                    if (_formKey.currentState!.validate()) {
-                                      if (_selectedType == null) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'يرجى اختيار نوع النبتة',
-                                            ),
-                                            backgroundColor: AppColors.error,
+                        ElevatedButton(
+                          onPressed: isSubmitting
+                              ? null
+                              : () {
+                                  if (_formKey.currentState!.validate()) {
+                                    if (_selectedType == null) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'please_choose_plant_type'.tr(),
                                           ),
-                                        );
-                                        return;
-                                      }
-                                      cubit.addPlant(
-                                        arabicName:
-                                            _arabicNameController.text.trim(),
-                                        scientificName:
-                                            _scientificNameController.text
-                                                .trim(),
+                                          backgroundColor: AppColors.error,
+                                        ),
                                       );
+                                      return;
                                     }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.secondary,
-                              minimumSize: const Size(double.infinity, 52),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                                    cubit.addPlant(
+                                      arabicName:
+                                          _arabicNameController.text.trim(),
+                                      scientificName:
+                                          _scientificNameController.text
+                                              .trim(),
+                                    );
+                                  }
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.secondary,
+                            minimumSize: const Size(double.infinity, 52),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            child: isSubmitting
-                                ? const CircularProgressIndicator(
-                                    color: Colors.white,
-                                  )
-                                : Text(
-                                    'إضافة النبات',
-                                    style: TextStyles.buttonTextStyle.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
                           ),
-                        ],
-                      ),
+                          child: isSubmitting
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  'btn_add_plant_submit'.tr(),
+                                  style: TextStyles.buttonTextStyle.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

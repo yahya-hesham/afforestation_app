@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class FormHeader extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            title ?? 'إنشاء حساب',
+            title ?? 'register_header'.tr(),
             style: TextStyles.loginHeaderStyle.copyWith(
               color: AppColors.onSecondary,
             ),
@@ -29,7 +30,7 @@ class FormHeader extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            subtitle ?? 'أدخل بياناتك لإنشاء حسابك والانضمام إلينا',
+            subtitle ?? 'register_subtitle'.tr(),
             style: TextStyles.footerTextTextStyle.copyWith(
               color: AppColors.onSecondary,
             ),

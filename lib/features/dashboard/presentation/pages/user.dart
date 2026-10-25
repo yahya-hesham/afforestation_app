@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/routes/routes.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/core/theme/theme_cubit.dart';
@@ -32,7 +33,7 @@ class UserView extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          "لوحة المستخدم",
+          "user_dashboard_title".tr(),
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -41,6 +42,18 @@ class UserView extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
+          // Earth language toggle button
+          IconButton(
+            tooltip: context.isArabic ? "English" : "العربية",
+            icon: Icon(
+              Icons.language_rounded,
+              color: isDark ? const Color(0xFF81C784) : const Color(0xFF43A047),
+              size: 22,
+            ),
+            onPressed: () {
+              context.toggleLanguage();
+            },
+          ),
           // Theme toggle button
           BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
@@ -66,17 +79,17 @@ class UserView extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildLogoutBtn(context),
                   _buildUserProfileHeader(
                     primaryTextColor,
                     secondaryTextColor,
                     isDark,
                   ),
+                  _buildLogoutBtn(context),
                 ],
               ),
               const SizedBox(height: 25),
@@ -84,9 +97,9 @@ class UserView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _buildStatCard(
-                      title: "إجمالي الأعمال",
+                      title: "total_works".tr(),
                       value: "145",
-                      unit: "شتلة",
+                      unit: "unit_seedling".tr(),
                       icon: Icons.analytics_outlined,
                       surfaceColor: surfaceColor,
                       borderColor: cardBorderColor,
@@ -97,9 +110,9 @@ class UserView extends StatelessWidget {
                   const SizedBox(width: 15),
                   Expanded(
                     child: _buildStatCard(
-                      title: "نشاطك الأسبوعي",
+                      title: "weekly_activity".tr(),
                       value: "12",
-                      unit: "عملية",
+                      unit: "unit_operation".tr(),
                       icon: Icons.insights_outlined,
                       surfaceColor: surfaceColor,
                       borderColor: cardBorderColor,
@@ -111,7 +124,7 @@ class UserView extends StatelessWidget {
               ),
               const SizedBox(height: 30),
               Text(
-                "العمليات السريعة",
+                "quick_operations".tr(),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -120,30 +133,30 @@ class UserView extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               _buildActionCard(
-                title: "إضافة عملية تشجير جديدة",
-                subtitle:
-                    "سجل بيانات شتلات جديدة في المواقع الميدانية المعتمدة",
+                title: "add_new_afforestation_title".tr(),
+                subtitle: "add_new_afforestation_subtitle".tr(),
                 icon: Icons.add_circle_outline,
                 surfaceColor: surfaceColor,
                 borderColor: cardBorderColor,
                 textColor: primaryTextColor,
                 subTextColor: secondaryTextColor,
                 isDark: isDark,
+                isArabic: context.isArabic,
                 onTap: () {
                   context.push(Routes.addAfforestation);
                 },
               ),
               const SizedBox(height: 12),
               _buildActionCard(
-                title: "عرض البيانات المضافة",
-                subtitle:
-                    "راجع سجلاتك السابقة وتتبع حالة نمو النباتات التي قمت بزراعتها",
+                title: "view_added_data_title".tr(),
+                subtitle: "view_added_data_subtitle".tr(),
                 icon: Icons.eco_outlined,
                 surfaceColor: surfaceColor,
                 borderColor: cardBorderColor,
                 textColor: primaryTextColor,
                 subTextColor: secondaryTextColor,
                 isDark: isDark,
+                isArabic: context.isArabic,
                 onTap: () {
                   context.push(Routes.search);
                 },
@@ -187,28 +200,6 @@ class UserView extends StatelessWidget {
   ) {
     return Row(
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              "مرحباً مجدداً، $userName",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: primaryTextColor,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              userEmail,
-              style: TextStyle(
-                fontSize: 12,
-                color: secondaryTextColor,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(width: 12),
         Container(
           width: 45,
           height: 45,
@@ -226,6 +217,28 @@ class UserView extends StatelessWidget {
               size: 24,
             ),
           ),
+        ),
+        const SizedBox(width: 12),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "welcome_user".tr(args: [userName]),
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: primaryTextColor,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              userEmail,
+              style: TextStyle(
+                fontSize: 12,
+                color: secondaryTextColor,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -249,12 +262,11 @@ class UserView extends StatelessWidget {
         border: Border.all(color: borderColor),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(icon, color: const Color(0xFF43A047), size: 20),
               Text(
                 title,
                 style: TextStyle(
@@ -263,28 +275,28 @@ class UserView extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              Icon(icon, color: const Color(0xFF43A047), size: 20),
             ],
           ),
           const SizedBox(height: 12),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: [
-              Text(
-                unit,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: subTextColor,
-                ),
-              ),
-              const SizedBox(width: 4),
               Text(
                 value,
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: textColor,
+                ),
+              ),
+              const SizedBox(width: 4),
+              Text(
+                unit,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: subTextColor,
                 ),
               ),
             ],
@@ -303,6 +315,7 @@ class UserView extends StatelessWidget {
     required Color textColor,
     required Color subTextColor,
     required bool isDark,
+    required bool isArabic,
     required VoidCallback onTap,
   }) {
     return InkWell(
@@ -317,15 +330,24 @@ class UserView extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(
-              Icons.arrow_back_ios,
-              size: 14,
-              color: isDark ? Colors.white38 : Colors.grey,
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? const Color(0xFF2E7D32).withValues(alpha: 0.25)
+                    : const Color(0xFFE8F5E9),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                color: const Color(0xFF2E7D32),
+                size: 20,
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
@@ -338,7 +360,6 @@ class UserView extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    textAlign: TextAlign.right,
                     style: TextStyle(
                       fontSize: 11,
                       color: subTextColor,
@@ -349,19 +370,10 @@ class UserView extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF2E7D32).withValues(alpha: 0.25)
-                    : const Color(0xFFE8F5E9),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.arrow_forward,
-                color: Color(0xFF2E7D32),
-                size: 16,
-              ),
+            Icon(
+              isArabic ? Icons.arrow_back_ios_new : Icons.arrow_forward_ios,
+              size: 14,
+              color: isDark ? Colors.white38 : Colors.grey,
             ),
           ],
         ),
@@ -380,22 +392,21 @@ class UserView extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Icon(
+            Icons.nature_people_outlined,
+            color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
+            size: 24,
+          ),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
-              "تساهم جهودك في زيادة الغطاء النباتي. شكراً لمساهمتك في حماية البيئة وتطوير المناطق الخضراء.",
-              textAlign: TextAlign.right,
+              "user_motivation_text".tr(),
               style: TextStyle(
                 fontSize: 12,
                 color: isDark ? Colors.white70 : const Color(0xFF2E7D32),
                 height: 1.5,
               ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Icon(
-            Icons.nature_people_outlined,
-            color: isDark ? const Color(0xFF81C784) : const Color(0xFF2E7D32),
-            size: 24,
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class StatisticsPlaceholderView extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          "الإحصائيات والتحليلات",
+          "stats_title".tr(),
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -32,7 +33,7 @@ class StatisticsPlaceholderView extends StatelessWidget {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Highlight Overview Card
               Container(
@@ -47,19 +48,19 @@ class StatisticsPlaceholderView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "إجمالي التشجير العام",
-                      style: TextStyle(
+                    Text(
+                      "total_afforestation".tr(),
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      "12,450 شجرة",
-                      style: TextStyle(
+                    Text(
+                      "trees_count_placeholder".tr(),
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -67,7 +68,6 @@ class StatisticsPlaceholderView extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         const Icon(
                           Icons.trending_up,
@@ -76,7 +76,7 @@ class StatisticsPlaceholderView extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          "زيادة بنسبة 15% هذا الشهر",
+                          "growth_rate_text".tr(),
                           style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.9),
                             fontSize: 12,
@@ -91,7 +91,7 @@ class StatisticsPlaceholderView extends StatelessWidget {
 
               // Section Header
               Text(
-                "مؤشرات الأداء الرئيسية",
+                "kpi_title".tr(),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -105,9 +105,9 @@ class StatisticsPlaceholderView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _buildMetricCard(
-                      title: "المناطق المغطاة",
-                      value: "34 موقع",
-                      subtitle: "بلديات نشطة",
+                      title: "covered_areas".tr(),
+                      value: "sites_count".tr(),
+                      subtitle: "active_municipalities".tr(),
                       icon: Icons.map_outlined,
                       color: const Color(0xFF4CAF50),
                       surfaceColor: surfaceColor,
@@ -119,9 +119,9 @@ class StatisticsPlaceholderView extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _buildMetricCard(
-                      title: "نسبة البقاء",
+                      title: "survival_rate".tr(),
                       value: "94.2%",
-                      subtitle: "معدل نمو ناجح",
+                      subtitle: "successful_growth".tr(),
                       icon: Icons.favorite,
                       color: Colors.redAccent,
                       surfaceColor: surfaceColor,
@@ -137,9 +137,9 @@ class StatisticsPlaceholderView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _buildMetricCard(
-                      title: "توفير المياه",
-                      value: "4.8K لتر",
-                      subtitle: "ري ذكي مُرشّد",
+                      title: "water_saving".tr(),
+                      value: "liters_count".tr(),
+                      subtitle: "smart_irrigation".tr(),
                       icon: Icons.water_drop_outlined,
                       color: Colors.cyan,
                       surfaceColor: surfaceColor,
@@ -151,9 +151,9 @@ class StatisticsPlaceholderView extends StatelessWidget {
                   const SizedBox(width: 12),
                   Expanded(
                     child: _buildMetricCard(
-                      title: "المتطوعين",
+                      title: "volunteers".tr(),
                       value: "+180",
-                      subtitle: "مشارك نشط",
+                      subtitle: "active_participants".tr(),
                       icon: Icons.groups_outlined,
                       color: Colors.blueAccent,
                       surfaceColor: surfaceColor,
@@ -178,10 +178,10 @@ class StatisticsPlaceholderView extends StatelessWidget {
                   ),
                 ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "معدل التشجير الأسبوعي",
+                      "weekly_rate".tr(),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -193,13 +193,13 @@ class StatisticsPlaceholderView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        _buildChartBar(0.4, "أحد", isDark, subTextColor),
-                        _buildChartBar(0.7, "إثنين", isDark, subTextColor),
-                        _buildChartBar(0.55, "ثلاثاء", isDark, subTextColor),
-                        _buildChartBar(0.9, "أربعاء", isDark, subTextColor),
-                        _buildChartBar(0.65, "خميس", isDark, subTextColor),
-                        _buildChartBar(0.3, "جمعة", isDark, subTextColor),
-                        _buildChartBar(0.85, "سبت", isDark, subTextColor),
+                        _buildChartBar(0.4, "day_sun".tr(), isDark, subTextColor),
+                        _buildChartBar(0.7, "day_mon".tr(), isDark, subTextColor),
+                        _buildChartBar(0.55, "day_tue".tr(), isDark, subTextColor),
+                        _buildChartBar(0.9, "day_wed".tr(), isDark, subTextColor),
+                        _buildChartBar(0.65, "day_thu".tr(), isDark, subTextColor),
+                        _buildChartBar(0.3, "day_fri".tr(), isDark, subTextColor),
+                        _buildChartBar(0.85, "day_sat".tr(), isDark, subTextColor),
                       ],
                     ),
                   ],
@@ -234,7 +234,7 @@ class StatisticsPlaceholderView extends StatelessWidget {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.all(8),

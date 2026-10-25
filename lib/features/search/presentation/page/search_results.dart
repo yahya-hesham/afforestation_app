@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/features/search/data/models/search_request_model.dart';
 import 'package:afforestation_app/features/search/data/models/search_result_model.dart';
@@ -37,16 +38,13 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const Directionality(
-          textDirection: TextDirection.rtl,
-          child: AlertDialog(
-            content: Row(
-              children: [
-                CircularProgressIndicator(color: AppColors.secondary),
-                SizedBox(width: 20),
-                Text("جاري تصدير ملف إكسل..."),
-              ],
-            ),
+        return AlertDialog(
+          content: Row(
+            children: [
+              const CircularProgressIndicator(color: AppColors.secondary),
+              const SizedBox(width: 20),
+              Text("exporting_excel".tr()),
+            ],
           ),
         );
       },
@@ -81,7 +79,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       }
 
       final xFile = XFile(filePath);
-      await Share.shareXFiles([xFile], text: 'تقرير بيانات التشجير');
+      await Share.shareXFiles([xFile], text: "excel_report_name".tr());
     } catch (e) {
       if (mounted) {
         Navigator.pop(context);
@@ -90,7 +88,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("فشل التصدير: $e"),
+            content: Text("export_failed".tr(args: [e.toString()])),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -114,184 +112,182 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       backgroundColor: scaffoldBg,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: textColor,
-                size: 20,
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: textColor, size: 20),
+            onPressed: () => Navigator.maybePop(context),
+          ),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? const Color(0xFF1E3A1E)
+                      : const Color(0xFFE8F5E9),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.park,
+                  color: Color(0xFF4CAF50),
+                  size: 18,
+                ),
               ),
-              onPressed: () => Navigator.maybePop(context),
-            ),
-            title: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: isDark ? const Color(0xFF1E3A1E) : const Color(0xFFE8F5E9),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(Icons.park, color: Color(0xFF4CAF50), size: 18),
+              const SizedBox(width: 8),
+              Text(
+                "Afforestation",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: textColor,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  "Afforestation",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: textColor,
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 14,
-                    backgroundColor: isDark ? const Color(0xFF2C2C2C) : Colors.grey,
-                    child: const Icon(Icons.person, size: 16, color: Colors.white),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    "ADMIN",
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: textColor,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    icon: Icon(
-                      Icons.logout,
-                      color: textColor,
-                      size: 20,
-                    ),
-                    onPressed: () => Navigator.maybePop(context),
-                  ),
-                  const SizedBox(width: 16),
-                ],
               ),
             ],
           ),
+          actions: [
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 14,
+                  backgroundColor: isDark
+                      ? const Color(0xFF2C2C2C)
+                      : Colors.grey,
+                  child: const Icon(
+                    Icons.person,
+                    size: 16,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  "ADMIN",
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: textColor,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: Icon(Icons.logout, color: textColor, size: 20),
+                  onPressed: () => Navigator.maybePop(context),
+                ),
+                const SizedBox(width: 16),
+              ],
+            ),
+          ],
         ),
       ),
       body: SafeArea(
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: BlocConsumer<SearchCubit, SearchState>(
-            listener: (context, state) {
-              if (state is SearchError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: AppColors.error,
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              if (state is SearchLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(color: AppColors.secondary),
-                );
-              }
-
-              if (state is SearchError) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.error_outline,
-                          color: AppColors.error,
-                          size: 48,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          state.message,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: textColor,
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pop(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.secondary,
-                          ),
-                          child: const Text(
-                            "العودة للبحث",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-
-              if (state is SearchSuccess) {
-                final allResults = state.results;
-
-                if (allResults.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.search_off,
-                          color: Colors.grey,
-                          size: 48,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "لا توجد نتائج",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          "جرب تعديل معايير البحث",
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                        const SizedBox(height: 24),
-                        ElevatedButton(
-                          onPressed: () => Navigator.pop(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.secondary,
-                          ),
-                          child: const Text(
-                            "العودة للبحث",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                return _buildResultsContent(context, allResults, isDark);
-              }
-
+        child: BlocConsumer<SearchCubit, SearchState>(
+          listener: (context, state) {
+            if (state is SearchError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: AppColors.error,
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is SearchLoading) {
               return const Center(
                 child: CircularProgressIndicator(color: AppColors.secondary),
               );
-            },
-          ),
+            }
+
+            if (state is SearchError) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        color: AppColors.error,
+                        size: 48,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        state.message,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, color: textColor),
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondary,
+                        ),
+                        child: Text(
+                          "back_to_search".tr(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            if (state is SearchSuccess) {
+              final allResults = state.results;
+
+              if (allResults.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.search_off,
+                        color: Colors.grey,
+                        size: 48,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        "no_results_found".tr(),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: textColor,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        "try_adjusting_criteria".tr(),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondary,
+                        ),
+                        child: Text(
+                          "back_to_search".tr(),
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return _buildResultsContent(context, allResults, isDark);
+            }
+
+            return const Center(
+              child: CircularProgressIndicator(color: AppColors.secondary),
+            );
+          },
         ),
       ),
     );
@@ -326,7 +322,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             child: Column(
               children: [
                 Text(
-                  "نتائج البحث",
+                  "search_results_title".tr(),
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -335,7 +331,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "سجلات التشجير بناءً على معايير البحث",
+                  "search_results_subtitle".tr(),
                   style: TextStyle(
                     fontSize: 12,
                     color: isDark ? Colors.white60 : Colors.grey,
@@ -360,9 +356,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 elevation: 0,
               ),
               icon: const Icon(Icons.download, color: Colors.white, size: 20),
-              label: const Text(
-                "تصدير إلى إكسل",
-                style: TextStyle(
+              label: Text(
+                "btn_export_excel".tr(),
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -387,8 +383,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-                foregroundColor: isDark ? const Color(0xFF81C784) : AppColors.primary,
+                backgroundColor: isDark
+                    ? const Color(0xFF1E1E1E)
+                    : Colors.white,
+                foregroundColor: isDark
+                    ? const Color(0xFF81C784)
+                    : AppColors.primary,
                 elevation: 0,
                 side: const BorderSide(color: AppColors.secondary, width: 1.5),
                 shape: RoundedRectangleBorder(
@@ -401,7 +401,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 size: 20,
               ),
               label: Text(
-                "عرض ملخص الإحصائيات",
+                "btn_view_stats_summary".tr(),
                 style: TextStyle(
                   color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                   fontSize: 15,
@@ -417,18 +417,24 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "صفحة ${_currentPage + 1} من $totalPages  ($totalCount سجل)",
-                style: TextStyle(
-                  fontSize: 12,
-                  color: isDark ? Colors.white60 : Colors.grey,
-                ),
-              ),
-              Text(
-                "أحدث السجلات",
+                "latest_records".tr(),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: isDark ? Colors.white : AppColors.onSurface,
+                ),
+              ),
+              Text(
+                "page_x_of_y".tr(
+                  args: [
+                    (_currentPage + 1).toString(),
+                    totalPages.toString(),
+                    totalCount.toString(),
+                  ],
+                ),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: isDark ? Colors.white60 : Colors.grey,
                 ),
               ),
             ],
@@ -438,14 +444,14 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
           // Record Cards
           ...pageResults.map(
             (item) => RecordCard(
-              plantName: item.treeName ?? "غير محدد",
+              plantName: item.treeName ?? "not_specified".tr(),
               badgeText: item.treeTypeName ?? "",
               plantingDate:
                   "${item.dateOfPlanted.year}-${item.dateOfPlanted.month.toString().padLeft(2, '0')}-${item.dateOfPlanted.day.toString().padLeft(2, '0')}",
               scientificName: item.scientificName ?? "",
-              location: item.locationName ?? "غير محدد",
+              location: item.locationName ?? "not_specified".tr(),
               quantity: item.number.toString(),
-              registeredBy: item.userName ?? "غير معروف",
+              registeredBy: item.userName ?? "unknown".tr(),
               onEdit: () => _showEditDialog(context, item, isDark),
               onDelete: () => _showDeleteConfirmation(context, item, isDark),
             ),
@@ -490,7 +496,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       decoration: BoxDecoration(
                         color: _currentPage == pageIndex
                             ? AppColors.secondary
-                            : (isDark ? const Color(0xFF2C2C2C) : Colors.grey.shade100),
+                            : (isDark
+                                  ? const Color(0xFF2C2C2C)
+                                  : Colors.grey.shade100),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       alignment: Alignment.center,
@@ -533,46 +541,45 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   ) {
     showDialog(
       context: context,
-      builder: (dialogContext) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: AlertDialog(
-          backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Text(
+          "confirm_delete_user".tr(),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: isDark ? const Color(0xFF81C784) : AppColors.primary,
           ),
-          title: Text(
-            "تأكيد الحذف",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: isDark ? const Color(0xFF81C784) : AppColors.primary,
-            ),
-          ),
-          content: Text(
-            "هل أنت متأكد من حذف \"${item.treeName ?? ''}\"؟",
-            style: TextStyle(
-              color: isDark ? Colors.white70 : Colors.black87,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text("إلغاء", style: TextStyle(color: Colors.grey)),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(dialogContext);
-                context.read<SearchCubit>().deleteRecord(item.id);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.error,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text("حذف", style: TextStyle(color: Colors.white)),
-            ),
-          ],
         ),
+        content: Text(
+          "delete_plant_confirm".tr(args: [item.treeName ?? '']),
+          style: TextStyle(color: isDark ? Colors.white70 : Colors.black87),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(
+              "cancel".tr(),
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              context.read<SearchCubit>().deleteRecord(item.id);
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Text(
+              "delete".tr(),
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -590,144 +597,151 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     showDialog(
       context: context,
       builder: (dialogContext) => StatefulBuilder(
-        builder: (dialogContext, setDialogState) => Directionality(
-          textDirection: TextDirection.rtl,
-          child: AlertDialog(
-            backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+        builder: (dialogContext, setDialogState) => AlertDialog(
+          backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            "edit_plant_data".tr(),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: isDark ? const Color(0xFF81C784) : AppColors.primary,
             ),
-            title: Text(
-              "تعديل سجل التشجير",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: isDark ? const Color(0xFF81C784) : AppColors.primary,
-              ),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(Icons.park, color: AppColors.secondary),
-                    title: Text(
-                      item.treeName ?? "غير محدد",
-                      style: TextStyle(color: isDark ? Colors.white : Colors.black87),
-                    ),
-                    subtitle: Text(
-                      item.scientificName ?? "",
-                      style: TextStyle(color: isDark ? Colors.white60 : Colors.black54),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.park, color: AppColors.secondary),
+                  title: Text(
+                    item.treeName ?? "not_specified".tr(),
+                    style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black87,
                     ),
                   ),
-                  Divider(color: isDark ? Colors.white12 : Colors.black12),
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(
-                      Icons.calendar_today,
+                  subtitle: Text(
+                    item.scientificName ?? "",
+                    style: TextStyle(
+                      color: isDark ? Colors.white60 : Colors.black54,
+                    ),
+                  ),
+                ),
+                Divider(color: isDark ? Colors.white12 : Colors.black12),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(
+                    Icons.calendar_today,
+                    color: AppColors.secondary,
+                  ),
+                  title: Text(
+                    "planting_date".tr(),
+                    style: TextStyle(
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
+                  ),
+                  subtitle: Text(
+                    "${selectedDate?.year}-${selectedDate?.month.toString().padLeft(2, '0')}-${selectedDate?.day.toString().padLeft(2, '0')}",
+                    style: TextStyle(
+                      color: isDark ? Colors.white70 : Colors.black54,
+                    ),
+                  ),
+                  onTap: () async {
+                    final picked = await showDatePicker(
+                      context: dialogContext,
+                      initialDate: selectedDate ?? DateTime.now(),
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2030),
+                      builder: (ctx, child) => Theme(
+                        data: isDark
+                            ? Theme.of(ctx).copyWith(
+                                colorScheme: const ColorScheme.dark(
+                                  primary: AppColors.secondary,
+                                  onPrimary: Colors.white,
+                                  surface: Color(0xFF1E1E1E),
+                                  onSurface: Colors.white,
+                                ),
+                                dialogBackgroundColor: const Color(0xFF1E1E1E),
+                              )
+                            : Theme.of(ctx).copyWith(
+                                colorScheme: const ColorScheme.light(
+                                  primary: AppColors.primary,
+                                  onPrimary: Colors.white,
+                                  onSurface: AppColors.onSurface,
+                                ),
+                              ),
+                        child: child!,
+                      ),
+                    );
+                    if (picked != null) {
+                      setDialogState(() => selectedDate = picked);
+                    }
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: numberController,
+                  keyboardType: TextInputType.number,
+                  style: TextStyle(
+                    color: isDark ? Colors.white : Colors.black87,
+                  ),
+                  decoration: InputDecoration(
+                    labelText: "quantity".tr(),
+                    prefixIcon: const Icon(
+                      Icons.numbers,
                       color: AppColors.secondary,
                     ),
-                    title: Text(
-                      "تاريخ الزراعة",
-                      style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
                     ),
-                    subtitle: Text(
-                      "${selectedDate?.year}-${selectedDate?.month.toString().padLeft(2, '0')}-${selectedDate?.day.toString().padLeft(2, '0')}",
-                      style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
-                    ),
-                    onTap: () async {
-                      final picked = await showDatePicker(
-                        context: dialogContext,
-                        initialDate: selectedDate ?? DateTime.now(),
-                        firstDate: DateTime(2020),
-                        lastDate: DateTime(2030),
-                        builder: (ctx, child) => Theme(
-                          data: isDark
-                              ? Theme.of(ctx).copyWith(
-                                  colorScheme: const ColorScheme.dark(
-                                    primary: AppColors.secondary,
-                                    onPrimary: Colors.white,
-                                    surface: Color(0xFF1E1E1E),
-                                    onSurface: Colors.white,
-                                  ),
-                                  dialogBackgroundColor: const Color(0xFF1E1E1E),
-                                )
-                              : Theme.of(ctx).copyWith(
-                                  colorScheme: const ColorScheme.light(
-                                    primary: AppColors.primary,
-                                    onPrimary: Colors.white,
-                                    onSurface: AppColors.onSurface,
-                                  ),
-                                ),
-                          child: child!,
-                        ),
-                      );
-                      if (picked != null) {
-                        setDialogState(() => selectedDate = picked);
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  TextField(
-                    controller: numberController,
-                    keyboardType: TextInputType.number,
-                    style: TextStyle(color: isDark ? Colors.white : Colors.black87),
-                    decoration: const InputDecoration(
-                      labelText: "الكمية",
-                      prefixIcon: Icon(
-                        Icons.numbers,
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      borderSide: BorderSide(
                         color: AppColors.secondary,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        borderSide: BorderSide(
-                          color: AppColors.secondary,
-                          width: 2,
-                        ),
+                        width: 2,
                       ),
                     ),
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: Text(
+                "cancel".tr(),
+                style: const TextStyle(color: Colors.grey),
               ),
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(dialogContext),
-                child: const Text(
-                  "إلغاء",
-                  style: TextStyle(color: Colors.grey),
+            ElevatedButton(
+              onPressed: () {
+                final updateData = UpdateRecordModel(
+                  id: item.id,
+                  dateOfPlanted: selectedDate,
+                  treeTypeId: item.treeTypeId,
+                  treeNameId: item.treeNameId,
+                  locationId: item.locationId,
+                  locationTypeId: item.locationTypeId,
+                  number: int.tryParse(numberController.text) ?? item.number,
+                );
+                Navigator.pop(dialogContext);
+                context.read<SearchCubit>().updateRecord(updateData);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.secondary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  final updateData = UpdateRecordModel(
-                    id: item.id,
-                    dateOfPlanted: selectedDate,
-                    treeTypeId: item.treeTypeId,
-                    treeNameId: item.treeNameId,
-                    locationId: item.locationId,
-                    locationTypeId: item.locationTypeId,
-                    number: int.tryParse(numberController.text) ?? item.number,
-                  );
-                  Navigator.pop(dialogContext);
-                  context.read<SearchCubit>().updateRecord(updateData);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.secondary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-                child: const Text(
-                  "حفظ التعديلات",
-                  style: TextStyle(color: Colors.white),
-                ),
+              child: Text(
+                "save_changes".tr(),
+                style: const TextStyle(color: Colors.white),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

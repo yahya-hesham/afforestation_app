@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/features/notifications/presentation/widget/buildheader.dart';
 import 'package:afforestation_app/features/notifications/presentation/widget/notfication_card.dart';
 import 'package:flutter/material.dart';
@@ -14,119 +15,132 @@ class NotificationsScreen extends StatefulWidget {
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
   int selectedTab = 0;
-  List<NotificationItem> notifications = [
-    NotificationItem(
-      title: "تنبيه زراعة جديد",
-      description: "تم إضافة 50 شتلة لافندر في منطقة المشرف عبده.",
-      time: "قبل 5 دقائق",
-      avatarColor: AppColors.secondary.withOpacity(0.15),
-      isUnread: true,
-      isSystem: false,
-    ),
-    NotificationItem(
-      title: "تحديث حالة النظام",
-      description: "تم تحديث سجلات التشجير الأسبوعية بنجاح",
-      time: "قبل 2 ساعة",
-      avatarColor: AppColors.primary.withOpacity(0.15),
-      isUnread: false,
-      isSystem: true,
-    ),
-    NotificationItem(
-      title: "تنبيه ري",
-      description: "يرجى مراجعة جدول الري لمنطقة لافندر اليوم.",
-      time: "قبل 4 ساعات",
-      avatarColor: AppColors.secondary.withOpacity(0.25),
-      isUnread: true,
-      isSystem: false,
-    ),
-  ];
+  List<NotificationItem>? _notifications;
+  String? _lastLanguageCode;
 
-  List<NotificationItem> getFilteredNotifications() {
+  List<NotificationItem> _initNotifications() {
+    return [
+      NotificationItem(
+        title: "sample_notif_1_title".tr(),
+        description: "sample_notif_1_desc".tr(),
+        time: "sample_notif_1_time".tr(),
+        avatarColor: AppColors.secondary.withValues(alpha: 0.15),
+        isUnread: true,
+        isSystem: false,
+      ),
+      NotificationItem(
+        title: "sample_notif_2_title".tr(),
+        description: "sample_notif_2_desc".tr(),
+        time: "sample_notif_2_time".tr(),
+        avatarColor: AppColors.primary.withValues(alpha: 0.15),
+        isUnread: false,
+        isSystem: true,
+      ),
+      NotificationItem(
+        title: "sample_notif_3_title".tr(),
+        description: "sample_notif_3_desc".tr(),
+        time: "sample_notif_3_time".tr(),
+        avatarColor: AppColors.secondary.withValues(alpha: 0.25),
+        isUnread: true,
+        isSystem: false,
+      ),
+    ];
+  }
+
+  List<NotificationItem> getNotifications(BuildContext context) {
+    final currentLang = context.locale.languageCode;
+    if (_notifications == null || _lastLanguageCode != currentLang) {
+      _lastLanguageCode = currentLang;
+      _notifications = _initNotifications();
+    }
+    return _notifications!;
+  }
+
+  List<NotificationItem> getFilteredNotifications(BuildContext context) {
+    final notifs = getNotifications(context);
     if (selectedTab == 0) {
-      return notifications;
+      return notifs;
     } else if (selectedTab == 1) {
-      return notifications.where((n) => n.isUnread).toList();
+      return notifs.where((n) => n.isUnread).toList();
     } else {
-      return notifications.where((n) => n.isSystem).toList();
+      return notifs.where((n) => n.isSystem).toList();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final filteredList = getFilteredNotifications();
+    final filteredList = getFilteredNotifications(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final scaffoldBg = isDark ? const Color(0xFF121212) : AppColors.background;
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: scaffoldBg,
-        body: Column(
-          children: [
-            buildHeader(context: context),
+    return Scaffold(
+      backgroundColor: scaffoldBg,
+      body: Column(
+        children: [
+          buildHeader(context: context),
 
-            const buildsearchrow(),
+          const buildsearchrow(),
 
-            _buildFilterTabs(isDark),
+          _buildFilterTabs(isDark),
 
-            Expanded(
-              child: filteredList.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.notifications_off_outlined,
-                            size: 64,
-                            color: isDark ? Colors.white38 : AppColors.onSurfaceVariant.withOpacity(0.5),
+          Expanded(
+            child: filteredList.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.notifications_off_outlined,
+                          size: 64,
+                          color: isDark ? Colors.white38 : AppColors.onSurfaceVariant.withValues(alpha: 0.5),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "no_notifications".tr(),
+                          style: TextStyles.listRowSubtitleStyle.copyWith(
+                            fontSize: 15,
+                            color: isDark ? Colors.white60 : null,
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            "لا توجد إشعارات حالياً",
-                            style: TextStyles.listRowSubtitleStyle.copyWith(
-                              fontSize: 15,
-                              color: isDark ? Colors.white60 : null,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: filteredList.length,
-                      itemBuilder: (context, index) {
-                        final item = filteredList[index];
-                        return NotificationCard(
-                          item: item,
-                          onDelete: () {
-                            setState(() {
-                              notifications.remove(item);
-                            });
-                          },
-                          onMarkAsRead: () {
-                            setState(() {
-                              final targetIndex = notifications.indexOf(item);
-                              if (targetIndex != -1) {
-                                notifications[targetIndex] =
-                                    NotificationItem(
-                                  title: item.title,
-                                  description: item.description,
-                                  time: item.time,
-                                  avatarColor: item.avatarColor,
-                                  isUnread: false,
-                                  isSystem: item.isSystem,
-                                );
-                              }
-                            });
-                          },
-                        );
-                      },
+                        ),
+                      ],
                     ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: const PlantBottomNavigationBar(),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: filteredList.length,
+                    itemBuilder: (context, index) {
+                      final item = filteredList[index];
+                      return NotificationCard(
+                        item: item,
+                        onDelete: () {
+                          setState(() {
+                            getNotifications(context).remove(item);
+                          });
+                        },
+                        onMarkAsRead: () {
+                          setState(() {
+                            final notifs = getNotifications(context);
+                            final targetIndex = notifs.indexOf(item);
+                            if (targetIndex != -1) {
+                              notifs[targetIndex] =
+                                  NotificationItem(
+                                title: item.title,
+                                description: item.description,
+                                time: item.time,
+                                avatarColor: item.avatarColor,
+                                isUnread: false,
+                                isSystem: item.isSystem,
+                              );
+                            }
+                          });
+                        },
+                      );
+                    },
+                  ),
+          ),
+        ],
       ),
+      bottomNavigationBar: const PlantBottomNavigationBar(),
     );
   }
 
@@ -137,14 +151,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       decoration: BoxDecoration(
         color: isDark
             ? Colors.white.withValues(alpha: 0.08)
-            : AppColors.onSurfaceVariant.withOpacity(0.12),
+            : AppColors.onSurfaceVariant.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
         children: [
-          _buildTabItem("الكل", 0, isDark),
-          _buildTabItem("غير مقروءة", 1, isDark),
-          _buildTabItem("تنبيهات النظام", 2, isDark),
+          _buildTabItem("tab_all".tr(), 0, isDark),
+          _buildTabItem("tab_unread".tr(), 1, isDark),
+          _buildTabItem("tab_system".tr(), 2, isDark),
         ],
       ),
     );
@@ -170,7 +184,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             boxShadow: isSelected
                 ? [
                     BoxShadow(
-                      color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
+                      color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.04),
                       blurRadius: 6,
                       offset: const Offset(0, 3),
                     ),

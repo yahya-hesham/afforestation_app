@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,7 @@ class FormFooter extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'بالتسجيل، أنت توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا',
+            'terms_notice'.tr(),
             style: TextStyles.footerTextTextStyle.copyWith(
               color: textColor,
               height: 1.5,

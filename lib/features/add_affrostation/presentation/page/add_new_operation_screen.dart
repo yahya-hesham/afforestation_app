@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/features/add_affrostation/presentation/cubit/add_afforestation_cubit.dart';
 import 'package:afforestation_app/features/add_affrostation/presentation/cubit/add_afforestation_state.dart';
@@ -79,7 +80,7 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
             onPressed: () => Navigator.pop(context),
           ),
           title: Text(
-            'إضافة عملية جديدة',
+            'add_new_operation'.tr(),
             style: TextStyle(
               color: isDark ? Colors.white : Colors.black,
               fontSize: 16,
@@ -109,7 +110,7 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                   content: Text(
                     state.message.isNotEmpty
                         ? state.message
-                        : 'حدث خطأ غير متوقع',
+                        : 'unexpected_error'.tr(),
                   ),
                   backgroundColor: AppColors.error,
                 ),
@@ -144,261 +145,257 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Form(
                 key: _formKey,
-                child: Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header Card
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20,
-                          horizontal: 16,
-                        ),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF56B76C),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: const Column(
-                          children: [
-                            Text(
-                              'إضافة عملية تشجير جديدة',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              'ADD A NEW AFFORESTATION OPERATION',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 10,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ],
-                        ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Header Card
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 16,
                       ),
-                      const SizedBox(height: 20),
-
-                      // Plant Data Section
-                      _buildSectionHeader('بيانات النبات', Icons.eco_outlined),
-                      const SizedBox(height: 12),
-                      _buildLabel('نوع النبات', textColor),
-                      _buildGenericDropdownField<PlantTypesResponse>(
-                        hint: '-- اختر النوع --',
-                        value: cubit.selectedPlantType,
-                        items: cubit.plantTypes,
-                        getLabel: (item) => item.type ?? '',
-                        onChanged: (val) => cubit.onPlantTypeChanged(val),
-                        isDark: isDark,
-                        surfaceColor: surfaceColor,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF56B76C),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      const SizedBox(height: 16),
-                      _buildLabel('اسم النبات', textColor),
-                      _buildGenericDropdownField<PlantNamesResponse>(
-                        hint: isLoadingPlants
-                            ? 'جاري تحميل أسماء النباتات...'
-                            : '-- اختر اسم النبات --',
-                        value: cubit.selectedPlantName,
-                        items: cubit.plantNames,
-                        getLabel: (item) => item.name ?? '',
-                        onChanged: (val) => cubit.onPlantNameChanged(val),
-                        isDark: isDark,
-                        surfaceColor: surfaceColor,
-                      ),
-
-                      const SizedBox(height: 24),
-                      Divider(
-                        height: 1,
-                        color: isDark ? Colors.white12 : Colors.black12,
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Location Data Section
-                      _buildSectionHeader(
-                        'بيانات الموقع',
-                        Icons.location_on_outlined,
-                      ),
-                      const SizedBox(height: 12),
-                      _buildLabel('نوع الموقع', textColor),
-                      _buildGenericDropdownField<LocTypesResponse>(
-                        hint: '-- اختر نوع الموقع --',
-                        value: cubit.selectedLocationType,
-                        items: cubit.locationTypes,
-                        getLabel: (item) => item.locationType ?? '',
-                        onChanged: (val) => cubit.onLocationTypeChanged(val),
-                        isDark: isDark,
-                        surfaceColor: surfaceColor,
-                      ),
-                      const SizedBox(height: 16),
-                      _buildLabel('موقع الزراعة', textColor),
-                      _buildGenericDropdownField<LocNamesResponse>(
-                        hint: isLoadingLocations
-                            ? 'جاري تحميل المواقع...'
-                            : '-- اختر العنوان المباشر --',
-                        value: cubit.selectedLocationAddress,
-                        items: cubit.locations,
-                        getLabel: (item) => item.name ?? '',
-                        onChanged: (val) =>
-                            cubit.onLocationAddressChanged(val),
-                        isDark: isDark,
-                        surfaceColor: surfaceColor,
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Date and Count Row
-                      Row(
+                      child: Column(
                         children: [
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                          Text(
+                            'add_new_afforestation_header'.tr(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'add_new_afforestation_en_sub'.tr(),
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontSize: 10,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Plant Data Section
+                    _buildSectionHeader('plant_data'.tr(), Icons.eco_outlined),
+                    const SizedBox(height: 12),
+                    _buildLabel('plant_type'.tr(), textColor),
+                    _buildGenericDropdownField<PlantTypesResponse>(
+                      hint: 'select_type_hint'.tr(),
+                      value: cubit.selectedPlantType,
+                      items: cubit.plantTypes,
+                      getLabel: (item) => item.type ?? '',
+                      onChanged: (val) => cubit.onPlantTypeChanged(val),
+                      isDark: isDark,
+                      surfaceColor: surfaceColor,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildLabel('plant_name'.tr(), textColor),
+                    _buildGenericDropdownField<PlantNamesResponse>(
+                      hint: isLoadingPlants
+                          ? 'loading_plants'.tr()
+                          : 'select_plant_name_hint'.tr(),
+                      value: cubit.selectedPlantName,
+                      items: cubit.plantNames,
+                      getLabel: (item) => item.name ?? '',
+                      onChanged: (val) => cubit.onPlantNameChanged(val),
+                      isDark: isDark,
+                      surfaceColor: surfaceColor,
+                    ),
+
+                    const SizedBox(height: 24),
+                    Divider(
+                      height: 1,
+                      color: isDark ? Colors.white12 : Colors.black12,
+                    ),
+                    const SizedBox(height: 20),
+
+                    // Location Data Section
+                    _buildSectionHeader(
+                      'location_data'.tr(),
+                      Icons.location_on_outlined,
+                    ),
+                    const SizedBox(height: 12),
+                    _buildLabel('location_type'.tr(), textColor),
+                    _buildGenericDropdownField<LocTypesResponse>(
+                      hint: 'select_location_type_hint'.tr(),
+                      value: cubit.selectedLocationType,
+                      items: cubit.locationTypes,
+                      getLabel: (item) => item.locationType ?? '',
+                      onChanged: (val) => cubit.onLocationTypeChanged(val),
+                      isDark: isDark,
+                      surfaceColor: surfaceColor,
+                    ),
+                    const SizedBox(height: 16),
+                    _buildLabel('planting_location'.tr(), textColor),
+                    _buildGenericDropdownField<LocNamesResponse>(
+                      hint: isLoadingLocations
+                          ? 'loading_locations'.tr()
+                          : 'select_address_hint'.tr(),
+                      value: cubit.selectedLocationAddress,
+                      items: cubit.locations,
+                      getLabel: (item) => item.name ?? '',
+                      onChanged: (val) =>
+                          cubit.onLocationAddressChanged(val),
+                      isDark: isDark,
+                      surfaceColor: surfaceColor,
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // Date and Count Row
+                    Row(
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildLabel('planting_date'.tr(), textColor),
+                              GestureDetector(
+                                onTap: _pickDate,
+                                child: AbsorbPointer(
+                                  child: _buildTextField(
+                                    controller: _dateController,
+                                    icon: Icons.calendar_month_outlined,
+                                    isReadOnly: true,
+                                    isDark: isDark,
+                                    surfaceColor: surfaceColor,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildLabel('plant_count'.tr(), textColor),
+                              _buildTextField(
+                                controller: _plantCountController,
+                                icon: Icons.unfold_more,
+                                isCenter: true,
+                                keyboardType: TextInputType.number,
+                                isDark: isDark,
+                                surfaceColor: surfaceColor,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 28),
+
+                    // Submit Button
+                    ElevatedButton(
+                      onPressed: isSubmitting
+                          ? null
+                          : () {
+                              if (_formKey.currentState!.validate()) {
+                                final number = int.tryParse(
+                                        _plantCountController.text.trim()) ??
+                                    0;
+                                cubit.submit(
+                                  dateOfPlanted: _selectedDate,
+                                  number: number,
+                                );
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF56B76C),
+                        minimumSize: const Size(double.infinity, 52),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: isSubmitting
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                _buildLabel('تاريخ الزراعة', textColor),
-                                GestureDetector(
-                                  onTap: _pickDate,
-                                  child: AbsorbPointer(
-                                    child: _buildTextField(
-                                      controller: _dateController,
-                                      icon: Icons.calendar_month_outlined,
-                                      isReadOnly: true,
-                                      isDark: isDark,
-                                      surfaceColor: surfaceColor,
-                                      textAlign: TextAlign.right,
-                                    ),
+                                const Icon(Icons.add,
+                                    color: Colors.white, size: 20),
+                                const SizedBox(width: 6),
+                                Text(
+                                  'btn_submit_operation'.tr(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
                             ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Tip box
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF56B76C).withValues(
+                          alpha: isDark ? 0.15 : 0.08,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: const Color(0xFF56B76C).withValues(
+                            alpha: isDark ? 0.3 : 0.15,
                           ),
-                          const SizedBox(width: 12),
+                        ),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(
+                            Icons.tips_and_updates_outlined,
+                            color: Color(0xFF56B76C),
+                            size: 18,
+                          ),
+                          const SizedBox(width: 8),
                           Expanded(
-                            flex: 1,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildLabel('عدد النباتات', textColor),
-                                _buildTextField(
-                                  controller: _plantCountController,
-                                  icon: Icons.unfold_more,
-                                  isCenter: true,
-                                  keyboardType: TextInputType.number,
-                                  isDark: isDark,
-                                  surfaceColor: surfaceColor,
+                                Text(
+                                  'quick_tip_title'.tr(),
+                                  style: const TextStyle(
+                                    color: Color(0xFF56B76C),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'add_operation_tip_content'.tr(),
+                                  style: TextStyle(
+                                    color: isDark
+                                        ? Colors.white70
+                                        : Colors.black54,
+                                    fontSize: 11,
+                                    height: 1.4,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 28),
-
-                      // Submit Button
-                      ElevatedButton(
-                        onPressed: isSubmitting
-                            ? null
-                            : () {
-                                if (_formKey.currentState!.validate()) {
-                                  final number = int.tryParse(
-                                          _plantCountController.text.trim()) ??
-                                      0;
-                                  cubit.submit(
-                                    dateOfPlanted: _selectedDate,
-                                    number: number,
-                                  );
-                                }
-                              },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF56B76C),
-                          minimumSize: const Size(double.infinity, 52),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: isSubmitting
-                            ? const CircularProgressIndicator(
-                                color: Colors.white,
-                              )
-                            : const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.add,
-                                      color: Colors.white, size: 20),
-                                  SizedBox(width: 6),
-                                  Text(
-                                    'إضافة العملية',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Tip box
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF56B76C).withValues(
-                            alpha: isDark ? 0.15 : 0.08,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: const Color(0xFF56B76C).withValues(
-                              alpha: isDark ? 0.3 : 0.15,
-                            ),
-                          ),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.tips_and_updates_outlined,
-                              color: Color(0xFF56B76C),
-                              size: 18,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'نصيحة سريعة',
-                                    style: TextStyle(
-                                      color: Color(0xFF56B76C),
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    'تأكد من اختيار نوع النبات المناسب للموقع الجغرافي لضمان نجاح عملية الاستزراع واستدامة الغطاء النباتي.',
-                                    style: TextStyle(
-                                      color: isDark
-                                          ? Colors.white70
-                                          : Colors.black54,
-                                      fontSize: 11,
-                                      height: 1.4,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 24),
+                  ],
                 ),
               ),
             );

@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class BuildSubmitButton extends StatelessWidget {
         ),
         icon: const Icon(Icons.person_add_alt_1_outlined, size: 22),
         label: Text(
-          buttonText ?? 'تسجيل حساب جديد',
+          buttonText ?? 'btn_register'.tr(),
           style: TextStyles.buttonTextStyle.copyWith(
             color: AppColors.onSecondary,
           ),

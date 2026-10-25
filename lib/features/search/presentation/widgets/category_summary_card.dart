@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -100,7 +101,7 @@ class CategorySummaryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "اسم النبات",
+                  "plant_name".tr(),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -108,7 +109,7 @@ class CategorySummaryCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "الكمية",
+                  "quantity".tr(),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
@@ -195,7 +196,7 @@ class CategorySummaryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "المجموع الفئوي",
+                  "category_total".tr(),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,

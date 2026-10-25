@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -71,6 +72,15 @@ class RecordCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
+                    Text(
+                      plantName,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? Colors.white : AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     if (badgeText.isNotEmpty)
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -90,15 +100,6 @@ class RecordCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                    const SizedBox(width: 8),
-                    Text(
-                      plantName,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: isDark ? Colors.white : AppColors.primary,
-                      ),
-                    ),
                   ],
                 ),
                 Icon(
@@ -117,10 +118,10 @@ class RecordCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    // تاريخ الزراعة
+                    // Planting date
                     Expanded(
                       child: _buildInfoItem(
-                        label: "تاريخ الزراعة",
+                        label: "planting_date".tr(),
                         value: plantingDate,
                         icon: Icons.calendar_today_outlined,
                         isDark: isDark,
@@ -128,10 +129,10 @@ class RecordCard extends StatelessWidget {
                         labelColor: labelColor,
                       ),
                     ),
-                    // الاسم العلمي
+                    // Scientific name
                     Expanded(
                       child: _buildInfoItem(
-                        label: "الاسم العلمي",
+                        label: "scientific_name".tr(),
                         value: scientificName,
                         icon: Icons.language,
                         isDark: isDark,
@@ -150,10 +151,10 @@ class RecordCard extends StatelessWidget {
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    // الموقع
+                    // Location
                     Expanded(
                       child: _buildInfoItem(
-                        label: "الموقع",
+                        label: "location".tr(),
                         value: location,
                         icon: Icons.location_on_outlined,
                         isDark: isDark,
@@ -161,10 +162,10 @@ class RecordCard extends StatelessWidget {
                         labelColor: labelColor,
                       ),
                     ),
-                    // الكمية
+                    // Quantity
                     Expanded(
                       child: _buildInfoItem(
-                        label: "الكمية",
+                        label: "quantity".tr(),
                         value: quantity,
                         icon: Icons.storage_outlined,
                         isDark: isDark,
@@ -181,10 +182,11 @@ class RecordCard extends StatelessWidget {
 
                 // Registered By Section
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    _buildAvatar(isDark),
+                    const SizedBox(width: 8),
                     Text(
-                      "مسجل بواسطة $registeredBy",
+                      "registered_by".tr(args: [registeredBy]),
                       style: TextStyle(
                         fontSize: 12,
                         color: isDark
@@ -193,8 +195,6 @@ class RecordCard extends StatelessWidget {
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    _buildAvatar(isDark),
                   ],
                 ),
               ],
@@ -210,7 +210,7 @@ class RecordCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                // تعديل
+                // Edit
                 TextButton.icon(
                   onPressed: onEdit,
                   icon: Icon(
@@ -219,7 +219,7 @@ class RecordCard extends StatelessWidget {
                     size: 16,
                   ),
                   label: Text(
-                    "تعديل",
+                    "edit".tr(),
                     style: TextStyle(
                       color: isDark ? Colors.white70 : AppColors.tertiary,
                       fontSize: 14,
@@ -229,7 +229,7 @@ class RecordCard extends StatelessWidget {
                 ),
                 // Divider
                 Container(width: 1, height: 20, color: dividerColor),
-                // حذف
+                // Delete
                 TextButton.icon(
                   onPressed: onDelete,
                   icon: const Icon(
@@ -237,9 +237,9 @@ class RecordCard extends StatelessWidget {
                     color: AppColors.error,
                     size: 16,
                   ),
-                  label: const Text(
-                    "حذف",
-                    style: TextStyle(
+                  label: Text(
+                    "delete".tr(),
+                    style: const TextStyle(
                       color: AppColors.error,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -282,22 +282,21 @@ class RecordCard extends StatelessWidget {
     TextStyle? valueStyle,
   }) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(
-              label,
-              style: TextStyle(fontSize: 11, color: labelColor),
-            ),
-            const SizedBox(width: 6),
             Icon(
               icon,
               size: 14,
               color: isDark
                   ? const Color(0xFF81C784)
                   : AppColors.primary.withValues(alpha: 0.7),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(fontSize: 11, color: labelColor),
             ),
           ],
         ),
@@ -310,7 +309,6 @@ class RecordCard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: primaryTextColor,
               ),
-          textAlign: TextAlign.end,
         ),
       ],
     );

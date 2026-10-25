@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/features/dashboard/data/models/plant_types_response.dart';
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
@@ -42,7 +43,7 @@ class CategorySelectionCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                'أنواع النباتات',
+                'plant_types'.tr(),
                 style: TextStyles.cardSectionTitleStyle.copyWith(
                   color: isDark ? Colors.white : AppColors.primary,
                 ),

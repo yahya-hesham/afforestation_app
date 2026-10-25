@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ AppBar buildAppBar(BuildContext context, {bool isAdminMode = true}) {
       onPressed: () => Navigator.maybePop(context),
     ),
     title: Text(
-      isAdminMode ? 'إضافة مستخدم جديد' : 'إنشاء حساب جديد',
+      isAdminMode ? 'add_new_user'.tr() : 'register_header'.tr(),
       style: TextStyles.loginHeaderStyle.copyWith(
         color: isDark ? Colors.white : AppColors.onSurface,
         fontSize: 18,
