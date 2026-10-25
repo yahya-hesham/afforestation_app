@@ -1,3 +1,4 @@
+import 'package:afforestation_app/core/services/local/shared_pref.dart';
 import 'package:afforestation_app/features/add_affrostation/data/models/add_afforestation_request_model.dart';
 import 'package:afforestation_app/features/add_affrostation/data/repo/add_afforestation_repo.dart';
 import 'package:afforestation_app/features/add_affrostation/presentation/cubit/add_afforestation_state.dart';
@@ -39,7 +40,11 @@ class AddAfforestationCubit extends Cubit<AddAfforestationState> {
       );
     } catch (e) {
       final msg = e.toString().replaceAll('Exception: ', '').trim();
-      emit(AddAfforestationErrorState(msg.isEmpty ? 'خطأ في تحميل البيانات الأولية' : msg));
+      emit(
+        AddAfforestationErrorState(
+          msg.isEmpty ? 'خطأ في تحميل البيانات الأولية' : msg,
+        ),
+      );
     }
   }
 
@@ -52,11 +57,17 @@ class AddAfforestationCubit extends Cubit<AddAfforestationState> {
 
     emit(AddAfforestationLoadingPlantsState());
     try {
-      plantNames = await AddAfforestationRepo.fetchTreeNamesByType(plantType!.id!);
+      plantNames = await AddAfforestationRepo.fetchTreeNamesByType(
+        plantType!.id!,
+      );
       emit(AddAfforestationPlantsLoadedState(plantNames));
     } catch (e) {
       final msg = e.toString().replaceAll('Exception: ', '').trim();
-      emit(AddAfforestationErrorState(msg.isEmpty ? 'خطأ في تحميل أسماء النباتات' : msg));
+      emit(
+        AddAfforestationErrorState(
+          msg.isEmpty ? 'خطأ في تحميل أسماء النباتات' : msg,
+        ),
+      );
     }
   }
 
@@ -69,11 +80,15 @@ class AddAfforestationCubit extends Cubit<AddAfforestationState> {
 
     emit(AddAfforestationLoadingLocationsState());
     try {
-      locations = await AddAfforestationRepo.fetchLocationsByTypeId(locType!.id!);
+      locations = await AddAfforestationRepo.fetchLocationsByTypeId(
+        locType!.id!,
+      );
       emit(AddAfforestationLocationsLoadedState(locations));
     } catch (e) {
       final msg = e.toString().replaceAll('Exception: ', '').trim();
-      emit(AddAfforestationErrorState(msg.isEmpty ? 'خطأ في تحميل المواقع' : msg));
+      emit(
+        AddAfforestationErrorState(msg.isEmpty ? 'خطأ في تحميل المواقع' : msg),
+      );
     }
   }
 
@@ -113,12 +128,15 @@ class AddAfforestationCubit extends Cubit<AddAfforestationState> {
     emit(AddAfforestationSubmittingState());
 
     try {
+      final userId = SharedPref.getUserInfo()?.id ?? 0;
+
       final request = AddAfforestationRequestModel(
         dateOfPlanted: dateOfPlanted,
         treeTypeId: selectedPlantType!.id!,
         treeNameId: selectedPlantName!.id!,
         locationTypeId: selectedLocationType!.id!,
-        locationId: selectedLocationAddress!.id!,
+        locationNameId: selectedLocationAddress!.id!,
+        userId: userId,
         number: number,
       );
 
@@ -126,7 +144,11 @@ class AddAfforestationCubit extends Cubit<AddAfforestationState> {
       emit(AddAfforestationSubmitSuccessState('تم إضافة عملية التشجير بنجاح'));
     } catch (e) {
       final msg = e.toString().replaceAll('Exception: ', '').trim();
-      emit(AddAfforestationErrorState(msg.isEmpty ? 'فشل في إضافة عملية التشجير' : msg));
+      emit(
+        AddAfforestationErrorState(
+          msg.isEmpty ? 'فشل في إضافة عملية التشجير' : msg,
+        ),
+      );
     }
   }
 }

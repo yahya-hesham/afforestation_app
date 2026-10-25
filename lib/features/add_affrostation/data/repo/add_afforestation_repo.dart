@@ -15,7 +15,9 @@ class AddAfforestationRepo {
     return await MangeRepo.fetchPlantTypes();
   }
 
-  static Future<List<PlantNamesResponse>> fetchTreeNamesByType(int typeId) async {
+  static Future<List<PlantNamesResponse>> fetchTreeNamesByType(
+    int typeId,
+  ) async {
     return await MangeRepo.fetchTreeNamesByType(typeId);
   }
 
@@ -23,7 +25,9 @@ class AddAfforestationRepo {
     return await MangeRepo.fetchLocTypes();
   }
 
-  static Future<List<LocNamesResponse>> fetchLocationsByTypeId(int typeId) async {
+  static Future<List<LocNamesResponse>> fetchLocationsByTypeId(
+    int typeId,
+  ) async {
     final allLocations = await MangeRepo.fetchAllLocations();
     return allLocations.where((loc) => loc.locationTypeId == typeId).toList();
   }
@@ -35,7 +39,7 @@ class AddAfforestationRepo {
       final token = SharedPref.getToken();
 
       final response = await DioProvider.post(
-        endpoint: Apis.afforestation,
+        endpoint: Apis.afforestation + '/Add',
         data: request.toJson(),
         headers: token.isNotEmpty ? {'Authorization': 'Bearer $token'} : null,
       );
@@ -44,7 +48,9 @@ class AddAfforestationRepo {
         throw Exception('فشل في إضافة عملية التشجير.');
       }
     } on DioException catch (e) {
-      debugPrint("Dio error (addAfforestationOperation): ${e.response?.data ?? e.message}");
+      debugPrint(
+        "Dio error (addAfforestationOperation): ${e.response?.data ?? e.message}",
+      );
       final errorMsg = _extractError(e.response?.data, e.message);
       throw Exception(errorMsg);
     } catch (e) {
@@ -57,13 +63,16 @@ class AddAfforestationRepo {
     if (data != null) {
       if (data is String && data.trim().isNotEmpty) return data;
       if (data is Map) {
-        if (data['message'] != null && data['message'].toString().trim().isNotEmpty) {
+        if (data['message'] != null &&
+            data['message'].toString().trim().isNotEmpty) {
           return data['message'].toString();
         }
-        if (data['title'] != null && data['title'].toString().trim().isNotEmpty) {
+        if (data['title'] != null &&
+            data['title'].toString().trim().isNotEmpty) {
           return data['title'].toString();
         }
-        if (data['error'] != null && data['error'].toString().trim().isNotEmpty) {
+        if (data['error'] != null &&
+            data['error'].toString().trim().isNotEmpty) {
           return data['error'].toString();
         }
         if (data['errors'] != null) {

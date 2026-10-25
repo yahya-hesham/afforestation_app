@@ -3,7 +3,8 @@ class AddAfforestationRequestModel {
   final int treeTypeId;
   final int treeNameId;
   final int locationTypeId;
-  final int locationId;
+  final int locationNameId;
+  final int userId;
   final int number;
 
   AddAfforestationRequestModel({
@@ -11,19 +12,23 @@ class AddAfforestationRequestModel {
     required this.treeTypeId,
     required this.treeNameId,
     required this.locationTypeId,
-    required this.locationId,
+    required this.locationNameId,
+    required this.userId,
     required this.number,
   });
 
   Map<String, dynamic> toJson() {
+    // Format as pure 'YYYY-MM-DD' without time or 'T' separator
     final formattedDate =
-        '${dateOfPlanted.year}-${dateOfPlanted.month.toString().padLeft(2, '0')}-${dateOfPlanted.day.toString().padLeft(2, '0')}T00:00:00';
+        '${dateOfPlanted.year}-${dateOfPlanted.month.toString().padLeft(2, '0')}-${dateOfPlanted.day.toString().padLeft(2, '0')}';
+
     return {
       'dateOfPlanted': formattedDate,
       'treeTypeId': treeTypeId,
       'treeNameId': treeNameId,
       'locationTypeId': locationTypeId,
-      'locationId': locationId,
+      'locationNameId': locationNameId,
+      'userId': userId,
       'number': number,
     };
   }
