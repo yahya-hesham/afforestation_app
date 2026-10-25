@@ -20,6 +20,7 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
   final TextEditingController _arabicNameController = TextEditingController();
   final TextEditingController _scientificNameController =
       TextEditingController();
+  PlantTypesResponse? _selectedType;
 
   @override
   void dispose() {
@@ -30,44 +31,51 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffoldBg = isDark ? const Color(0xFF121212) : AppColors.background;
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+
     return BlocProvider(
       create: (context) => AddPlantCubit()..fetchPlantTypes(),
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: scaffoldBg,
         appBar: AppBar(
-          backgroundColor: AppColors.surface,
+          backgroundColor: surfaceColor,
           elevation: 0,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppColors.onSurface),
-              onPressed: () => Navigator.pop(context),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: isDark ? Colors.white : AppColors.onSurface,
             ),
-          ],
+            onPressed: () => Navigator.pop(context),
+          ),
           title: Text(
             'إضافة نبات جديد',
             style: TextStyles.loginHeaderStyle.copyWith(
-              color: AppColors.onSurface,
+              color: isDark ? Colors.white : AppColors.onSurface,
               fontSize: 18,
             ),
           ),
           centerTitle: true,
-          leading: Container(
-            margin: const EdgeInsets.all(8),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.secondary,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: SvgPicture.asset(
-              AppAssets.bellsvg,
-              colorFilter: const ColorFilter.mode(
-                AppColors.onSecondary,
-                BlendMode.srcIn,
+          actions: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.secondary,
+                borderRadius: BorderRadius.circular(8),
               ),
-              width: 20,
-              height: 20,
+              child: SvgPicture.asset(
+                AppAssets.bellsvg,
+                colorFilter: const ColorFilter.mode(
+                  AppColors.onSecondary,
+                  BlendMode.srcIn,
+                ),
+                width: 20,
+                height: 20,
+              ),
             ),
-          ),
+          ],
         ),
         body: BlocConsumer<AddPlantCubit, AddPlantState>(
           listener: (context, state) {
@@ -117,7 +125,8 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                         children: [
                           CircleAvatar(
                             radius: 28,
-                            backgroundColor: Colors.white.withValues(alpha: 0.2),
+                            backgroundColor:
+                                Colors.white.withValues(alpha: 0.2),
                             child: SvgPicture.asset(
                               AppAssets.plantCropssvg,
                               colorFilter: const ColorFilter.mode(
@@ -149,95 +158,108 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
                     ),
                     const SizedBox(height: 24),
 
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildLabel('اسم النبات باللغة العربية', Icons.edit),
-                            const SizedBox(height: 8),
-                            _buildTextField(
-                              controller: _arabicNameController,
-                              hint: 'أدخل اسم النبات هنا...',
-                              validator: (val) {
-                                if (val == null || val.trim().isEmpty) {
-                                  return 'اسم النبات مطلوب';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 20),
-
-                            _buildLabel(
-                              'الاسم العلمي Scientific Name',
-                              Icons.language,
-                            ),
-                            const SizedBox(height: 8),
-                            _buildTextField(
-                              controller: _scientificNameController,
-                              hint: 'مثال: Acacia arabica...',
-                              isEnglish: true,
-                            ),
-                            const SizedBox(height: 20),
-
-                            _buildLabel('اختر نوع النبتة', Icons.eco),
-                            const SizedBox(height: 8),
-                            _buildDropdownField(
-                              cubit: cubit,
-                              isLoading: isLoadingTypes,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-
-                    ElevatedButton(
-                      onPressed: isSubmitting
-                          ? null
-                          : () {
-                              if (_formKey.currentState!.validate()) {
-                                cubit.addPlant(
-                                  arabicName: _arabicNameController.text,
-                                  scientificName:
-                                      _scientificNameController.text,
-                                );
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildLabel(
+                            'اسم النبات باللغة العربية',
+                            Icons.edit,
+                            isDark,
+                          ),
+                          const SizedBox(height: 8),
+                          _buildTextField(
+                            controller: _arabicNameController,
+                            hint: 'أدخل اسم النبات هنا...',
+                            isDark: isDark,
+                            surfaceColor: surfaceColor,
+                            validator: (val) {
+                              if (val == null || val.trim().isEmpty) {
+                                return 'اسم النبات مطلوب';
                               }
+                              return null;
                             },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        minimumSize: const Size(double.infinity, 54),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: isSubmitting
-                          ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(Icons.add_circle_outline,
-                                    color: Colors.white),
-                                const SizedBox(width: 8),
-                                Text(
-                                  'إضافة النبات',
-                                  style: TextStyles.buttonTextStyle.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
-                    ),
-                    const SizedBox(height: 40),
+                          ),
+                          const SizedBox(height: 20),
 
-                    Text(
-                      '© 2026 - afforestationPlant',
-                      style: TextStyles.hintTextStyle.copyWith(fontSize: 12),
+                          _buildLabel(
+                            'الاسم العلمي Scientific Name',
+                            Icons.language,
+                            isDark,
+                          ),
+                          const SizedBox(height: 8),
+                          _buildTextField(
+                            controller: _scientificNameController,
+                            hint: 'مثال: Acacia arabica...',
+                            isEnglish: true,
+                            isDark: isDark,
+                            surfaceColor: surfaceColor,
+                          ),
+                          const SizedBox(height: 20),
+
+                          _buildLabel(
+                            'اختر نوع النبتة',
+                            Icons.forest_outlined,
+                            isDark,
+                          ),
+                          const SizedBox(height: 8),
+                          _buildDropdownField(
+                            cubit: cubit,
+                            isLoading: isLoadingTypes,
+                            isDark: isDark,
+                            surfaceColor: surfaceColor,
+                          ),
+                          const SizedBox(height: 32),
+
+                          ElevatedButton(
+                            onPressed: isSubmitting
+                                ? null
+                                : () {
+                                    if (_formKey.currentState!.validate()) {
+                                      if (_selectedType == null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                              'يرجى اختيار نوع النبتة',
+                                            ),
+                                            backgroundColor: AppColors.error,
+                                          ),
+                                        );
+                                        return;
+                                      }
+                                      cubit.addPlant(
+                                        arabicName:
+                                            _arabicNameController.text.trim(),
+                                        scientificName:
+                                            _scientificNameController.text
+                                                .trim(),
+                                      );
+                                    }
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.secondary,
+                              minimumSize: const Size(double.infinity, 52),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: isSubmitting
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : Text(
+                                    'إضافة النبات',
+                                    style: TextStyles.buttonTextStyle.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -245,49 +267,45 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
             );
           },
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: AppColors.surface,
-          selectedItemColor: AppColors.primary,
-          unselectedItemColor: AppColors.onSurfaceVariant.withValues(alpha: 0.6),
-          currentIndex: 1,
-          items: [
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.bar_chart),
-              label: 'الإحصائيات',
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                AppAssets.treesvg,
-                colorFilter: const ColorFilter.mode(
-                  AppColors.primary,
-                  BlendMode.srcIn,
-                ),
-                width: 24,
-                height: 24,
+        bottomNavigationBar: Directionality(
+          textDirection: TextDirection.rtl,
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: surfaceColor,
+            selectedItemColor:
+                isDark ? const Color(0xFF81C784) : AppColors.primary,
+            unselectedItemColor: isDark ? Colors.white60 : Colors.grey,
+            currentIndex: 1,
+            onTap: (index) {
+              if (index == 0) Navigator.pop(context);
+            },
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                label: 'الرئيسية',
               ),
-              label: 'نباتاتنا',
-            ),
-            const BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              label: 'الرئيسية',
-            ),
-          ],
+              BottomNavigationBarItem(
+                icon: Icon(Icons.forest),
+                label: 'نباتاتنا',
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildLabel(String text, IconData icon) {
+  Widget _buildLabel(String text, IconData icon, bool isDark) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 18, color: AppColors.primary),
-        const SizedBox(width: 6),
+        Icon(icon, size: 16, color: AppColors.secondary),
+        const SizedBox(width: 8),
         Text(
           text,
-          style: TextStyles.buttonTextStyle.copyWith(
-            color: AppColors.onSurface,
-            fontSize: 14,
+          style: TextStyles.screenHeaderTitleStyle.copyWith(
+            fontSize: 13,
+            color: isDark ? Colors.white : AppColors.onSurface,
           ),
         ),
       ],
@@ -299,36 +317,40 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
     required String hint,
     bool isEnglish = false,
     String? Function(String?)? validator,
+    required bool isDark,
+    required Color surfaceColor,
   }) {
     return TextFormField(
       controller: controller,
-      validator: validator,
-      textAlign: isEnglish ? TextAlign.left : TextAlign.right,
       textDirection: isEnglish ? TextDirection.ltr : TextDirection.rtl,
+      textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+      validator: validator,
+      style: TextStyle(color: isDark ? Colors.white : Colors.black87),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyles.hintTextStyle.copyWith(fontSize: 13),
-        fillColor: AppColors.surface,
-        filled: true,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
+        hintStyle: TextStyles.hintTextStyle.copyWith(
+          color: isDark ? Colors.white38 : Colors.grey.shade400,
+          fontSize: 13,
         ),
+        filled: true,
+        fillColor: surfaceColor,
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
-            color: AppColors.tertiary.withValues(alpha: 0.2),
+            color: isDark ? Colors.white12 : Colors.grey.shade300,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
-            color: AppColors.tertiary.withValues(alpha: 0.2),
+            color: isDark ? Colors.white12 : Colors.grey.shade300,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: AppColors.primary),
         ),
       ),
     );
@@ -337,66 +359,72 @@ class _AddNewPlantScreenState extends State<AddNewPlantScreen> {
   Widget _buildDropdownField({
     required AddPlantCubit cubit,
     required bool isLoading,
+    required bool isDark,
+    required Color surfaceColor,
   }) {
-    return DropdownButtonFormField<PlantTypesResponse>(
-      dropdownColor: AppColors.surface,
-      style: const TextStyle(color: AppColors.onSurface, fontSize: 14),
-      initialValue: cubit.selectedPlantType,
-      validator: (val) {
-        if (val == null) {
-          return 'يرجى اختيار نوع النبتة';
-        }
-        return null;
-      },
-      hint: Align(
-        alignment: Alignment.centerRight,
-        child: Text(
-          isLoading
-              ? 'جاري تحميل أنواع النباتات...'
-              : '-- اضغط لاختيار النوع --',
-          style: TextStyles.hintTextStyle.copyWith(fontSize: 13),
+    final textColor = isDark ? Colors.white : Colors.black87;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: isDark ? Colors.white12 : Colors.grey.shade300,
         ),
       ),
-      isExpanded: true,
-      alignment: Alignment.centerRight,
-      decoration: InputDecoration(
-        fillColor: AppColors.surface,
-        filled: true,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: AppColors.tertiary.withValues(alpha: 0.2),
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: AppColors.tertiary.withValues(alpha: 0.2),
-          ),
-        ),
-      ),
-      items: cubit.plantTypes.map((PlantTypesResponse item) {
-        return DropdownMenuItem<PlantTypesResponse>(
-          value: item,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              item.type ?? '',
-              style: TextStyles.buttonTextStyle.copyWith(
-                color: AppColors.onSurface,
-                fontSize: 14,
+      child: isLoading
+          ? Container(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              child: const Row(
+                children: [
+                  SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'جاري تحميل أنواع النباتات...',
+                    style: TextStyle(color: Colors.grey, fontSize: 13),
+                  ),
+                ],
+              ),
+            )
+          : DropdownButtonHideUnderline(
+              child: DropdownButton<PlantTypesResponse>(
+                value: _selectedType,
+                hint: Text(
+                  '-- اضغط لاختيار النوع --',
+                  style: TextStyle(
+                    color: isDark ? Colors.white38 : Colors.grey.shade400,
+                    fontSize: 13,
+                  ),
+                ),
+                dropdownColor: surfaceColor,
+                isExpanded: true,
+                icon: const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: Colors.grey,
+                ),
+                items: cubit.plantTypes.map((PlantTypesResponse type) {
+                  return DropdownMenuItem<PlantTypesResponse>(
+                    value: type,
+                    child: Text(
+                      type.type ?? '',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: textColor,
+                      ),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (PlantTypesResponse? value) {
+                  setState(() => _selectedType = value);
+                  cubit.onPlantTypeChanged(value);
+                },
               ),
             ),
-          ),
-        );
-      }).toList(),
-      onChanged: (newValue) {
-        cubit.onPlantTypeChanged(newValue);
-      },
     );
   }
 }

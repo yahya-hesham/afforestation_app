@@ -14,30 +14,41 @@ class RoleDropdownField extends StatelessWidget {
     required this.onChanged,
   });
 
+  String _formatRole(String role) {
+    if (role.contains('Admin') || role.contains('مسؤول')) {
+      return 'مستخدم مسؤول (Admin)';
+    }
+    return 'مستخدم عادي (User)';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? const Color(0xFF2A2A2A) : AppColors.background;
+    final textColor = isDark ? Colors.white : AppColors.onSurface;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: bgColor,
         borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(color: AppColors.tertiary.withOpacity(0.3)),
+        border: Border.all(
+          color: isDark ? Colors.white12 : AppColors.tertiary.withOpacity(0.3),
+        ),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: selectedRole,
+          dropdownColor: bgColor,
           isExpanded: true,
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            color: AppColors.onSurface,
-          ),
+          icon: Icon(Icons.keyboard_arrow_down, color: textColor),
           items: roles.map((String role) {
             return DropdownMenuItem<String>(
               value: role,
               child: Text(
-                role,
+                _formatRole(role),
                 style: TextStyles.hintTextStyle.copyWith(
-                  color: AppColors.onSurface,
+                  color: textColor,
                   fontSize: 15,
                 ),
               ),
@@ -49,3 +60,4 @@ class RoleDropdownField extends StatelessWidget {
     );
   }
 }
+

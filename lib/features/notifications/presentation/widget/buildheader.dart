@@ -7,12 +7,14 @@ class buildHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.only(top: 60, bottom: 24, right: 24, left: 24),
-      decoration: const BoxDecoration(
-        color: Color(0xFF72C366),
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1E3A1E) : const Color(0xFF72C366),
+        borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(24),
           bottomRight: Radius.circular(24),
         ),
@@ -22,8 +24,8 @@ class buildHeader extends StatelessWidget {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 "الإشعارات",
                 style: TextStyle(
                   color: Colors.white,
@@ -31,10 +33,13 @@ class buildHeader extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 "آخر التنبيهات والرسائل المرتبطة بالتطبيق",
-                style: TextStyle(fontSize: 12, color: Color(0xFFE2FBE7)),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: isDark ? Colors.white70 : const Color(0xFFE2FBE7),
+                ),
               ),
             ],
           ),
@@ -59,16 +64,21 @@ class buildsearchrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final searchBg = isDark ? const Color(0xFF1E1E1E) : Colors.white;
+    final clearColor = isDark ? const Color(0xFF81C784) : const Color(0xFF1E5624);
+    final borderColor = isDark ? Colors.white12 : Colors.grey.shade200;
+
     return Padding(
       padding: const EdgeInsets.only(top: 16, right: 16, left: 16, bottom: 8),
       child: Row(
         children: [
           TextButton(
             onPressed: () {},
-            child: const Text(
+            child: Text(
               "مسح الكل",
               style: TextStyle(
-                color: Color(0xFF1E5624),
+                color: clearColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
@@ -79,18 +89,28 @@ class buildsearchrow extends StatelessWidget {
             child: Container(
               height: 45,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: searchBg,
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.grey.shade200),
+                border: Border.all(color: borderColor),
               ),
-              child: const TextField(
+              child: TextField(
                 textAlign: TextAlign.right,
+                style: TextStyle(
+                  color: isDark ? Colors.white : Colors.black87,
+                  fontSize: 13,
+                ),
                 decoration: InputDecoration(
                   hintText: "...بحث في التنبيهات",
-                  hintStyle: TextStyle(color: Colors.grey, fontSize: 13),
-                  prefixIcon: Icon(Icons.search, color: Colors.grey),
+                  hintStyle: TextStyle(
+                    color: isDark ? Colors.white38 : Colors.grey,
+                    fontSize: 13,
+                  ),
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: isDark ? Colors.white54 : Colors.grey,
+                  ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
+                  contentPadding: const EdgeInsets.symmetric(
                     vertical: 10,
                     horizontal: 16,
                   ),

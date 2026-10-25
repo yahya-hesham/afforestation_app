@@ -6,11 +6,16 @@ class PlantBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final navBg = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: AppColors.surface,
-      selectedItemColor: AppColors.primary,
-      unselectedItemColor: AppColors.onSurfaceVariant.withOpacity(0.6),
+      backgroundColor: navBg,
+      selectedItemColor: isDark ? const Color(0xFF81C784) : AppColors.primary,
+      unselectedItemColor: isDark
+          ? Colors.white60
+          : AppColors.onSurfaceVariant.withOpacity(0.6),
       currentIndex: 1,
       selectedFontSize: 12,
       unselectedFontSize: 12,
@@ -21,7 +26,7 @@ class PlantBottomNavigationBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.bar_chart_outlined),
-          label: 'إحصائيات',
+          label: 'الإحصائيات',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.forest_outlined),

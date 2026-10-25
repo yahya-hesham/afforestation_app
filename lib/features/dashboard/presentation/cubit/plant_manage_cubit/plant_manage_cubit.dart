@@ -1,4 +1,3 @@
-import 'package:afforestation_app/features/auth/presentation/cubit/auth_state.dart';
 import 'package:afforestation_app/features/dashboard/data/models/plant_types_response.dart';
 import 'package:afforestation_app/features/dashboard/data/repository/plant_mange_repo.dart';
 import 'package:afforestation_app/features/dashboard/presentation/cubit/plant_manage_cubit/plant_manage_state.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PlantManageCubit extends Cubit<PlantManagementState> {
   PlantManageCubit() : super(PlantManagementInitial());
+
   Future<void> loadDashboard() async {
     emit(PlantManagementLoading());
     try {
@@ -72,16 +72,18 @@ class PlantManageCubit extends Cubit<PlantManagementState> {
 
   Future<void> editPlant({
     required int id,
-    required String newName,
+    String? newName,
+    String? name,
     String? scientificName,
   }) async {
     if (state is! PlantManagementSuccess) return;
     final currentState = state as PlantManagementSuccess;
+    final resolvedName = newName ?? name ?? '';
 
     try {
       await MangeRepo.updateTree(
         id: id,
-        name: newName,
+        name: resolvedName,
         scientificName: scientificName,
       );
       final updatedList = await MangeRepo.fetchTreeNamesByType(

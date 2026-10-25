@@ -26,6 +26,18 @@ class AddPlantCubit extends Cubit<AddPlantState> {
     selectedPlantType = type;
   }
 
+  void onTypeChanged(PlantTypesResponse? type) => onPlantTypeChanged(type);
+
+  Future<void> submitPlant({
+    String? name,
+    String? arabicName,
+    required String scientificName,
+  }) =>
+      addPlant(
+        arabicName: arabicName ?? name ?? '',
+        scientificName: scientificName,
+      );
+
   Future<void> addPlant({
     required String arabicName,
     required String scientificName,

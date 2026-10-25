@@ -39,17 +39,24 @@ class CategorySummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+    final textColor = isDark ? Colors.white : AppColors.onSurface;
+    final subheadColor = isDark ? const Color(0xFF2C2C2C) : Colors.grey.withValues(alpha: 0.05);
+    final dividerColor = isDark ? Colors.white12 : Colors.black12.withValues(alpha: 0.05);
     final Color activeBannerColor = bannerColor ?? AppColors.secondary;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 24),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.black12.withValues(alpha: 0.08)),
+        border: Border.all(
+          color: isDark ? Colors.white12 : Colors.black12.withValues(alpha: 0.08),
+        ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.03),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -87,9 +94,9 @@ class CategorySummaryCard extends StatelessWidget {
 
           // Table Sub-header Row
           Container(
-            color: Colors.grey.withValues(alpha: 0.05),
+            color: subheadColor,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -97,7 +104,7 @@ class CategorySummaryCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey,
+                    color: isDark ? Colors.white60 : Colors.grey,
                   ),
                 ),
                 Text(
@@ -105,7 +112,7 @@ class CategorySummaryCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey,
+                    color: isDark ? Colors.white60 : Colors.grey,
                   ),
                 ),
               ],
@@ -120,7 +127,7 @@ class CategorySummaryCard extends StatelessWidget {
             separatorBuilder: (context, index) => Divider(
               height: 1,
               thickness: 1,
-              color: Colors.black12.withValues(alpha: 0.05),
+              color: dividerColor,
             ),
             itemBuilder: (context, index) {
               final item = items[index];
@@ -132,38 +139,38 @@ class CategorySummaryCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Plant Names
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             item.nameAr,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.onSurface,
+                              color: textColor,
                             ),
                           ),
-                          const SizedBox(height: 2),
-                          Text(
-                            item.nameEn,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontStyle: FontStyle.italic,
-                              color: Colors.grey,
+                          if (item.nameEn.isNotEmpty) ...[
+                            const SizedBox(height: 2),
+                            Text(
+                              item.nameEn,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: isDark ? Colors.white60 : Colors.grey.shade600,
+                                fontStyle: FontStyle.italic,
+                              ),
                             ),
-                          ),
+                          ],
                         ],
                       ),
                     ),
-                    // Quantity
                     Text(
                       _formatNumber(item.quantity),
-                      style: const TextStyle(
-                        fontSize: 16,
+                      style: TextStyle(
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+                        color: textColor,
                       ),
                     ),
                   ],
@@ -172,33 +179,35 @@ class CategorySummaryCard extends StatelessWidget {
             },
           ),
 
-          // Subtotal Row
-          Divider(
-            height: 1,
-            thickness: 1.5,
-            color: AppColors.primary.withValues(alpha: 0.15),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          // Subtotal Row Footer
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            decoration: BoxDecoration(
+              color: isDark
+                  ? const Color(0xFF2C2C2C)
+                  : Colors.grey.withValues(alpha: 0.08),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(22),
+                bottomRight: Radius.circular(22),
+              ),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
+                Text(
                   "المجموع الفئوي",
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.onSurface,
+                    color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                   ),
                 ),
                 Text(
                   _formatNumber(subtotal),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                    decoration: TextDecoration.underline,
-                    decorationThickness: 2,
+                    color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                   ),
                 ),
               ],

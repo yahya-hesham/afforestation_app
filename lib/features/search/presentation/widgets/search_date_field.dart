@@ -15,15 +15,28 @@ class SearchDateField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final containerColor = isDark ? const Color(0xFF2C2C2C) : AppColors.background;
+    final labelColor = isDark ? Colors.white : AppColors.onSurface;
+    final iconColor = isDark ? Colors.white60 : Colors.black.withValues(alpha: 0.5);
+    final borderColor = isDark ? Colors.white12 : Colors.black.withValues(alpha: 0.08);
+
+    Color textColor;
+    if (value == "dd/mm/yyyy") {
+      textColor = isDark ? Colors.white38 : Colors.grey;
+    } else {
+      textColor = isDark ? Colors.white : AppColors.onSurface;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: AppColors.onSurface,
+            color: labelColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -34,25 +47,23 @@ class SearchDateField extends StatelessWidget {
             height: 48,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: AppColors.background,
+              color: containerColor,
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+              border: Border.all(color: borderColor),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(
                   Icons.calendar_today_outlined,
-                  color: Colors.black.withValues(alpha: 0.5),
+                  color: iconColor,
                   size: 18,
                 ),
                 Text(
                   value,
                   style: TextStyle(
                     fontSize: 14,
-                    color: value == "dd/mm/yyyy"
-                        ? Colors.grey
-                        : AppColors.onSurface,
+                    color: textColor,
                   ),
                 ),
               ],

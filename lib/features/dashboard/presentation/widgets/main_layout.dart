@@ -17,7 +17,7 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  int _currentIndex = 3; // Defaults to index 3 (الرئيسية / Home)
+  int _currentIndex = 3; // Defaults to index 3 (الرئيسية)
 
   late final List<Widget> _screens;
 
@@ -30,8 +30,8 @@ class _MainLayoutState extends State<MainLayout> {
       UserView(
         userName: name,
         userEmail: user?.email ?? "",
-      ), // Index 0: الملف الشخصي (Profile)
-      const StatisticsPlaceholderView(), // Index 1: الإحصائيات (Statistics)
+      ), // Index 0: الملف الشخصي
+      const StatisticsPlaceholderView(), // Index 1: الإحصائيات
       BlocProvider(
         create: (_) => SearchCubit(),
         child: Search(
@@ -40,19 +40,20 @@ class _MainLayoutState extends State<MainLayout> {
           },
         ),
       ),
-      AdminView(adminName: name), // Index 3: الرئيسية (Home)
+      AdminView(adminName: name), // Index 3: الرئيسية
     ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final scaffold = Scaffold(
       body: IndexedStack(index: _currentIndex, children: _screens),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
+        backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
         selectedItemColor: const Color(0xFF53B157),
-        unselectedItemColor: Colors.grey,
+        unselectedItemColor: isDark ? Colors.white60 : Colors.grey,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
@@ -70,7 +71,10 @@ class _MainLayoutState extends State<MainLayout> {
             activeIcon: Icon(Icons.bar_chart),
             label: 'الإحصائيات',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'البحث'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'البحث',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined),
             activeIcon: Icon(Icons.home),
@@ -80,8 +84,6 @@ class _MainLayoutState extends State<MainLayout> {
       ),
     );
 
-    // Apply SafeArea only on Android to prevent the bottom navigation bar
-    // from being obscured by the system navigation bar / gesture area
     if (Platform.isAndroid) {
       return SafeArea(top: false, child: scaffold);
     }

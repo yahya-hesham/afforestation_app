@@ -1,11 +1,11 @@
-import 'package:afforestation_app/core/functions/extenstion.dart';
 import 'package:afforestation_app/core/functions/navigations.dart';
 import 'package:afforestation_app/core/routes/routes.dart';
 import 'package:afforestation_app/core/services/local/shared_pref.dart';
+import 'package:afforestation_app/core/theme/theme_cubit.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/location_management_screen.dart';
 import 'package:afforestation_app/features/dashboard/presentation/pages/plant_management_screen.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../notifications/presentation/pages/notifications_screen.dart';
 
@@ -21,8 +21,20 @@ class AdminView extends StatefulWidget {
 class _AdminViewState extends State<AdminView> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
+    // Adaptive surface color: slightly off-background for cards / icon buttons
+    final surfaceColor = isDark ? const Color(0xFF2C2C2C) : Colors.white;
+    // Adaptive scaffold tint
+    final scaffoldColor = isDark
+        ? const Color(0xFF121212)
+        : const Color(0xFFF4F7F5);
+    // Icon / text accent color
+    const accentColor = Color(0xFF1B3A1E);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F7F5),
+      backgroundColor: scaffoldColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -33,27 +45,27 @@ class _AdminViewState extends State<AdminView> {
             // Notification bell
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: surfaceColor,
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF1B3A1E).withValues(alpha: 0.06),
+                    color: accentColor.withValues(alpha: 0.06),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
                 ],
               ),
               child: IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.notifications_none_rounded,
-                  color: Color(0xFF1B3A1E),
+                  color: isDark ? Colors.white70 : accentColor,
                   size: 22,
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => NotificationsScreen(),
+                      builder: (context) => const NotificationsScreen(),
                     ),
                   );
                 },
@@ -71,7 +83,7 @@ class _AdminViewState extends State<AdminView> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF1B3A1E).withValues(alpha: 0.25),
+                    color: accentColor.withValues(alpha: 0.25),
                     blurRadius: 8,
                     offset: const Offset(0, 3),
                   ),
@@ -83,31 +95,40 @@ class _AdminViewState extends State<AdminView> {
                 size: 22,
               ),
             ),
-            // Language toggle
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF1B3A1E).withValues(alpha: 0.06),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+            // Theme toggle button
+            BlocBuilder<ThemeCubit, ThemeMode>(
+              builder: (context, themeMode) {
+                final isCurrentlyDark = themeMode == ThemeMode.dark;
+                return Container(
+                  decoration: BoxDecoration(
+                    color: surfaceColor,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: accentColor.withValues(alpha: 0.06),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: IconButton(
-                icon: const Icon(
-                  Icons.language_rounded,
-                  color: Color(0xFF1B3A1E),
-                  size: 22,
-                ),
-                onPressed: () {
-                  context.isArabic
-                      ? context.setLocale(const Locale('en'))
-                      : context.setLocale(const Locale('ar'));
-                },
-              ),
+                  child: IconButton(
+                    icon: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      child: Icon(
+                        isCurrentlyDark
+                            ? Icons.light_mode_rounded
+                            : Icons.dark_mode_rounded,
+                        key: ValueKey<bool>(isCurrentlyDark),
+                        color: isDark ? Colors.white70 : accentColor,
+                        size: 22,
+                      ),
+                    ),
+                    onPressed: () {
+                      context.read<ThemeCubit>().toggleTheme();
+                    },
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -119,7 +140,7 @@ class _AdminViewState extends State<AdminView> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               // Title section
-              const Center(
+              Center(
                 child: Column(
                   children: [
                     Text(
@@ -127,13 +148,16 @@ class _AdminViewState extends State<AdminView> {
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1B3A1E),
+                        color: isDark ? Colors.white : accentColor,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       "قم بإدارة نظام التشجير الخاص بك بكفاءة",
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isDark ? Colors.white54 : Colors.grey,
+                      ),
                     ),
                   ],
                 ),
@@ -155,7 +179,7 @@ class _AdminViewState extends State<AdminView> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF1B3A1E).withValues(alpha: 0.3),
+                      color: accentColor.withValues(alpha: 0.3),
                       blurRadius: 16,
                       offset: const Offset(0, 6),
                     ),
@@ -164,77 +188,8 @@ class _AdminViewState extends State<AdminView> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton.icon(
-                      onPressed: () async {
-                        await SharedPref.prefs.clear();
-                        if (context.mounted) {
-                          context.go(Routes.login);
-                        }
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.white.withValues(alpha: 0.15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 8,
-                        ),
-                      ),
-                      icon: const Icon(
-                        Icons.logout_rounded,
-                        color: Color(0xFFFF8A80),
-                        size: 16,
-                      ),
-                      label: const Text(
-                        "خروج",
-                        style: TextStyle(
-                          color: Color(0xFFFF8A80),
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          "${widget.adminName} ،مرحباً بك مجدداً",
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        const Text(
-                          "جاهز لإحداث فرق اليوم؟",
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xFFB8E6B8),
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF53B157),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Text(
-                            "مسؤول النظام",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    _buildLogoutButton(context),
+                    _buildUserInfoColumn(),
                   ],
                 ),
               ),
@@ -245,12 +200,15 @@ class _AdminViewState extends State<AdminView> {
               _buildSectionHeader(
                 title: "إضافة أنواع",
                 icon: Icons.add_circle_outline,
+                isDark: isDark,
               ),
               _buildDashboardButton(
                 title: "إضافة نوع نبات جديد",
                 icon: Icons.eco_outlined,
                 iconColor: const Color(0xFF43A047),
                 iconBgColor: const Color(0xFFE8F5E9),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {},
               ),
               _buildDashboardButton(
@@ -258,6 +216,8 @@ class _AdminViewState extends State<AdminView> {
                 icon: Icons.location_on_outlined,
                 iconColor: const Color(0xFF1565C0),
                 iconBgColor: const Color(0xFFE3F2FD),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {},
               ),
 
@@ -267,12 +227,15 @@ class _AdminViewState extends State<AdminView> {
               _buildSectionHeader(
                 title: "إضافة عناصر",
                 icon: Icons.assignment_outlined,
+                isDark: isDark,
               ),
               _buildDashboardButton(
                 title: "إضافة عملية تشجير",
                 icon: Icons.grass,
                 iconColor: const Color(0xFF2E7D32),
                 iconBgColor: const Color(0xFFE8F5E9),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {
                   pushTo(context, Routes.addAfforestation);
                 },
@@ -282,6 +245,8 @@ class _AdminViewState extends State<AdminView> {
                 icon: Icons.local_florist_outlined,
                 iconColor: const Color(0xFFE91E63),
                 iconBgColor: const Color(0xFFFCE4EC),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {
                   pushTo(context, Routes.addPlant);
                 },
@@ -291,6 +256,8 @@ class _AdminViewState extends State<AdminView> {
                 icon: Icons.map_outlined,
                 iconColor: const Color(0xFFFF6F00),
                 iconBgColor: const Color(0xFFFFF3E0),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {},
               ),
 
@@ -300,12 +267,15 @@ class _AdminViewState extends State<AdminView> {
               _buildSectionHeader(
                 title: "إدارة المستخدمين",
                 icon: Icons.people_outline,
+                isDark: isDark,
               ),
               _buildDashboardButton(
                 title: "إضافة مستخدم",
                 icon: Icons.person_add_alt_1_outlined,
                 iconColor: const Color(0xFF5E35B1),
                 iconBgColor: const Color(0xFFEDE7F6),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {
                   pushTo(context, Routes.addUser);
                 },
@@ -315,6 +285,8 @@ class _AdminViewState extends State<AdminView> {
                 icon: Icons.supervised_user_circle_outlined,
                 iconColor: const Color(0xFF00838F),
                 iconBgColor: const Color(0xFFE0F7FA),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {
                   pushTo(context, Routes.manageUsers);
                 },
@@ -326,12 +298,15 @@ class _AdminViewState extends State<AdminView> {
               _buildSectionHeader(
                 title: "بحث وعرض البيانات",
                 icon: Icons.storage_outlined,
+                isDark: isDark,
               ),
               _buildDashboardButton(
                 title: "البحث المتقدم",
                 icon: Icons.search_rounded,
                 iconColor: const Color(0xFF37474F),
                 iconBgColor: const Color(0xFFECEFF1),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {
                   pushTo(context, Routes.search);
                 },
@@ -341,6 +316,8 @@ class _AdminViewState extends State<AdminView> {
                 icon: Icons.format_list_bulleted_outlined,
                 iconColor: const Color(0xFF43A047),
                 iconBgColor: const Color(0xFFE8F5E9),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -355,6 +332,8 @@ class _AdminViewState extends State<AdminView> {
                 icon: Icons.layers_outlined,
                 iconColor: const Color(0xFFEF6C00),
                 iconBgColor: const Color(0xFFFFF3E0),
+                isDark: isDark,
+                surfaceColor: surfaceColor,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -373,31 +352,107 @@ class _AdminViewState extends State<AdminView> {
     );
   }
 
-  Widget _buildSectionHeader({required String title, required IconData icon}) {
+  Widget _buildLogoutButton(BuildContext context) {
+    return TextButton.icon(
+      onPressed: () async {
+        await SharedPref.prefs.clear();
+        if (context.mounted) {
+          context.go(Routes.login);
+        }
+      },
+      style: TextButton.styleFrom(
+        backgroundColor: Colors.white.withValues(alpha: 0.15),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      ),
+      icon: const Icon(
+        Icons.logout_rounded,
+        color: Color(0xFFFF8A80),
+        size: 16,
+      ),
+      label: const Text(
+        "خروج",
+        style: TextStyle(
+          color: Color(0xFFFF8A80),
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserInfoColumn() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          "${widget.adminName} ،مرحباً بك مجدداً",
+          style: const TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          "جاهز لإحداث فرق اليوم؟",
+          style: TextStyle(
+            fontSize: 13,
+            color: Color(0xFFB8E6B8),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: const Color(0xFF53B157),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Text(
+            "مسؤول النظام",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSectionHeader({
+    required String title,
+    required IconData icon,
+    required bool isDark,
+  }) {
+    const accentColor = Color(0xFF1B3A1E);
+    final iconWidget = Container(
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.10)
+            : accentColor.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Icon(icon, color: isDark ? Colors.white70 : accentColor, size: 18),
+    );
+
+    final textWidget = Text(
+      title,
+      style: TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w700,
+        color: isDark ? Colors.white : accentColor,
+        letterSpacing: 0.3,
+      ),
+    );
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 14.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF1B3A1E),
-              letterSpacing: 0.3,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Container(
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: const Color(0xFF1B3A1E).withValues(alpha: 0.08),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, color: const Color(0xFF1B3A1E), size: 18),
-          ),
-        ],
+        children: [textWidget, const SizedBox(width: 10), iconWidget],
       ),
     );
   }
@@ -406,9 +461,54 @@ class _AdminViewState extends State<AdminView> {
     required String title,
     required IconData icon,
     required VoidCallback onTap,
+    required bool isDark,
+    required Color surfaceColor,
     Color iconColor = const Color(0xFF53B157),
     Color iconBgColor = const Color(0xFFE8F5E9),
   }) {
+    const accentColor = Color(0xFF1B3A1E);
+    final effectiveIconBg = isDark
+        ? iconBgColor.withValues(alpha: 0.18)
+        : iconBgColor;
+
+    final chevronIcon = Container(
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: isDark
+            ? Colors.white.withValues(alpha: 0.08)
+            : const Color(0xFFF4F7F5),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Icon(
+        Icons.arrow_back_ios,
+        size: 12,
+        color: isDark ? Colors.white38 : const Color(0xFF9E9E9E),
+      ),
+    );
+
+    final titleWithIcon = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 14,
+            color: isDark ? Colors.white : const Color(0xFF2B2B2B),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(width: 14),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: effectiveIconBg,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: iconColor, size: 20),
+        ),
+      ],
+    );
+
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
       child: Material(
@@ -421,14 +521,18 @@ class _AdminViewState extends State<AdminView> {
           child: Ink(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: surfaceColor,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: const Color(0xFF1B3A1E).withValues(alpha: 0.06),
+                color: isDark
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : accentColor.withValues(alpha: 0.06),
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF1B3A1E).withValues(alpha: 0.04),
+                  color: isDark
+                      ? Colors.black.withValues(alpha: 0.25)
+                      : accentColor.withValues(alpha: 0.04),
                   blurRadius: 10,
                   offset: const Offset(0, 3),
                 ),
@@ -436,41 +540,7 @@ class _AdminViewState extends State<AdminView> {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF4F7F5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    size: 12,
-                    color: Color(0xFF9E9E9E),
-                  ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF2B2B2B),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(width: 14),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: iconBgColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(icon, color: iconColor, size: 20),
-                    ),
-                  ],
-                ),
-              ],
+              children: [chevronIcon, titleWithIcon],
             ),
           ),
         ),
@@ -478,3 +548,4 @@ class _AdminViewState extends State<AdminView> {
     );
   }
 }
+

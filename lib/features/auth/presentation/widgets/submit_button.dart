@@ -1,4 +1,3 @@
-// Extracted Submit button method since it uses the view state validations
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,7 @@ import 'package:flutter/material.dart';
 class BuildSubmitButton extends StatelessWidget {
   final VoidCallback? onTap;
   final String? buttonText;
-  // final void Function()? onTap;
+
   const BuildSubmitButton({super.key, this.onTap, this.buttonText});
 
   @override
@@ -26,7 +25,7 @@ class BuildSubmitButton extends StatelessWidget {
         ),
         icon: const Icon(Icons.person_add_alt_1_outlined, size: 22),
         label: Text(
-          buttonText ?? 'تسجيل الحساب الجديد',
+          buttonText ?? 'تسجيل حساب جديد',
           style: TextStyles.buttonTextStyle.copyWith(
             color: AppColors.onSecondary,
           ),

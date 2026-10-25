@@ -18,16 +18,21 @@ class UserManagementScreen extends StatefulWidget {
 }
 
 class _UserManagementScreenState extends State<UserManagementScreen> {
-  String selectedFilter = 'الكل';
+  String selectedFilter = 'all';
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffoldBg = isDark ? const Color(0xFF121212) : AppColors.background;
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+    final textColor = isDark ? Colors.white : AppColors.onSurface;
+
     return BlocProvider(
       create: (context) => UserCubit()..getUsers(),
       child: Builder(
         builder: (context) {
           return Scaffold(
-            backgroundColor: AppColors.background,
+            backgroundColor: scaffoldBg,
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
                 await pushTo(context, Routes.addUser);
@@ -62,166 +67,188 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
 
                 int totalCount = allUsers.length;
                 int adminCount = allUsers
-                    .where((u) => u.roleId == 0 || u.role == 'مشرف')
+                    .where((u) => u.roleId == 0 || u.role == 'مشرف' || u.role.toLowerCase() == 'admin')
                     .length;
 
                 List<UserModel> filteredUsers;
-                if (selectedFilter == 'مشرفون') {
+                if (selectedFilter == 'admins') {
                   filteredUsers = allUsers
-                      .where((u) => u.roleId == 0 || u.role == 'مشرف')
+                      .where((u) => u.roleId == 0 || u.role == 'مشرف' || u.role.toLowerCase() == 'admin')
                       .toList();
-                } else if (selectedFilter == 'مستخدمون') {
+                } else if (selectedFilter == 'users') {
                   filteredUsers = allUsers
-                      .where((u) => u.roleId == 1 || u.role == 'مستخدم')
+                      .where((u) => u.roleId == 1 || u.role == 'مستخدم' || u.role.toLowerCase() == 'user')
                       .toList();
                 } else {
                   filteredUsers = allUsers;
                 }
 
-                return NestedScrollView(
-                  headerSliverBuilder:
-                      (BuildContext context, bool innerBoxIsScrolled) {
-                    return <Widget>[
-                      SliverAppBar(
-                        backgroundColor: AppColors.surface,
-                        elevation: 0,
-                        pinned: true,
-                        floating: true,
-                        forceElevated: innerBoxIsScrolled,
-                        leading: IconButton(
-                          icon: const Icon(Icons.arrow_back,
-                              color: AppColors.onSurface),
-                          onPressed: () => pop(context),
-                        ),
-                        title: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'إدارة المستخدمين',
-                              style: TextStyles.loginHeaderStyle.copyWith(
-                                color: AppColors.onSurface,
-                              ),
+                return Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: NestedScrollView(
+                    headerSliverBuilder:
+                        (BuildContext context, bool innerBoxIsScrolled) {
+                      return <Widget>[
+                        SliverAppBar(
+                          backgroundColor: surfaceColor,
+                          elevation: 0,
+                          pinned: true,
+                          floating: true,
+                          forceElevated: innerBoxIsScrolled,
+                          leading: IconButton(
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: textColor,
                             ),
-                            const SizedBox(width: 8),
-                            SvgPicture.asset(
-                              AppAssets.treesvg,
-                              colorFilter: const ColorFilter.mode(
-                                AppColors.primary,
-                                BlendMode.srcIn,
-                              ),
-                              width: 24,
-                              height: 24,
-                            ),
-                          ],
-                        ),
-                        centerTitle: true,
-                        actions: [
-                          Container(
-                            margin: const EdgeInsets.all(8),
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: AppColors.secondary,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SvgPicture.asset(
-                              AppAssets.bellsvg,
-                              colorFilter: const ColorFilter.mode(
-                                AppColors.onSecondary,
-                                BlendMode.srcIn,
-                              ),
-                              width: 20,
-                              height: 20,
-                            ),
+                            onPressed: () => pop(context),
                           ),
-                        ],
-                      ),
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          title: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildStatCard(
-                                      'إجمالي المستخدمين',
-                                      '$totalCount',
-                                      AppAssets.treesvg,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: _buildStatCard(
-                                      'المشرفون',
-                                      '$adminCount',
-                                      AppAssets.plantCropssvg,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                children: [
-                                  _buildFilterButton('الكل'),
-                                  const SizedBox(width: 8),
-                                  _buildFilterButton('مشرفون'),
-                                  const SizedBox(width: 8),
-                                  _buildFilterButton('مستخدمون'),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
                               Text(
-                                'قائمة المستخدمين',
+                                'إدارة المستخدمين',
                                 style: TextStyles.loginHeaderStyle.copyWith(
-                                  color: AppColors.onSurface,
-                                  fontSize: 16,
+                                  color: textColor,
                                 ),
+                              ),
+                              const SizedBox(width: 8),
+                              SvgPicture.asset(
+                                AppAssets.treesvg,
+                                colorFilter: const ColorFilter.mode(
+                                  AppColors.primary,
+                                  BlendMode.srcIn,
+                                ),
+                                width: 24,
+                                height: 24,
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                    ];
-                  },
-                  body: state is UserLoadingState
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: AppColors.primary,
-                          ),
-                        )
-                      : filteredUsers.isEmpty
-                          ? Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text('لا يوجد مستخدمين في هذا القسم'),
-                                  const SizedBox(height: 12),
-                                  ElevatedButton(
-                                    onPressed: () =>
-                                        context.read<UserCubit>().getUsers(),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: AppColors.primary,
-                                      foregroundColor: AppColors.onPrimary,
-                                    ),
-                                    child: const Text('إعادة التحميل'),
-                                  ),
-                                ],
+                          centerTitle: true,
+                          actions: [
+                            Container(
+                              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: AppColors.secondary,
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                            )
-                          : ListView.separated(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                                vertical: 8.0,
+                              child: SvgPicture.asset(
+                                AppAssets.bellsvg,
+                                colorFilter: const ColorFilter.mode(
+                                  AppColors.onSecondary,
+                                  BlendMode.srcIn,
+                                ),
+                                width: 20,
+                                height: 20,
                               ),
-                              itemCount: filteredUsers.length,
-                              separatorBuilder: (context, index) =>
-                                  const SizedBox(height: 12),
-                              itemBuilder: (context, index) {
-                                final user = filteredUsers[index];
-                                return _buildUserCard(context, user);
-                              },
                             ),
+                          ],
+                        ),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildStatCard(
+                                        'إجمالي المستخدمين',
+                                        '$totalCount',
+                                        AppAssets.treesvg,
+                                        isDark,
+                                        surfaceColor,
+                                        textColor,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: _buildStatCard(
+                                        'المشرفون',
+                                        '$adminCount',
+                                        AppAssets.plantCropssvg,
+                                        isDark,
+                                        surfaceColor,
+                                        textColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    _buildFilterButton('all', 'الكل', isDark, surfaceColor, textColor),
+                                    const SizedBox(width: 8),
+                                    _buildFilterButton('admins', 'مشرفون', isDark, surfaceColor, textColor),
+                                    const SizedBox(width: 8),
+                                    _buildFilterButton('users', 'مستخدمون', isDark, surfaceColor, textColor),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'قائمة المستخدمين',
+                                  style: TextStyles.loginHeaderStyle.copyWith(
+                                    color: textColor,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ];
+                    },
+                    body: state is UserLoadingState
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primary,
+                            ),
+                          )
+                        : filteredUsers.isEmpty
+                            ? Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'لا يوجد مستخدمين في هذا القسم',
+                                      style: TextStyle(
+                                        color: isDark ? Colors.white70 : Colors.black87,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 12),
+                                    ElevatedButton(
+                                      onPressed: () =>
+                                          context.read<UserCubit>().getUsers(),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primary,
+                                        foregroundColor: AppColors.onPrimary,
+                                      ),
+                                      child: const Text('إعادة المحاولة'),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : ListView.separated(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                itemCount: filteredUsers.length,
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(height: 12),
+                                itemBuilder: (context, index) {
+                                  final user = filteredUsers[index];
+                                  return _buildUserCard(
+                                    context,
+                                    user,
+                                    isDark,
+                                    surfaceColor,
+                                    textColor,
+                                  );
+                                },
+                              ),
+                  ),
                 );
               },
             ),
@@ -231,13 +258,24 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  Widget _buildStatCard(String title, String count, String svgAsset) {
+  Widget _buildStatCard(
+    String title,
+    String count,
+    String svgAsset,
+    bool isDark,
+    Color surfaceColor,
+    Color textColor,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.tertiary.withValues(alpha: 0.2)),
+        border: Border.all(
+          color: isDark
+              ? Colors.white12
+              : AppColors.tertiary.withValues(alpha: 0.2),
+        ),
       ),
       child: Column(
         children: [
@@ -254,13 +292,13 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
           Text(
             title,
             style: TextStyles.footerTextTextStyle.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: isDark ? Colors.white70 : AppColors.onSurfaceVariant,
             ),
           ),
           Text(
             count,
             style: TextStyles.loginHeaderStyle.copyWith(
-              color: AppColors.onSurface,
+              color: textColor,
             ),
           ),
         ],
@@ -268,29 +306,37 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  Widget _buildFilterButton(String text) {
-    bool isSelected = selectedFilter == text;
+  Widget _buildFilterButton(
+    String key,
+    String text,
+    bool isDark,
+    Color surfaceColor,
+    Color textColor,
+  ) {
+    bool isSelected = selectedFilter == key;
     return GestureDetector(
       onTap: () {
         setState(() {
-          selectedFilter = text;
+          selectedFilter = key;
         });
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary : AppColors.surface,
+          color: isSelected ? AppColors.primary : surfaceColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected
                 ? Colors.transparent
-                : AppColors.tertiary.withValues(alpha: 0.3),
+                : (isDark
+                    ? Colors.white12
+                    : AppColors.tertiary.withValues(alpha: 0.3)),
           ),
         ),
         child: Text(
           text,
           style: TextStyles.textButtonTextStyle.copyWith(
-            color: isSelected ? AppColors.onPrimary : AppColors.onSurface,
+            color: isSelected ? AppColors.onPrimary : textColor,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -298,13 +344,26 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  Widget _buildUserCard(BuildContext context, UserModel user) {
+  Widget _buildUserCard(
+    BuildContext context,
+    UserModel user,
+    bool isDark,
+    Color surfaceColor,
+    Color textColor,
+  ) {
+    final isAdmin = user.roleId == 0 || user.role == 'مشرف' || user.role.toLowerCase() == 'admin';
+    final roleText = isAdmin ? 'مشرف' : 'مستخدم';
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.tertiary.withValues(alpha: 0.1)),
+        border: Border.all(
+          color: isDark
+              ? Colors.white12
+              : AppColors.tertiary.withValues(alpha: 0.1),
+        ),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -341,7 +400,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                       Text(
                         user.name,
                         style: TextStyles.buttonTextStyle.copyWith(
-                          color: AppColors.onSurface,
+                          color: textColor,
                           fontSize: 14,
                         ),
                         maxLines: 1,
@@ -350,7 +409,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                       Text(
                         user.email,
                         style: TextStyles.hintTextStyle.copyWith(
-                          color: AppColors.onSurfaceVariant,
+                          color: isDark ? Colors.white60 : AppColors.onSurfaceVariant,
                           fontSize: 12,
                         ),
                         maxLines: 1,
@@ -358,10 +417,10 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        user.role,
+                        roleText,
                         style: TextStyles.textButtonTextStyle.copyWith(
-                          color: user.roleId == 0 || user.role == 'مشرف'
-                              ? AppColors.primary
+                          color: isAdmin
+                              ? (isDark ? const Color(0xFF81C784) : AppColors.primary)
                               : AppColors.secondary,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -377,12 +436,12 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.edit,
-                  color: AppColors.onSurfaceVariant,
+                  color: isDark ? Colors.white70 : AppColors.onSurfaceVariant,
                   size: 20,
                 ),
-                onPressed: () => _showEditDialog(context, user),
+                onPressed: () => _showEditDialog(context, user, isDark),
               ),
               IconButton(
                 icon: const Icon(
@@ -399,7 +458,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     );
   }
 
-  void _showEditDialog(BuildContext context, UserModel user) {
+  void _showEditDialog(BuildContext context, UserModel user, bool isDark) {
     final passwordCtrl = TextEditingController();
     bool isObscured = true;
     final formKeyDialog = GlobalKey<FormState>();
@@ -409,104 +468,117 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       builder: (dialogContext) {
         return StatefulBuilder(
           builder: (context, setStateDialog) {
-            return AlertDialog(
-              title: const Text('تغيير كلمة المرور'),
-              content: SingleChildScrollView(
-                child: Form(
-                  key: formKeyDialog,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.08),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              user.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 13,
-                              ),
+            return Directionality(
+              textDirection: TextDirection.rtl,
+              child: AlertDialog(
+                backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                title: Text(
+                  'تغيير كلمة المرور',
+                  style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+                ),
+                content: SingleChildScrollView(
+                  child: Form(
+                    key: formKeyDialog,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withValues(
+                              alpha: isDark ? 0.2 : 0.08,
                             ),
-                            Text(
-                              user.email,
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 11,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: passwordCtrl,
-                        obscureText: isObscured,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return 'يرجى إدخال كلمة المرور الجديدة';
-                          }
-                          if (value.trim().length < 6) {
-                            return 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'كلمة المرور الجديدة',
-                          prefixIcon: const Icon(Icons.lock_outline, size: 20),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              isObscured
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              size: 20,
-                            ),
-                            onPressed: () {
-                              setStateDialog(() {
-                                isObscured = !isObscured;
-                              });
-                            },
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                user.name,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                  color: isDark ? Colors.white : Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                user.email,
+                                style: TextStyle(
+                                  color: isDark ? Colors.white60 : Colors.grey,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: passwordCtrl,
+                          obscureText: isObscured,
+                          style: TextStyle(
+                            color: isDark ? Colors.white : Colors.black87,
+                          ),
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'الرجاء إدخال كلمة المرور الجديدة';
+                            }
+                            if (value.trim().length < 6) {
+                              return 'كلمة المرور يجب أن لا تقل عن 6 أحرف';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            labelText: 'كلمة المرور الجديدة',
+                            prefixIcon: const Icon(Icons.lock_outline, size: 20),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                isObscured
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                setStateDialog(() {
+                                  isObscured = !isObscured;
+                                });
+                              },
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
-                  child: const Text('إلغاء'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (formKeyDialog.currentState!.validate()) {
-                      if (user.id != null) {
-                        context.read<UserCubit>().updateUserPassword(
-                              id: user.id!,
-                              password: passwordCtrl.text.trim(),
-                            );
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    child: const Text('إلغاء'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (formKeyDialog.currentState!.validate()) {
+                        if (user.id != null) {
+                          context.read<UserCubit>().updateUserPassword(
+                                id: user.id!,
+                                password: passwordCtrl.text.trim(),
+                              );
+                        }
+                        Navigator.pop(dialogContext);
                       }
-                      Navigator.pop(dialogContext);
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.onPrimary,
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.onPrimary,
+                    ),
+                    child: const Text('حفظ'),
                   ),
-                  child: const Text('حفظ'),
-                ),
-              ],
+                ],
+              ),
             );
           },
         );
@@ -518,28 +590,39 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     showDialog(
       context: context,
       builder: (dialogContext) {
-        return AlertDialog(
-          title: const Text('تأكيد الحذف'),
-          content: Text('هل أنت تأكد من حذف المستخدم "${user.name}"؟'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('إلغاء'),
+        final isDark = Theme.of(dialogContext).brightness == Brightness.dark;
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: AlertDialog(
+            backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+            title: Text(
+              'تأكيد الحذف',
+              style: TextStyle(color: isDark ? Colors.white : Colors.black87),
             ),
-            ElevatedButton(
-              onPressed: () {
-                if (user.id != null) {
-                  context.read<UserCubit>().deleteUser(user.id!);
-                }
-                Navigator.pop(dialogContext);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.error,
-                foregroundColor: Colors.white,
+            content: Text(
+              'هل أنت متأكد من حذف المستخدم "${user.name}"؟',
+              style: TextStyle(color: isDark ? Colors.white70 : Colors.black87),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text('إلغاء'),
               ),
-              child: const Text('حذف'),
-            ),
-          ],
+              ElevatedButton(
+                onPressed: () {
+                  if (user.id != null) {
+                    context.read<UserCubit>().deleteUser(user.id!);
+                  }
+                  Navigator.pop(dialogContext);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.error,
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text('حذف'),
+              ),
+            ],
+          ),
         );
       },
     );

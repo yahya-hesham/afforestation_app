@@ -34,15 +34,24 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+    final textColor = isDark ? Colors.white : AppColors.onSurface;
+    final subtitleColor = isDark ? Colors.white70 : AppColors.onSurfaceVariant;
+    final timeColor = isDark ? Colors.white38 : AppColors.onSurfaceVariant.withOpacity(0.6);
+
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isDark ? Colors.white12 : Colors.transparent,
+        ),
         boxShadow: [
           BoxShadow(
-            color: AppColors.onSurface.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.02),
             blurRadius: 6,
             offset: const Offset(0, 3),
           ),
@@ -56,8 +65,8 @@ class NotificationCard extends StatelessWidget {
               margin: const EdgeInsets.only(top: 6),
               width: 8,
               height: 8,
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                 shape: BoxShape.circle,
               ),
             )
@@ -69,11 +78,19 @@ class NotificationCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(item.title, style: TextStyles.listRowTitleStyle),
+                Text(
+                  item.title,
+                  style: TextStyles.listRowTitleStyle.copyWith(
+                    color: textColor,
+                  ),
+                ),
                 const SizedBox(height: 4),
                 Text(
                   item.description,
-                  style: TextStyles.listRowSubtitleStyle.copyWith(height: 1.4),
+                  style: TextStyles.listRowSubtitleStyle.copyWith(
+                    height: 1.4,
+                    color: subtitleColor,
+                  ),
                 ),
                 const SizedBox(height: 12),
 
@@ -109,7 +126,7 @@ class NotificationCard extends StatelessWidget {
                       item.time,
                       style: TextStyles.listRowSubtitleStyle.copyWith(
                         fontSize: 11,
-                        color: AppColors.onSurfaceVariant.withOpacity(0.6),
+                        color: timeColor,
                       ),
                     ),
                   ],
@@ -122,7 +139,9 @@ class NotificationCard extends StatelessWidget {
             width: 45,
             height: 45,
             decoration: BoxDecoration(
-              color: item.avatarColor,
+              color: isDark
+                  ? item.avatarColor.withValues(alpha: 0.25)
+                  : item.avatarColor,
               shape: BoxShape.circle,
             ),
           ),

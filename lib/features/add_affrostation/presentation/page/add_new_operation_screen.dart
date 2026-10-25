@@ -57,41 +57,49 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffoldBg =
+        isDark ? const Color(0xFF121212) : const Color(0xFFF7F9FA);
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black87;
+
     return BlocProvider(
       create: (context) => AddAfforestationCubit()..loadInitialData(),
       child: Scaffold(
-        backgroundColor: const Color(0xFFF7F9FA),
+        backgroundColor: scaffoldBg,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: surfaceColor,
           elevation: 0,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.black,
-                size: 18,
-              ),
-              onPressed: () => Navigator.pop(context),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              color: isDark ? Colors.white : Colors.black,
+              size: 20,
             ),
-          ],
-          title: const Text(
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Text(
             'إضافة عملية جديدة',
             style: TextStyle(
-              color: Colors.black,
+              color: isDark ? Colors.white : Colors.black,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
           ),
           centerTitle: true,
-          leading: Container(
-            margin: const EdgeInsets.all(8),
-            padding: const EdgeInsets.all(4),
-            decoration: BoxDecoration(
-              color: const Color(0xFFE8F5E9),
-              borderRadius: BorderRadius.circular(8),
+          actions: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: isDark
+                    ? const Color(0xFF4CAF50).withValues(alpha: 0.18)
+                    : const Color(0xFFE8F5E9),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Icon(Icons.tune, color: Color(0xFF4CAF50), size: 20),
             ),
-            child: const Icon(Icons.tune, color: Color(0xFF4CAF50), size: 20),
-          ),
+          ],
         ),
         body: BlocConsumer<AddAfforestationCubit, AddAfforestationState>(
           listener: (context, state) {
@@ -179,16 +187,18 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                       // Plant Data Section
                       _buildSectionHeader('بيانات النبات', Icons.eco_outlined),
                       const SizedBox(height: 12),
-                      _buildLabel('نوع النبات'),
+                      _buildLabel('نوع النبات', textColor),
                       _buildGenericDropdownField<PlantTypesResponse>(
                         hint: '-- اختر النوع --',
                         value: cubit.selectedPlantType,
                         items: cubit.plantTypes,
                         getLabel: (item) => item.type ?? '',
                         onChanged: (val) => cubit.onPlantTypeChanged(val),
+                        isDark: isDark,
+                        surfaceColor: surfaceColor,
                       ),
                       const SizedBox(height: 16),
-                      _buildLabel('اسم النبات'),
+                      _buildLabel('اسم النبات', textColor),
                       _buildGenericDropdownField<PlantNamesResponse>(
                         hint: isLoadingPlants
                             ? 'جاري تحميل أسماء النباتات...'
@@ -197,10 +207,15 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                         items: cubit.plantNames,
                         getLabel: (item) => item.name ?? '',
                         onChanged: (val) => cubit.onPlantNameChanged(val),
+                        isDark: isDark,
+                        surfaceColor: surfaceColor,
                       ),
 
                       const SizedBox(height: 24),
-                      const Divider(height: 1, color: Colors.black12),
+                      Divider(
+                        height: 1,
+                        color: isDark ? Colors.white12 : Colors.black12,
+                      ),
                       const SizedBox(height: 20),
 
                       // Location Data Section
@@ -209,16 +224,18 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                         Icons.location_on_outlined,
                       ),
                       const SizedBox(height: 12),
-                      _buildLabel('نوع الموقع'),
+                      _buildLabel('نوع الموقع', textColor),
                       _buildGenericDropdownField<LocTypesResponse>(
                         hint: '-- اختر نوع الموقع --',
                         value: cubit.selectedLocationType,
                         items: cubit.locationTypes,
                         getLabel: (item) => item.locationType ?? '',
                         onChanged: (val) => cubit.onLocationTypeChanged(val),
+                        isDark: isDark,
+                        surfaceColor: surfaceColor,
                       ),
                       const SizedBox(height: 16),
-                      _buildLabel('موقع الزراعة'),
+                      _buildLabel('موقع الزراعة', textColor),
                       _buildGenericDropdownField<LocNamesResponse>(
                         hint: isLoadingLocations
                             ? 'جاري تحميل المواقع...'
@@ -226,7 +243,10 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                         value: cubit.selectedLocationAddress,
                         items: cubit.locations,
                         getLabel: (item) => item.name ?? '',
-                        onChanged: (val) => cubit.onLocationAddressChanged(val),
+                        onChanged: (val) =>
+                            cubit.onLocationAddressChanged(val),
+                        isDark: isDark,
+                        surfaceColor: surfaceColor,
                       ),
 
                       const SizedBox(height: 24),
@@ -239,7 +259,7 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildLabel('تاريخ الزراعة'),
+                                _buildLabel('تاريخ الزراعة', textColor),
                                 GestureDetector(
                                   onTap: _pickDate,
                                   child: AbsorbPointer(
@@ -247,6 +267,9 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                                       controller: _dateController,
                                       icon: Icons.calendar_month_outlined,
                                       isReadOnly: true,
+                                      isDark: isDark,
+                                      surfaceColor: surfaceColor,
+                                      textAlign: TextAlign.right,
                                     ),
                                   ),
                                 ),
@@ -259,12 +282,14 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                _buildLabel('عدد النباتات'),
+                                _buildLabel('عدد النباتات', textColor),
                                 _buildTextField(
                                   controller: _plantCountController,
                                   icon: Icons.unfold_more,
                                   isCenter: true,
                                   keyboardType: TextInputType.number,
+                                  isDark: isDark,
+                                  surfaceColor: surfaceColor,
                                 ),
                               ],
                             ),
@@ -323,27 +348,30 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                         width: double.infinity,
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF56B76C).withValues(alpha: 0.08),
+                          color: const Color(0xFF56B76C).withValues(
+                            alpha: isDark ? 0.15 : 0.08,
+                          ),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color:
-                                const Color(0xFF56B76C).withValues(alpha: 0.15),
+                            color: const Color(0xFF56B76C).withValues(
+                              alpha: isDark ? 0.3 : 0.15,
+                            ),
                           ),
                         ),
-                        child: const Row(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.tips_and_updates_outlined,
                               color: Color(0xFF56B76C),
                               size: 18,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'نصيحة سريعة',
                                     style: TextStyle(
                                       color: Color(0xFF56B76C),
@@ -351,11 +379,13 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 4),
+                                  const SizedBox(height: 4),
                                   Text(
                                     'تأكد من اختيار نوع النبات المناسب للموقع الجغرافي لضمان نجاح عملية الاستزراع واستدامة الغطاء النباتي.',
                                     style: TextStyle(
-                                      color: Colors.black54,
+                                      color: isDark
+                                          ? Colors.white70
+                                          : Colors.black54,
                                       fontSize: 11,
                                       height: 1.4,
                                     ),
@@ -381,8 +411,8 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
   Widget _buildSectionHeader(String title, IconData icon) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: const Color(0xFF56B76C)),
-        const SizedBox(width: 6),
+        Icon(icon, color: const Color(0xFF56B76C), size: 18),
+        const SizedBox(width: 8),
         Text(
           title,
           style: const TextStyle(
@@ -395,12 +425,16 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
     );
   }
 
-  Widget _buildLabel(String text) {
+  Widget _buildLabel(String label, Color color) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6, right: 4),
+      padding: const EdgeInsets.only(bottom: 6.0),
       child: Text(
-        text,
-        style: const TextStyle(color: Colors.black87, fontSize: 12),
+        label,
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
@@ -410,45 +444,48 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
     required T? value,
     required List<T> items,
     required String Function(T) getLabel,
-    required ValueChanged<T?> onChanged,
+    required void Function(T?) onChanged,
+    required bool isDark,
+    required Color surfaceColor,
   }) {
-    return DropdownButtonFormField<T>(
-      dropdownColor: Colors.white,
-      style: const TextStyle(color: Colors.black87, fontSize: 13),
-      initialValue: value,
-      hint: Text(
-        hint,
-        style: const TextStyle(fontSize: 12, color: Colors.black38),
+    final borderColor = isDark ? Colors.white12 : Colors.grey.shade300;
+    final itemTextColor = isDark ? Colors.white : Colors.black87;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: borderColor),
       ),
-      isExpanded: true,
-      decoration: InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 12,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black12),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black12),
-        ),
-      ),
-      items: items
-          .map(
-            (e) => DropdownMenuItem<T>(
-              value: e,
-              child: Text(
-                getLabel(e),
-                style: const TextStyle(fontSize: 13, color: Colors.black87),
-              ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<T>(
+          value: value,
+          hint: Text(
+            hint,
+            style: TextStyle(
+              color: isDark ? Colors.white38 : Colors.grey.shade500,
+              fontSize: 13,
             ),
-          )
-          .toList(),
-      onChanged: onChanged,
+          ),
+          dropdownColor: surfaceColor,
+          isExpanded: true,
+          icon: Icon(
+            Icons.keyboard_arrow_down,
+            color: isDark ? Colors.white54 : Colors.grey.shade600,
+          ),
+          items: items.map((T item) {
+            return DropdownMenuItem<T>(
+              value: item,
+              child: Text(
+                getLabel(item),
+                style: TextStyle(fontSize: 13, color: itemTextColor),
+              ),
+            );
+          }).toList(),
+          onChanged: onChanged,
+        ),
+      ),
     );
   }
 
@@ -458,28 +495,38 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
     bool isReadOnly = false,
     bool isCenter = false,
     TextInputType keyboardType = TextInputType.text,
+    required bool isDark,
+    required Color surfaceColor,
+    TextAlign textAlign = TextAlign.start,
   }) {
-    return TextFormField(
-      controller: controller,
-      readOnly: isReadOnly,
-      keyboardType: keyboardType,
-      textAlign: isCenter ? TextAlign.center : TextAlign.right,
-      style: const TextStyle(fontSize: 13),
-      decoration: InputDecoration(
-        fillColor: Colors.white,
-        filled: true,
-        suffixIcon: Icon(icon, size: 18, color: Colors.black38),
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 12,
+    final borderColor = isDark ? Colors.white12 : Colors.grey.shade300;
+    final textColor = isDark ? Colors.white : Colors.black87;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: borderColor),
+      ),
+      child: TextFormField(
+        controller: controller,
+        readOnly: isReadOnly,
+        textAlign: isCenter ? TextAlign.center : textAlign,
+        keyboardType: keyboardType,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 13,
+          fontWeight: isCenter ? FontWeight.bold : FontWeight.normal,
         ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black12),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black12),
+        decoration: InputDecoration(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          border: InputBorder.none,
+          prefixIcon: Icon(
+            icon,
+            color: isDark ? Colors.white54 : Colors.grey.shade600,
+            size: 18,
+          ),
         ),
       ),
     );

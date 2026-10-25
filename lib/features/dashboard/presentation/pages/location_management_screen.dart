@@ -5,8 +5,6 @@ import 'package:afforestation_app/features/dashboard/presentation/cubit/location
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-
 class LocationManagementScreen extends StatelessWidget {
   const LocationManagementScreen({super.key});
 
@@ -24,10 +22,13 @@ class _LocationManagementView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffoldBg = isDark ? const Color(0xFF121212) : AppColors.background;
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: scaffoldBg,
         body: SafeArea(
           child: BlocConsumer<LocationManageCubit, LocationManagementState>(
             listener: (context, state) {
@@ -105,6 +106,8 @@ class _DashboardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       children: [
         const _Header(),
@@ -119,20 +122,23 @@ class _DashboardBody extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'جميع المواقع',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textDark,
+                      color: isDark ? Colors.white : AppColors.textDark,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const Text(
+                  Text(
                     'تصفح وإدارة المواقع حسب النوع',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 13, color: AppColors.textGrey),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? Colors.white70 : AppColors.textGrey,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   _TypesCard(state: state),
@@ -156,22 +162,27 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.chevron_right, color: AppColors.textDark),
+            icon: Icon(
+              Icons.chevron_right,
+              color: isDark ? Colors.white : AppColors.textDark,
+            ),
             onPressed: () => Navigator.of(context).maybePop(),
           ),
-          const Expanded(
+          Expanded(
             child: Text(
               'إدارة المواقع',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textDark,
+                color: isDark ? Colors.white : AppColors.textDark,
               ),
             ),
           ),
@@ -191,11 +202,17 @@ class _TypesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : AppColors.cardWhite;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.cardWhite,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isDark ? Colors.white12 : Colors.transparent,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.04),
@@ -207,18 +224,18 @@ class _TypesCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
               Text(
                 'أنواع المواقع',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
-                  color: AppColors.textDark,
+                  color: isDark ? Colors.white : AppColors.textDark,
                 ),
               ),
-              Spacer(),
-              Icon(
+              const Spacer(),
+              const Icon(
                 Icons.location_on_outlined,
                 color: AppColors.primaryGreen,
                 size: 20,
@@ -227,9 +244,12 @@ class _TypesCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           if (state.categories.isEmpty)
-            const Text(
+            Text(
               'لا توجد أنواع مواقع بعد',
-              style: TextStyle(color: AppColors.textGrey, fontSize: 13),
+              style: TextStyle(
+                color: isDark ? Colors.white60 : AppColors.textGrey,
+                fontSize: 13,
+              ),
             )
           else
             Wrap(
@@ -269,22 +289,30 @@ class _TypeChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryGreen : Colors.white,
+          color: isSelected
+              ? AppColors.primaryGreen
+              : (isDark ? const Color(0xFF2C2C2C) : Colors.white),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? AppColors.primaryGreen : AppColors.chipBorder,
+            color: isSelected
+                ? AppColors.primaryGreen
+                : (isDark ? Colors.white24 : AppColors.chipBorder),
           ),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? Colors.white : AppColors.darkGreen,
+            color: isSelected
+                ? Colors.white
+                : (isDark ? const Color(0xFF81C784) : AppColors.darkGreen),
             fontWeight: FontWeight.w600,
             fontSize: 13,
           ),
@@ -308,8 +336,6 @@ class _SelectedCategoryHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // First child sits at the RTL "start" (visually the right side),
-          // matching the category name being on the right in the mock.
           Text(
             state.selectedCategory.locationType ?? '',
             style: const TextStyle(
@@ -349,23 +375,29 @@ class _LocationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : AppColors.cardWhite;
+
     return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.cardWhite,
-        borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+      decoration: BoxDecoration(
+        color: surfaceColor,
+        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(20)),
+        border: Border.all(
+          color: isDark ? Colors.white12 : Colors.transparent,
+        ),
       ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Row(
+          Row(
             children: [
               Expanded(
                 child: Text(
                   'اسم الموقع',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textGrey,
+                    color: isDark ? Colors.white60 : AppColors.textGrey,
                     fontSize: 13,
                   ),
                 ),
@@ -374,20 +406,25 @@ class _LocationsList extends StatelessWidget {
                 'إدارة',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: AppColors.textGrey,
+                  color: isDark ? Colors.white60 : AppColors.textGrey,
                   fontSize: 13,
                 ),
               ),
             ],
           ),
-          const Divider(height: 20),
+          Divider(
+            height: 20,
+            color: isDark ? Colors.white12 : Colors.black12,
+          ),
           if (state.locations.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 24),
               child: Text(
                 'لا توجد مواقع من هذا النوع بعد',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.textGrey),
+                style: TextStyle(
+                  color: isDark ? Colors.white60 : AppColors.textGrey,
+                ),
               ),
             )
           else
@@ -417,30 +454,35 @@ class _LocationRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       children: [
-        // Start (right side in RTL): the name, expanded.
         Expanded(
           child: Text(
             location.name ?? '',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
-              color: AppColors.textDark,
+              color: isDark ? Colors.white : AppColors.textDark,
               fontWeight: FontWeight.w500,
             ),
           ),
         ),
         _PillButton(
           label: 'تعديل',
-          background: AppColors.editBg,
-          foreground: AppColors.editText,
+          background: isDark
+              ? const Color(0xFFFCEBB6).withValues(alpha: 0.18)
+              : AppColors.editBg,
+          foreground: isDark ? const Color(0xFFFFD54F) : AppColors.editText,
           onTap: () => _showEditLocationSheet(context, location),
         ),
         const SizedBox(width: 8),
         _PillButton(
           label: 'حذف',
-          background: AppColors.deleteBg,
-          foreground: AppColors.deleteText,
+          background: isDark
+              ? const Color(0xFFF9D4D4).withValues(alpha: 0.18)
+              : AppColors.deleteBg,
+          foreground: isDark ? const Color(0xFFEF5350) : AppColors.deleteText,
           onTap: () => _confirmDelete(context, location),
         ),
       ],
@@ -491,18 +533,25 @@ class _TotalSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF8EF),
+        color: isDark
+            ? const Color(0xFF53B157).withValues(alpha: 0.15)
+            : const Color(0xFFEFF8EF),
         borderRadius: BorderRadius.circular(20),
+        border: isDark
+            ? Border.all(color: const Color(0xFF53B157).withValues(alpha: 0.25))
+            : null,
       ),
       child: Row(
         children: [
-          const Text(
+          Text(
             'إجمالي المواقع المسجلة',
             style: TextStyle(
-              color: AppColors.textDark,
+              color: isDark ? Colors.white : AppColors.textDark,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -510,9 +559,9 @@ class _TotalSummaryCard extends StatelessWidget {
           Row(
             children: [
               Text(
-                'موقعاً $count',
-                style: const TextStyle(
-                  color: AppColors.darkGreen,
+                '$count موقعاً',
+                style: TextStyle(
+                  color: isDark ? const Color(0xFF81C784) : AppColors.darkGreen,
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ),
@@ -528,16 +577,14 @@ class _TotalSummaryCard extends StatelessWidget {
 }
 
 Future<void> _showAddLocationSheet(BuildContext context) async {
-  // Capture the cubit from the calling context (a descendant of the
-  // screen's BlocProvider) - safer than trying to read it again from the
-  // bottom sheet's own context.
   final cubit = context.read<LocationManageCubit>();
   final controller = TextEditingController();
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
   final result = await showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -555,14 +602,19 @@ Future<void> _showAddLocationSheet(BuildContext context) async {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
+              Text(
                 'إضافة موقع جديد',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: controller,
                 autofocus: true,
+                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
                 decoration: InputDecoration(
                   hintText: 'اسم الموقع',
                   border: OutlineInputBorder(
@@ -604,11 +656,12 @@ Future<void> _showEditLocationSheet(
 ) async {
   final cubit = context.read<LocationManageCubit>();
   final controller = TextEditingController(text: location.name);
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
   final result = await showModalBottomSheet<String>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -626,14 +679,19 @@ Future<void> _showEditLocationSheet(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
+              Text(
                 'تعديل اسم الموقع',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: controller,
                 autofocus: true,
+                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
                 decoration: InputDecoration(
                   hintText: 'اسم الموقع',
                   border: OutlineInputBorder(

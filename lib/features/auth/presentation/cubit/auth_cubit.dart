@@ -23,7 +23,7 @@ class AuthCubit extends Cubit<AuthState> {
       } else {
         emit(
           AuthError(
-            'فشل تسجيل الدخول. يرجى التحقق من صحة البريد الإلكتروني أو كلمة المرور.',
+            'فشل تسجيل الدخول، يرجى التأكد من البيانات',
           ),
         );
       }
@@ -41,7 +41,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     try {
       // Map String role selection to enum values (0 = Admin, 1 = User)
-      int roleId = role == 'مستخدم مسؤول (Admin)' ? 0 : 1;
+      int roleId = role.contains('Admin') || role.contains('مسؤول') ? 0 : 1;
 
       await AuthRepo.register(
         name: fullName,

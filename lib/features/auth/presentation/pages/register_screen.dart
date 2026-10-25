@@ -23,15 +23,19 @@ class AddUserScreen extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  // Dropdown Configuration
-  // yahya
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffoldBg =
+        isDark ? const Color(0xFF121212) : AppColors.background;
+    final surfaceColor =
+        isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: Scaffold(
-        backgroundColor: AppColors.background,
-        appBar: buildAppBar(context),
+        backgroundColor: scaffoldBg,
+        appBar: buildAppBar(context, isAdminMode: isAdminMode),
         body: Directionality(
           textDirection: TextDirection.rtl,
           child: SingleChildScrollView(
@@ -43,7 +47,7 @@ class AddUserScreen extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: surfaceColor,
                     borderRadius: BorderRadius.circular(24.0),
                     boxShadow: [
                       BoxShadow(
@@ -65,8 +69,8 @@ class AddUserScreen extends StatelessWidget {
                               ? 'إضافة مستخدم جديد'
                               : 'إنشاء حساب جديد',
                           subtitle: isAdminMode
-                              ? 'قم بإضافة مستخدم جديد إلى نظام التشجير'
-                              : 'قم بإنشاء حساب جديد للانضمام إلى نظام التشجير',
+                              ? 'أدخل تفاصيل المستخدم الجديد لإنشاء الحساب'
+                              : 'أدخل بياناتك لإنشاء حسابك والانضمام إلينا',
                         ),
                         Padding(
                           padding: const EdgeInsets.all(20.0),
@@ -74,17 +78,17 @@ class AddUserScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               // --- Name Field ---
-                              const BuiledFieldLabel.BuildFieldLabel(
+                              BuiledFieldLabel.BuildFieldLabel(
                                 labelText: 'الاسم الكامل',
                                 icon: Icons.person_outline,
                               ),
                               const SizedBox(height: 8),
                               CustomTextFormField(
                                 controller: nameController,
-                                hintText: '...أدخل الاسم الكامل',
+                                hintText: 'أدخل اسمك الكامل',
                                 validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
-                                    return 'الاسم الكامل مطلوب';
+                                    return 'يرجى إدخال الاسم';
                                   }
                                   return null;
                                 },
@@ -92,20 +96,20 @@ class AddUserScreen extends StatelessWidget {
                               const SizedBox(height: 20),
 
                               // --- Email Field ---
-                              const BuiledFieldLabel.BuildFieldLabel(
+                              BuiledFieldLabel.BuildFieldLabel(
                                 labelText: 'البريد الإلكتروني',
                                 icon: Icons.mail_outline,
                               ),
                               const SizedBox(height: 8),
                               CustomTextFormField(
                                 controller: emailController,
-                                hintText: 'example@domain.com',
+                                hintText: 'example@email.com',
                                 validator: (value) {
                                   if (value == null ||
                                       value.trim().isEmpty ||
                                       !value.contains("@") ||
                                       !value.endsWith(".com")) {
-                                    return 'البريد الإلكتروني مطلوب';
+                                    return 'يرجى إدخال بريد إلكتروني صحيح';
                                   }
                                   return null;
                                 },
@@ -113,18 +117,18 @@ class AddUserScreen extends StatelessWidget {
                               const SizedBox(height: 20),
 
                               // --- Password Field ---
-                              const BuiledFieldLabel.BuildFieldLabel(
+                              BuiledFieldLabel.BuildFieldLabel(
                                 labelText: 'كلمة المرور',
                                 icon: Icons.lock_outline,
                               ),
                               const SizedBox(height: 8),
                               CustomTextFormField(
                                 controller: passwordController,
-                                hintText: '••••••••',
+                                hintText: 'أدخل كلمة المرور',
                                 isPassword: true,
                                 validator: (value) {
                                   if (value == null || value.trim().isEmpty) {
-                                    return 'كلمة المرور مطلوبة';
+                                    return 'يرجى إدخال كلمة المرور';
                                   }
                                   return null;
                                 },
@@ -132,8 +136,8 @@ class AddUserScreen extends StatelessWidget {
                               const SizedBox(height: 20),
 
                               // --- Role Dropdown ---
-                              const BuiledFieldLabel.BuildFieldLabel(
-                                labelText: 'اختر الدور الوظيفي',
+                              BuiledFieldLabel.BuildFieldLabel(
+                                labelText: 'اختر الصلاحية',
                                 icon: Icons.shield_outlined,
                               ),
                               const SizedBox(height: 8),
@@ -142,17 +146,12 @@ class AddUserScreen extends StatelessWidget {
                                     current is RoleChangedState,
                                 builder: (context, state) {
                                   var cubit = context.read<AuthCubit>();
-                                  // if (state is RoleChangedState) {
-                                  //   selectedRole = state.selectedRole;
-                                  // }
                                   return RoleDropdownField(
                                     selectedRole: cubit.currentRole,
                                     roles: cubit.roles,
                                     onChanged: (newValue) {
                                       if (newValue != null) {
                                         cubit.changeRole(newValue);
-                                        //selectedRole = newValue;
-                                        //log(newValue);
                                       }
                                     },
                                   );
@@ -167,7 +166,7 @@ class AddUserScreen extends StatelessWidget {
                                     if (isAdminMode) {
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         const SnackBar(
-                                          content: Text('تم إضافة المستخدم بنجاح'),
+                                          content: Text('تمت إضافة المستخدم بنجاح'),
                                           backgroundColor: Color(0xFF53B157),
                                         ),
                                       );
@@ -216,7 +215,9 @@ class AddUserScreen extends StatelessWidget {
                                           },
                                         )
                                       : const Center(
-                                          child: CircularProgressIndicator(),
+                                          child: CircularProgressIndicator(
+                                            color: Color(0xFF53B157),
+                                          ),
                                         );
                                 },
                               ),

@@ -29,7 +29,6 @@ class _SearchState extends State<Search> {
   void initState() {
     super.initState();
     final cubit = context.read<SearchCubit>();
-    // Load dropdowns and 30-day summary from API
     if (!cubit.areDropdownsLoaded) {
       cubit.loadDropdowns();
     }
@@ -39,6 +38,7 @@ class _SearchState extends State<Search> {
   }
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -46,13 +46,23 @@ class _SearchState extends State<Search> {
       lastDate: DateTime(2030),
       builder: (context, child) {
         return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: AppColors.primary,
-              onPrimary: Colors.white,
-              onSurface: AppColors.onSurface,
-            ),
-          ),
+          data: isDark
+              ? Theme.of(context).copyWith(
+                  colorScheme: const ColorScheme.dark(
+                    primary: AppColors.secondary,
+                    onPrimary: Colors.white,
+                    surface: Color(0xFF1E1E1E),
+                    onSurface: Colors.white,
+                  ),
+                  dialogBackgroundColor: const Color(0xFF1E1E1E),
+                )
+              : Theme.of(context).copyWith(
+                  colorScheme: const ColorScheme.light(
+                    primary: AppColors.primary,
+                    onPrimary: Colors.white,
+                    onSurface: AppColors.onSurface,
+                  ),
+                ),
           child: child!,
         );
       },
@@ -74,7 +84,6 @@ class _SearchState extends State<Search> {
   }
 
   void _performSearch() {
-    // Validate: from date is required
     if (_startDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -88,19 +97,14 @@ class _SearchState extends State<Search> {
 
     final searchCubit = context.read<SearchCubit>();
 
-    // Set date filters on the cubit
     searchCubit.fromDate = _startDate;
     searchCubit.toDate = _endDate;
-
-    // Set selected IDs from dropdown items (null means "all")
     searchCubit.selectedUserId = _selectedUser?.id;
     searchCubit.selectedLocationId = _selectedLocation?.id;
     searchCubit.selectedTreeId = _selectedPlant?.id;
 
-    // Trigger the search
     searchCubit.search();
 
-    // Navigate to results page
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -115,20 +119,24 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<SearchCubit>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffoldBg = isDark ? const Color(0xFF121212) : AppColors.background;
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+    final textColor = isDark ? Colors.white : AppColors.onSurface;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: scaffoldBg,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Directionality(
-          textDirection: TextDirection.ltr,
+          textDirection: TextDirection.rtl,
           child: AppBar(
-            backgroundColor: AppColors.background,
+            backgroundColor: Colors.transparent,
             elevation: 0,
             leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: AppColors.onSurface,
+              icon: Icon(
+                Icons.arrow_back,
+                color: textColor,
                 size: 20,
               ),
               onPressed: () {
@@ -139,18 +147,18 @@ class _SearchState extends State<Search> {
                 }
               },
             ),
-            title: const Text(
+            title: Text(
               "البحث المتقدم",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.onSurface,
+                color: textColor,
               ),
             ),
             centerTitle: true,
             actions: [
               Container(
-                margin: const EdgeInsets.only(right: 16),
+                margin: const EdgeInsets.symmetric(horizontal: 16),
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   color: AppColors.secondary,
@@ -179,14 +187,14 @@ class _SearchState extends State<Search> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.surface,
+                    color: surfaceColor,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: Colors.black.withValues(alpha: 0.04),
+                      color: isDark ? Colors.white12 : Colors.black.withValues(alpha: 0.04),
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.02),
+                        color: Colors.black.withValues(alpha: isDark ? 0.2 : 0.02),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
@@ -194,22 +202,25 @@ class _SearchState extends State<Search> {
                   ),
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         "بحث بيانات التشجير",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+                          color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
+                      Text(
                         "تصفية حسب نطاق التاريخ والمستخدم والموقع",
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: isDark ? Colors.white60 : Colors.grey,
+                        ),
                       ),
                       const SizedBox(height: 25),
 
-                      // Dates row (من تاريخ / إلى تاريخ)
+                      // Dates row
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -248,7 +259,7 @@ class _SearchState extends State<Search> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Dropdowns populated from API
+                      // Dropdowns
                       BlocBuilder<SearchCubit, SearchState>(
                         buildWhen: (prev, curr) =>
                             curr is DropdownsLoading ||
@@ -282,7 +293,7 @@ class _SearchState extends State<Search> {
                                     "فشل في تحميل البيانات",
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: Colors.grey.shade600,
+                                      color: isDark ? Colors.white60 : Colors.grey.shade600,
                                     ),
                                   ),
                                   const SizedBox(height: 8),
@@ -295,14 +306,12 @@ class _SearchState extends State<Search> {
                             );
                           }
 
-                          // Build dropdowns from loaded data
                           final userItems = cubit.users;
                           final locationItems = cubit.locations;
                           final plantItems = cubit.treeNames;
 
                           return Column(
                             children: [
-                              // اسم المستخدم والموقع Row
                               Row(
                                 children: [
                                   Expanded(
@@ -311,6 +320,8 @@ class _SearchState extends State<Search> {
                                       allLabel: "كل المستخدمين",
                                       items: userItems,
                                       selectedItem: _selectedUser,
+                                      isDark: isDark,
+                                      textColor: textColor,
                                       onChanged: (val) {
                                         setState(() => _selectedUser = val);
                                       },
@@ -323,6 +334,8 @@ class _SearchState extends State<Search> {
                                       allLabel: "كل المواقع",
                                       items: locationItems,
                                       selectedItem: _selectedLocation,
+                                      isDark: isDark,
+                                      textColor: textColor,
                                       onChanged: (val) {
                                         setState(() => _selectedLocation = val);
                                       },
@@ -332,12 +345,13 @@ class _SearchState extends State<Search> {
                               ),
                               const SizedBox(height: 20),
 
-                              // اسم النبات
                               _buildApiDropdown(
                                 label: "اسم النبات",
                                 allLabel: "كل النباتات",
                                 items: plantItems,
                                 selectedItem: _selectedPlant,
+                                isDark: isDark,
+                                textColor: textColor,
                                 onChanged: (val) {
                                   setState(() => _selectedPlant = val);
                                 },
@@ -348,7 +362,7 @@ class _SearchState extends State<Search> {
                       ),
                       const SizedBox(height: 30),
 
-                      // بحث البيانات Button
+                      // Submit button
                       SizedBox(
                         width: double.infinity,
                         height: 52,
@@ -381,15 +395,14 @@ class _SearchState extends State<Search> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 35),
+                const SizedBox(height: 20),
 
-                const SizedBox(height: 25),
-
-                // 3. Quick Tip Card
+                // 2. Tip Box
                 const QuickTipCard(
                   tipText:
                       "يمكنك استخدام ميزة \"تصدير إلى إكسل\" من صفحة النتائج لحفظ التقارير على جهازك.",
                 ),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -398,67 +411,69 @@ class _SearchState extends State<Search> {
     );
   }
 
-  /// Build a dropdown field for API-loaded data with an "all" option
   Widget _buildApiDropdown({
     required String label,
     required String allLabel,
     required List<DropdownItemModel> items,
     required DropdownItemModel? selectedItem,
     required ValueChanged<DropdownItemModel?> onChanged,
+    required bool isDark,
+    required Color textColor,
   }) {
+    final borderColor = isDark ? Colors.white12 : Colors.grey.shade300;
+    final dropdownBg = isDark ? const Color(0xFF2C2C2C) : Colors.white;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 14,
+          style: TextStyle(
+            fontSize: 13,
             fontWeight: FontWeight.bold,
-            color: AppColors.onSurface,
+            color: textColor,
           ),
         ),
         const SizedBox(height: 8),
         Container(
-          height: 48,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-            color: AppColors.background,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: Colors.black.withValues(alpha: 0.08)),
+            color: dropdownBg,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: borderColor),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<DropdownItemModel?>(
               value: selectedItem,
               isExpanded: true,
+              dropdownColor: dropdownBg,
               icon: Icon(
                 Icons.keyboard_arrow_down,
-                color: Colors.black.withValues(alpha: 0.5),
+                color: isDark ? Colors.white54 : Colors.grey.shade600,
               ),
               items: [
-                // "All" option
                 DropdownMenuItem<DropdownItemModel?>(
                   value: null,
                   child: Text(
                     allLabel,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: AppColors.onSurface,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? Colors.white70 : Colors.black87,
                     ),
                   ),
                 ),
-                // API items
-                ...items.map((item) {
-                  return DropdownMenuItem<DropdownItemModel?>(
+                ...items.map(
+                  (item) => DropdownMenuItem<DropdownItemModel?>(
                     value: item,
                     child: Text(
                       item.name,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.onSurface,
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: isDark ? Colors.white : Colors.black87,
                       ),
                     ),
-                  );
-                }),
+                  ),
+                ),
               ],
               onChanged: onChanged,
             ),

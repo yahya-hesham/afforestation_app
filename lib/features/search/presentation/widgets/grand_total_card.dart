@@ -17,131 +17,81 @@ class GrandTotalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 110,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
         gradient: const LinearGradient(
-          colors: [Color(0xFF74C365), Color(0xFF458536)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
+          colors: [
+            Color(0xFF2E7D32),
+            Color(0xFF4CAF50),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF458536).withValues(alpha: 0.3),
-            blurRadius: 12,
+            color: const Color(0xFF2E7D32).withValues(alpha: 0.35),
+            blurRadius: 16,
             offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: Stack(
-          children: [
-            // Decorative Bar Chart graphics in the background (placed on the left side in RTL)
-            Positioned(
-              left: 20,
-              bottom: 0,
-              child: Opacity(
-                opacity: 0.15,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: 8,
-                      height: 35,
-                      color: Colors.white,
-                      margin: const EdgeInsets.only(right: 4),
-                    ),
-                    Container(
-                      width: 8,
-                      height: 60,
-                      color: Colors.white,
-                      margin: const EdgeInsets.only(right: 4),
-                    ),
-                    Container(
-                      width: 8,
-                      height: 45,
-                      color: Colors.white,
-                      margin: const EdgeInsets.only(right: 4),
-                    ),
-                    Container(
-                      width: 8,
-                      height: 80,
-                      color: Colors.white,
-                      margin: const EdgeInsets.only(right: 4),
-                    ),
-                    Container(width: 8, height: 50, color: Colors.white),
-                  ],
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.eco,
+                  color: Colors.white,
+                  size: 20,
                 ),
               ),
-            ),
-
-            // Foreground Content
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Count & Title Text
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "المجموع الكلي للمزروعات",
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white70,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "${_formatNumber(totalCount)} ",
-                                style: const TextStyle(
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const TextSpan(
-                                text: "شتلة",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Trending Icon Container
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.25),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.trending_up,
-                      color: Colors.white,
-                      size: 28,
-                    ),
-                  ),
-                ],
+              const SizedBox(width: 10),
+              const Text(
+                "المجموع الكلي للمزروعات",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.3,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                _formatNumber(totalCount),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 36,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.0,
+                ),
+              ),
+              const SizedBox(width: 6),
+              const Text(
+                "شتلة",
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -9,27 +9,34 @@ class SmartAlertCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FBF7),
+        color: isDark
+            ? const Color(0xFF1E1E1E)
+            : const Color(0xFFF7FBF7),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.secondary.withValues(alpha: 0.25)),
+        border: Border.all(
+          color: isDark
+              ? Colors.white12
+              : AppColors.secondary.withValues(alpha: 0.25),
+        ),
       ),
       child: Row(
         children: [
-          // Text message on the right (RTL: text is expanded)
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                    color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -37,7 +44,7 @@ class SmartAlertCard extends StatelessWidget {
                   message,
                   style: TextStyle(
                     fontSize: 11,
-                    color: Colors.black87.withValues(alpha: 0.7),
+                    color: isDark ? Colors.white70 : Colors.black87.withValues(alpha: 0.7),
                     height: 1.4,
                   ),
                 ),
@@ -45,18 +52,18 @@ class SmartAlertCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-
-          // Circle sprout icon container
           Container(
             width: 36,
             height: 36,
             decoration: BoxDecoration(
-              color: AppColors.secondary.withValues(alpha: 0.15),
+              color: AppColors.secondary.withValues(
+                alpha: isDark ? 0.25 : 0.15,
+              ),
               shape: BoxShape.circle,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.spa_outlined,
-              color: AppColors.primary,
+              color: isDark ? const Color(0xFF81C784) : AppColors.primary,
               size: 18,
             ),
           ),

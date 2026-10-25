@@ -4,7 +4,6 @@ import 'package:afforestation_app/features/dashboard/presentation/cubit/plant_ma
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// Your existing imports
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/category_selection_card.dart';
@@ -12,16 +11,12 @@ import 'package:afforestation_app/features/dashboard/presentation/widgets/plant_
 import 'package:afforestation_app/features/dashboard/presentation/widgets/plants_list_container.dart';
 import 'package:afforestation_app/features/dashboard/presentation/widgets/screen_header.dart';
 
-// Import your Cubit, States, and Repository
-// (Adjust these paths according to your actual folder structure)
-
 class PlantManagementScreen extends StatelessWidget {
   const PlantManagementScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      // FIXED: Added the cascade operator (..loadDashboard()) to trigger the API fetch immediately
       create: (context) => PlantManageCubit()..loadDashboard(),
       child: const PlantManagementView(),
     );
@@ -33,13 +28,15 @@ class PlantManagementView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffoldBg = isDark ? const Color(0xFF121212) : AppColors.background;
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: scaffoldBg,
         appBar: const PlantAppBar(),
         body: BlocConsumer<PlantManageCubit, PlantManagementState>(
-          // Listen to state changes for one-off tasks (like snackbars or side-effects)
           listener: (context, state) {
             if (state is PlantManagementFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -50,7 +47,6 @@ class PlantManagementView extends StatelessWidget {
               );
             }
           },
-          // Restrict UI rebuilding to only structural dashboard states
           buildWhen: (previous, current) {
             if (current is PlantManagementFailure &&
                 previous is PlantManagementSuccess) {
@@ -62,14 +58,12 @@ class PlantManagementView extends StatelessWidget {
                 current is PlantManagementFailure;
           },
           builder: (context, state) {
-            // State 1: Full-Screen Loading
             if (state is PlantManagementLoading) {
               return const Center(
                 child: CircularProgressIndicator(color: AppColors.primary),
               );
             }
 
-            // State 2: Full-Screen Error
             if (state is PlantManagementFailure) {
               return Center(
                 child: Column(
@@ -78,7 +72,7 @@ class PlantManagementView extends StatelessWidget {
                     Text(
                       'حدث خطأ ما أثناء تحميل البيانات.',
                       style: TextStyles.buttonTextStyle.copyWith(
-                        color: Colors.black,
+                        color: isDark ? Colors.white : Colors.black,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -93,9 +87,7 @@ class PlantManagementView extends StatelessWidget {
               );
             }
 
-            // State 3: Content Loaded Successfully
             if (state is PlantManagementSuccess) {
-              // Find the index of the selected category to pass to the CategorySelectionCard
               final selectedIndex = state.categories.indexWhere(
                 (cat) => cat.id == state.selectedCategory.id,
               );
@@ -111,14 +103,12 @@ class PlantManagementView extends StatelessWidget {
                     const ScreenHeader(),
                     const SizedBox(height: 20),
 
-                    // --- Dynamic Category Selection ---
+                    // Category Selection
                     CategorySelectionCard(
-                      types:
-                          state.categories, // Passes List<PlantTypesResponse>
+                      types: state.categories,
                       selectedIndex: selectedIndex == -1 ? 0 : selectedIndex,
                       onCategorySelected: (index) {
                         final chosenCategory = state.categories[index];
-                        // Trigger Cubit filter action
                         context.read<PlantManageCubit>().selectCategory(
                           chosenCategory,
                         );
@@ -126,57 +116,88 @@ class PlantManagementView extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // --- Dynamic Filtered Plants List ---
+                    // Plants List
                     PlantsListContainer(
-                      categoryTitle:
-                          state.selectedCategory.type ??
-                          '', // Displays the API category type text (e.g. SHRUBS)
-                      plants: state
-                          .plants, // Passes List<PlantNamesResponse> containing scientific names and IDs
-                      onEdit: (plant) {
-                        _showEditPlantSheet(context, plant);
-                      },
-                      onDelete: (plant) {
-                        _confirmDeletePlant(context, plant);
-                      },
-                      onAddPlant: () {
-                        _showAddPlantSheet(
-                          context,
-                          state.selectedCategory.type ?? '',
-                        );
-                      },
+                      categoryTitle: state.selectedCategory.type ?? '',
+                      plants: state.plants,
+                      onEdit: (plant) => _showEditPlantSheet(context, plant),
+                      onDelete: (plant) => _confirmDelete(context, plant),
+                      onAddPlant: () => _showAddPlantSheet(context, state),
                     ),
                     const SizedBox(height: 20),
 
-                    // --- Bottom Button ---
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.surface,
-                        foregroundColor: AppColors.primary,
-                        elevation: 0,
-                        side: const BorderSide(color: Colors.black12),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Text(
-                        'عرض التقارير التفصيلية',
-                        style: TextStyles.buttonTextStyle.copyWith(
-                          color: AppColors.primary,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
+                    // Detailed Reports Action Card
+                    _buildReportActionCard(context, isDark),
                   ],
                 ),
               );
             }
 
-            // Fallback placeholder
             return const SizedBox.shrink();
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReportActionCard(BuildContext context, bool isDark) {
+    final cardColor = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+
+    return InkWell(
+      onTap: () {},
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isDark ? Colors.white12 : Colors.black.withOpacity(0.04),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(isDark ? 0.2 : 0.02),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? const Color(0xFF2E7D32).withValues(alpha: 0.25)
+                        : const Color(0xFFE8F5E9),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.assessment_outlined,
+                    color: Color(0xFF2E7D32),
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'عرض التقارير التفصيلية',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: isDark ? Colors.white : Colors.black87,
+                  ),
+                ),
+              ],
+            ),
+            Icon(
+              Icons.arrow_back_ios,
+              size: 14,
+              color: isDark ? Colors.white38 : Colors.grey,
+            ),
+          ],
         ),
       ),
     );
@@ -185,16 +206,17 @@ class PlantManagementView extends StatelessWidget {
 
 Future<void> _showAddPlantSheet(
   BuildContext context,
-  String categoryTypeName,
+  PlantManagementSuccess state,
 ) async {
   final cubit = context.read<PlantManageCubit>();
   final nameController = TextEditingController();
   final sciNameController = TextEditingController();
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
   final result = await showModalBottomSheet<Map<String, String>>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -213,13 +235,18 @@ Future<void> _showAddPlantSheet(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'إضافة نبات جديد ($categoryTypeName)',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                'إضافة نبات جديد (${state.selectedCategory.type})',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: nameController,
                 autofocus: true,
+                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
                 decoration: InputDecoration(
                   labelText: 'اسم النبات *',
                   border: OutlineInputBorder(
@@ -230,6 +257,7 @@ Future<void> _showAddPlantSheet(
               const SizedBox(height: 12),
               TextField(
                 controller: sciNameController,
+                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
                 decoration: InputDecoration(
                   labelText: 'الاسم العلمي',
                   border: OutlineInputBorder(
@@ -250,7 +278,10 @@ Future<void> _showAddPlantSheet(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('إضافة', style: TextStyle(color: Colors.white)),
+                child: const Text(
+                  'إضافة',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -274,11 +305,12 @@ Future<void> _showEditPlantSheet(
   final cubit = context.read<PlantManageCubit>();
   final nameController = TextEditingController(text: plant.name);
   final sciNameController = TextEditingController(text: plant.scientificName);
+  final isDark = Theme.of(context).brightness == Brightness.dark;
 
   final result = await showModalBottomSheet<Map<String, String>>(
     context: context,
     isScrollControlled: true,
-    backgroundColor: Colors.white,
+    backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
@@ -296,14 +328,19 @@ Future<void> _showEditPlantSheet(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
+              Text(
                 'تعديل بيانات النبات',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: nameController,
                 autofocus: true,
+                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
                 decoration: InputDecoration(
                   labelText: 'اسم النبات',
                   border: OutlineInputBorder(
@@ -314,6 +351,7 @@ Future<void> _showEditPlantSheet(
               const SizedBox(height: 12),
               TextField(
                 controller: sciNameController,
+                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
                 decoration: InputDecoration(
                   labelText: 'الاسم العلمي',
                   border: OutlineInputBorder(
@@ -334,7 +372,10 @@ Future<void> _showEditPlantSheet(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text('حفظ التعديلات', style: TextStyle(color: Colors.white)),
+                child: const Text(
+                  'حفظ التعديلات',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -352,7 +393,7 @@ Future<void> _showEditPlantSheet(
   }
 }
 
-Future<void> _confirmDeletePlant(
+Future<void> _confirmDelete(
   BuildContext context,
   PlantNamesResponse plant,
 ) async {

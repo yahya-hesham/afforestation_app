@@ -7,14 +7,24 @@ class PlantAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AppBar(
-      backgroundColor: AppColors.background,
+      backgroundColor: isDark ? const Color(0xFF1E1E1E) : AppColors.background,
       elevation: 0,
-      title: Text('إدارة النباتات', style: TextStyles.appBarTitleStyle),
+      title: Text(
+        'إدارة النباتات',
+        style: TextStyles.appBarTitleStyle.copyWith(
+          color: isDark ? Colors.white : null,
+        ),
+      ),
       centerTitle: true,
       actions: [
         IconButton(
-          icon: const Icon(Icons.search, color: AppColors.onSurface),
+          icon: Icon(
+            Icons.search,
+            color: isDark ? Colors.white : AppColors.onSurface,
+          ),
           onPressed: () {},
         ),
         Padding(

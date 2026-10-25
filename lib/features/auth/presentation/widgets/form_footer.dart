@@ -7,15 +7,18 @@ class FormFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white60 : AppColors.onSurfaceVariant;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0, left: 24.0, right: 24.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'بمجرد النقر على زر التسجيل، فإنك توافق على شروط\nالخدمة وسياسة الخصوصية الخاصة بنظام',
+            'بالتسجيل، أنت توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا',
             style: TextStyles.footerTextTextStyle.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: textColor,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
@@ -24,7 +27,7 @@ class FormFooter extends StatelessWidget {
           Text(
             'AfforestationPanel.',
             style: TextStyles.footerTextTextStyle.copyWith(
-              color: AppColors.onSurfaceVariant,
+              color: textColor,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center,

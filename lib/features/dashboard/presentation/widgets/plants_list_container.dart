@@ -1,6 +1,4 @@
 import 'package:afforestation_app/features/dashboard/data/models/plant_names_response.dart';
-import 'package:afforestation_app/features/dashboard/presentation/dumy_data/plant_model.dart';
-
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
@@ -23,11 +21,16 @@ class PlantsListContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.black.withOpacity(0.04)),
+        border: Border.all(
+          color: isDark ? Colors.white12 : Colors.black.withOpacity(0.04),
+        ),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -59,7 +62,7 @@ class PlantsListContainer extends StatelessWidget {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.surface,
+                    backgroundColor: Colors.white,
                     elevation: 0,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
@@ -74,7 +77,9 @@ class PlantsListContainer extends StatelessWidget {
             ),
           ),
           Container(
-            color: AppColors.secondary.withOpacity(0.15),
+            color: isDark
+                ? AppColors.secondary.withValues(alpha: 0.12)
+                : AppColors.secondary.withOpacity(0.15),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
@@ -84,7 +89,7 @@ class PlantsListContainer extends StatelessWidget {
                     'اسم النبات',
                     style: TextStyles.listRowSubtitleStyle.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
+                      color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                     ),
                   ),
                 ),
@@ -94,7 +99,7 @@ class PlantsListContainer extends StatelessWidget {
                     'الاسم العلمي',
                     style: TextStyles.listRowSubtitleStyle.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
+                      color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                     ),
                   ),
                 ),
@@ -104,7 +109,7 @@ class PlantsListContainer extends StatelessWidget {
                     'إدارة',
                     style: TextStyles.listRowSubtitleStyle.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
+                      color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -117,15 +122,19 @@ class PlantsListContainer extends StatelessWidget {
                   padding: const EdgeInsets.all(24.0),
                   child: Text(
                     "لا توجد نباتات في هذا القسم",
-                    style: TextStyles.listRowSubtitleStyle,
+                    style: TextStyles.listRowSubtitleStyle.copyWith(
+                      color: isDark ? Colors.white60 : null,
+                    ),
                   ),
                 )
               : ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: plants.length,
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 1, color: Colors.black12),
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    color: isDark ? Colors.white12 : Colors.black12,
+                  ),
                   itemBuilder: (context, index) {
                     final plant = plants[index];
                     return Padding(
@@ -139,7 +148,9 @@ class PlantsListContainer extends StatelessWidget {
                             flex: 3,
                             child: Text(
                               plant.scientificName ?? "",
-                              style: TextStyles.listRowTitleStyle,
+                              style: TextStyles.listRowTitleStyle.copyWith(
+                                color: isDark ? Colors.white : AppColors.onSurface,
+                              ),
                             ),
                           ),
                           Expanded(
@@ -148,6 +159,7 @@ class PlantsListContainer extends StatelessWidget {
                               plant.name ?? "",
                               style: TextStyles.listRowSubtitleStyle.copyWith(
                                 fontStyle: FontStyle.italic,
+                                color: isDark ? Colors.white70 : AppColors.onSurfaceVariant,
                               ),
                             ),
                           ),
@@ -158,10 +170,10 @@ class PlantsListContainer extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () => onEdit(plant),
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.edit_outlined,
                                     size: 18,
-                                    color: AppColors.onSurface,
+                                    color: isDark ? Colors.white70 : AppColors.onSurface,
                                   ),
                                 ),
                                 const SizedBox(width: 12),

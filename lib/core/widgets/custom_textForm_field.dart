@@ -33,42 +33,55 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : AppColors.onSurface;
+    final bgColor = isDark ? const Color(0xFF2A2A2A) : AppColors.background;
+
     return TextFormField(
       controller: widget.controller,
       obscureText: _isObscured,
       validator: widget.validator,
-      // Pass styling options down
-      decoration: _buildInputDecoration(hintText: widget.hintText),
+      style: TextStyle(color: textColor, fontSize: 14),
+      decoration: _buildInputDecoration(
+        hintText: widget.hintText,
+        isDark: isDark,
+        bgColor: bgColor,
+      ),
     );
   }
 
-  InputDecoration _buildInputDecoration({required String hintText}) {
+  InputDecoration _buildInputDecoration({
+    required String hintText,
+    required bool isDark,
+    required Color bgColor,
+  }) {
     return InputDecoration(
       labelText: widget.labelText,
+      labelStyle: isDark ? const TextStyle(color: Colors.white70) : null,
       hintText: hintText,
       hintStyle: TextStyles.hintTextStyle.copyWith(
-        color: AppColors.onSurfaceVariant.withOpacity(0.5),
+        color: isDark
+            ? Colors.white38
+            : AppColors.onSurfaceVariant.withOpacity(0.5),
         fontSize: 14,
       ),
-      // 👇 This automatically styles the native error text message
       errorStyle: TextStyles.errorTextStyle.copyWith(
         color: AppColors.error,
         fontSize: 12,
       ),
-      fillColor: AppColors.background,
+      fillColor: bgColor,
       filled: true,
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 16.0,
         vertical: 16.0,
       ),
-
       suffixIcon: widget.isPassword
           ? IconButton(
               icon: Icon(
                 _isObscured
                     ? Icons.visibility_outlined
                     : Icons.visibility_off_outlined,
-                color: AppColors.onSurfaceVariant,
+                color: isDark ? Colors.white70 : AppColors.onSurfaceVariant,
                 size: 20,
               ),
               onPressed: () {
@@ -78,12 +91,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               },
             )
           : null,
-
-      // --- Borders Configurations ---
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
-          color: AppColors.tertiary.withOpacity(0.2),
+          color: isDark ? Colors.white12 : AppColors.tertiary.withOpacity(0.2),
           width: 1.5,
         ),
       ),
@@ -91,7 +102,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         borderRadius: BorderRadius.circular(12.0),
         borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
       ),
-      // 👇 Added these native error borders so you don't have to manage 'hasError' manually
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide(
@@ -101,7 +111,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
-        borderSide: const BorderSide(color: AppColors.error, width: 2.0),
+        borderSide: const BorderSide(color: AppColors.error, width: 1.5),
       ),
     );
   }

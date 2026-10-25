@@ -3,13 +3,13 @@ import 'package:afforestation_app/core/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class FormHeader extends StatelessWidget {
-  final String title;
-  final String subtitle;
+  final String? title;
+  final String? subtitle;
 
   const FormHeader({
     super.key,
-    this.title = 'إنشاء حساب جديد',
-    this.subtitle = 'قم بإنشاء حساب جديد للانضمام إلى نظام التشجير',
+    this.title,
+    this.subtitle,
   });
 
   @override
@@ -21,17 +21,19 @@ class FormHeader extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            title,
+            title ?? 'إنشاء حساب',
             style: TextStyles.loginHeaderStyle.copyWith(
               color: AppColors.onSecondary,
             ),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
-            subtitle,
+            subtitle ?? 'أدخل بياناتك لإنشاء حسابك والانضمام إلينا',
             style: TextStyles.footerTextTextStyle.copyWith(
               color: AppColors.onSecondary,
             ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

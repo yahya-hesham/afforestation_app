@@ -33,7 +33,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       _isExporting = true;
     });
 
-    // Show a loading dialog
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -63,10 +62,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         selectedTreeId: searchCubit.selectedTreeId,
       );
 
-      // Fetch bytes from API
       final bytes = await SearchRepo.exportExcel(request: request);
 
-      // Save to a temporary file
       final tempDir = await getTemporaryDirectory();
       final fromStr = request.fromDate != null
           ? "${request.fromDate!.day}-${request.fromDate!.month}-${request.fromDate!.year}"
@@ -79,25 +76,21 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       final file = File(filePath);
       await file.writeAsBytes(bytes);
 
-      // Close the loading dialog
       if (mounted) {
         Navigator.pop(context);
       }
 
-      // Share the file using share_plus
       final xFile = XFile(filePath);
       await Share.shareXFiles([xFile], text: 'تقرير بيانات التشجير');
     } catch (e) {
-      // Close the loading dialog
       if (mounted) {
         Navigator.pop(context);
       }
 
-      // Show error snackbar
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("فشل التصدير: ${e.toString()}"),
+            content: Text("فشل التصدير: $e"),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -113,67 +106,71 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scaffoldBg = isDark ? const Color(0xFF121212) : AppColors.background;
+    final textColor = isDark ? Colors.white : AppColors.onSurface;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: scaffoldBg,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: Directionality(
-          textDirection: TextDirection.ltr,
+          textDirection: TextDirection.rtl,
           child: AppBar(
-            backgroundColor: AppColors.background,
+            backgroundColor: Colors.transparent,
             elevation: 0,
-            leadingWidth: 180,
-            leading: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black12),
-                    ),
-                    child: const Icon(
-                      Icons.park_outlined,
-                      color: AppColors.primary,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  const Text(
-                    "Afforestation",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: AppColors.onSurface,
-                    ),
-                  ),
-                ],
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: textColor,
+                size: 20,
               ),
+              onPressed: () => Navigator.maybePop(context),
+            ),
+            title: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF1E3A1E) : const Color(0xFFE8F5E9),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.park, color: Color(0xFF4CAF50), size: 18),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  "Afforestation",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: textColor,
+                  ),
+                ),
+              ],
             ),
             actions: [
               Row(
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     radius: 14,
-                    backgroundColor: Colors.grey,
-                    child: Icon(Icons.person, size: 16, color: Colors.white),
+                    backgroundColor: isDark ? const Color(0xFF2C2C2C) : Colors.grey,
+                    child: const Icon(Icons.person, size: 16, color: Colors.white),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     "ADMIN",
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.onSurface,
+                      color: textColor,
                     ),
                   ),
                   const SizedBox(width: 8),
                   IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.logout,
-                      color: AppColors.onSurface,
+                      color: textColor,
                       size: 20,
                     ),
                     onPressed: () => Navigator.maybePop(context),
@@ -222,9 +219,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         Text(
                           state.message,
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
-                            color: AppColors.onSurface,
+                            color: textColor,
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -258,12 +255,12 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                           size: 48,
                         ),
                         const SizedBox(height: 16),
-                        const Text(
+                        Text(
                           "لا توجد نتائج",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.onSurface,
+                            color: textColor,
                           ),
                         ),
                         const SizedBox(height: 8),
@@ -287,7 +284,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   );
                 }
 
-                return _buildResultsContent(context, allResults);
+                return _buildResultsContent(context, allResults, isDark);
               }
 
               return const Center(
@@ -303,11 +300,10 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   Widget _buildResultsContent(
     BuildContext context,
     List<SearchResultModel> allResults,
+    bool isDark,
   ) {
-    // UI-side pagination
     final totalCount = allResults.length;
     final totalPages = (totalCount / _pageSize).ceil();
-    // Clamp current page
     if (_currentPage >= totalPages) {
       _currentPage = totalPages - 1;
     }
@@ -326,7 +322,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title Section
-          const Center(
+          Center(
             child: Column(
               children: [
                 Text(
@@ -334,13 +330,16 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
+                    color: isDark ? Colors.white : AppColors.primary,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   "سجلات التشجير بناءً على معايير البحث",
-                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: isDark ? Colors.white60 : Colors.grey,
+                  ),
                 ),
               ],
             ),
@@ -382,30 +381,29 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    // ✅ Passing the actual search results to the statistics page
                     builder: (context) =>
                         StatisticsSummaryPage(results: allResults),
                   ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: AppColors.primary,
+                backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+                foregroundColor: isDark ? const Color(0xFF81C784) : AppColors.primary,
                 elevation: 0,
                 side: const BorderSide(color: AppColors.secondary, width: 1.5),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
               ),
-              icon: const Icon(
+              icon: Icon(
                 Icons.analytics_outlined,
-                color: AppColors.primary,
+                color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                 size: 20,
               ),
-              label: const Text(
+              label: Text(
                 "عرض ملخص الإحصائيات",
                 style: TextStyle(
-                  color: AppColors.primary,
+                  color: isDark ? const Color(0xFF81C784) : AppColors.primary,
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
                 ),
@@ -420,21 +418,24 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             children: [
               Text(
                 "صفحة ${_currentPage + 1} من $totalPages  ($totalCount سجل)",
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                style: TextStyle(
+                  fontSize: 12,
+                  color: isDark ? Colors.white60 : Colors.grey,
+                ),
               ),
-              const Text(
+              Text(
                 "أحدث السجلات",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.onSurface,
+                  color: isDark ? Colors.white : AppColors.onSurface,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 12),
 
-          // Record Cards — current page only
+          // Record Cards
           ...pageResults.map(
             (item) => RecordCard(
               plantName: item.treeName ?? "غير محدد",
@@ -445,8 +446,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
               location: item.locationName ?? "غير محدد",
               quantity: item.number.toString(),
               registeredBy: item.userName ?? "غير معروف",
-              onEdit: () => _showEditDialog(context, item),
-              onDelete: () => _showDeleteConfirmation(context, item),
+              onEdit: () => _showEditDialog(context, item, isDark),
+              onDelete: () => _showDeleteConfirmation(context, item, isDark),
             ),
           ),
 
@@ -457,7 +458,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Previous
                 IconButton(
                   onPressed: _currentPage > 0
                       ? () {
@@ -465,12 +465,10 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         }
                       : null,
                   icon: const Icon(Icons.arrow_back_ios, size: 18),
-                  color: AppColors.primary,
-                  disabledColor: Colors.grey.shade300,
+                  color: isDark ? const Color(0xFF81C784) : AppColors.primary,
+                  disabledColor: isDark ? Colors.white24 : Colors.grey.shade300,
                 ),
-                // Page numbers
                 ...List.generate(totalPages > 5 ? 5 : totalPages, (i) {
-                  // Show pages around current
                   int pageIndex;
                   if (totalPages <= 5) {
                     pageIndex = i;
@@ -492,7 +490,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       decoration: BoxDecoration(
                         color: _currentPage == pageIndex
                             ? AppColors.secondary
-                            : Colors.grey.shade100,
+                            : (isDark ? const Color(0xFF2C2C2C) : Colors.grey.shade100),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       alignment: Alignment.center,
@@ -501,7 +499,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         style: TextStyle(
                           color: _currentPage == pageIndex
                               ? Colors.white
-                              : AppColors.onSurface,
+                              : (isDark ? Colors.white : AppColors.onSurface),
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -509,7 +507,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     ),
                   );
                 }),
-                // Next
                 IconButton(
                   onPressed: _currentPage < totalPages - 1
                       ? () {
@@ -517,8 +514,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         }
                       : null,
                   icon: const Icon(Icons.arrow_forward_ios, size: 18),
-                  color: AppColors.primary,
-                  disabledColor: Colors.grey.shade300,
+                  color: isDark ? const Color(0xFF81C784) : AppColors.primary,
+                  disabledColor: isDark ? Colors.white24 : Colors.grey.shade300,
                 ),
               ],
             ),
@@ -529,25 +526,32 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     );
   }
 
-  // ─── Delete Confirmation Dialog ───
-  void _showDeleteConfirmation(BuildContext context, SearchResultModel item) {
+  void _showDeleteConfirmation(
+    BuildContext context,
+    SearchResultModel item,
+    bool isDark,
+  ) {
     showDialog(
       context: context,
       builder: (dialogContext) => Directionality(
         textDirection: TextDirection.rtl,
         child: AlertDialog(
+          backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text(
+          title: Text(
             "تأكيد الحذف",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: AppColors.primary,
+              color: isDark ? const Color(0xFF81C784) : AppColors.primary,
             ),
           ),
           content: Text(
-            "هل أنت متأكد من حذف سجل \"${item.treeName ?? ''}\"؟\nلا يمكن التراجع عن هذا الإجراء.",
+            "هل أنت متأكد من حذف \"${item.treeName ?? ''}\"؟",
+            style: TextStyle(
+              color: isDark ? Colors.white70 : Colors.black87,
+            ),
           ),
           actions: [
             TextButton(
@@ -573,8 +577,11 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     );
   }
 
-  // ─── Edit Dialog ───
-  void _showEditDialog(BuildContext context, SearchResultModel item) {
+  void _showEditDialog(
+    BuildContext context,
+    SearchResultModel item,
+    bool isDark,
+  ) {
     final numberController = TextEditingController(
       text: item.number.toString(),
     );
@@ -586,38 +593,47 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         builder: (dialogContext, setDialogState) => Directionality(
           textDirection: TextDirection.rtl,
           child: AlertDialog(
+            backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            title: const Text(
-              "تعديل السجل",
+            title: Text(
+              "تعديل سجل التشجير",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: AppColors.primary,
+                color: isDark ? const Color(0xFF81C784) : AppColors.primary,
               ),
             ),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Plant name (read-only info)
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.park, color: AppColors.secondary),
-                    title: Text(item.treeName ?? "غير محدد"),
-                    subtitle: Text(item.scientificName ?? ""),
+                    title: Text(
+                      item.treeName ?? "غير محدد",
+                      style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+                    ),
+                    subtitle: Text(
+                      item.scientificName ?? "",
+                      style: TextStyle(color: isDark ? Colors.white60 : Colors.black54),
+                    ),
                   ),
-                  const Divider(),
-                  // Date picker
+                  Divider(color: isDark ? Colors.white12 : Colors.black12),
                   ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(
                       Icons.calendar_today,
                       color: AppColors.secondary,
                     ),
-                    title: const Text("تاريخ الزراعة"),
+                    title: Text(
+                      "تاريخ الزراعة",
+                      style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+                    ),
                     subtitle: Text(
                       "${selectedDate?.year}-${selectedDate?.month.toString().padLeft(2, '0')}-${selectedDate?.day.toString().padLeft(2, '0')}",
+                      style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
                     ),
                     onTap: () async {
                       final picked = await showDatePicker(
@@ -626,13 +642,23 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                         firstDate: DateTime(2020),
                         lastDate: DateTime(2030),
                         builder: (ctx, child) => Theme(
-                          data: Theme.of(ctx).copyWith(
-                            colorScheme: const ColorScheme.light(
-                              primary: AppColors.primary,
-                              onPrimary: Colors.white,
-                              onSurface: AppColors.onSurface,
-                            ),
-                          ),
+                          data: isDark
+                              ? Theme.of(ctx).copyWith(
+                                  colorScheme: const ColorScheme.dark(
+                                    primary: AppColors.secondary,
+                                    onPrimary: Colors.white,
+                                    surface: Color(0xFF1E1E1E),
+                                    onSurface: Colors.white,
+                                  ),
+                                  dialogBackgroundColor: const Color(0xFF1E1E1E),
+                                )
+                              : Theme.of(ctx).copyWith(
+                                  colorScheme: const ColorScheme.light(
+                                    primary: AppColors.primary,
+                                    onPrimary: Colors.white,
+                                    onSurface: AppColors.onSurface,
+                                  ),
+                                ),
                           child: child!,
                         ),
                       );
@@ -642,22 +668,22 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     },
                   ),
                   const SizedBox(height: 12),
-                  // Quantity
                   TextField(
                     controller: numberController,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
+                    style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+                    decoration: const InputDecoration(
                       labelText: "الكمية",
-                      prefixIcon: const Icon(
+                      prefixIcon: Icon(
                         Icons.numbers,
                         color: AppColors.secondary,
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        borderSide: BorderSide(
                           color: AppColors.secondary,
                           width: 2,
                         ),

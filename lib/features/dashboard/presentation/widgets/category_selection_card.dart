@@ -1,6 +1,4 @@
 import 'package:afforestation_app/features/dashboard/data/models/plant_types_response.dart';
-import 'package:afforestation_app/features/dashboard/presentation/dumy_data/plant_model.dart';
-
 import 'package:flutter/material.dart';
 import 'package:afforestation_app/core/styles/colors.dart';
 import 'package:afforestation_app/core/styles/text_styles.dart';
@@ -19,12 +17,17 @@ class CategorySelectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final surfaceColor = isDark ? const Color(0xFF1E1E1E) : AppColors.surface;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.black.withOpacity(0.04)),
+        border: Border.all(
+          color: isDark ? Colors.white12 : Colors.black.withOpacity(0.04),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -38,7 +41,12 @@ class CategorySelectionCard extends StatelessWidget {
                 size: 20,
               ),
               const SizedBox(width: 8),
-              Text('أنواع النباتات', style: TextStyles.cardSectionTitleStyle),
+              Text(
+                'أنواع النباتات',
+                style: TextStyles.cardSectionTitleStyle.copyWith(
+                  color: isDark ? Colors.white : AppColors.primary,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -61,10 +69,12 @@ class CategorySelectionCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: isSelected
                           ? AppColors.secondary
-                          : AppColors.surface,
+                          : (isDark ? const Color(0xFF2C2C2C) : AppColors.surface),
                       borderRadius: BorderRadius.circular(30),
                       border: Border.all(
-                        color: isSelected ? Colors.transparent : Colors.black12,
+                        color: isSelected
+                            ? Colors.transparent
+                            : (isDark ? Colors.white12 : Colors.black12),
                       ),
                     ),
                     child: Center(
@@ -76,7 +86,7 @@ class CategorySelectionCard extends StatelessWidget {
                               : FontWeight.w400,
                           color: isSelected
                               ? AppColors.onSecondary
-                              : AppColors.onSurfaceVariant,
+                              : (isDark ? Colors.white70 : AppColors.onSurfaceVariant),
                         ),
                       ),
                     ),
