@@ -457,7 +457,7 @@ class _AddNewOperationScreenState extends State<AddNewOperationScreen> {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<T>(
-          value: value,
+          value: items.contains(value) ? value : null,
           hint: Text(
             hint,
             style: TextStyle(

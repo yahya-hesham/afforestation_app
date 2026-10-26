@@ -27,12 +27,24 @@ class AddAfforestationPlantsLoadedState extends AddAfforestationState {
   AddAfforestationPlantsLoadedState(this.plantNames);
 }
 
+class AddAfforestationPlantNameSelectedState extends AddAfforestationState {
+  final PlantNamesResponse? plantName;
+
+  AddAfforestationPlantNameSelectedState(this.plantName);
+}
+
 class AddAfforestationLoadingLocationsState extends AddAfforestationState {}
 
 class AddAfforestationLocationsLoadedState extends AddAfforestationState {
   final List<LocNamesResponse> locations;
 
   AddAfforestationLocationsLoadedState(this.locations);
+}
+
+class AddAfforestationLocationAddressSelectedState extends AddAfforestationState {
+  final LocNamesResponse? locationAddress;
+
+  AddAfforestationLocationAddressSelectedState(this.locationAddress);
 }
 
 class AddAfforestationSubmittingState extends AddAfforestationState {}

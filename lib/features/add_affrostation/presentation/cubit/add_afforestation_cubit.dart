@@ -53,7 +53,10 @@ class AddAfforestationCubit extends Cubit<AddAfforestationState> {
     selectedPlantName = null;
     plantNames = [];
 
-    if (plantType?.id == null) return;
+    if (plantType?.id == null) {
+      emit(AddAfforestationPlantsLoadedState(plantNames));
+      return;
+    }
 
     emit(AddAfforestationLoadingPlantsState());
     try {
@@ -76,7 +79,10 @@ class AddAfforestationCubit extends Cubit<AddAfforestationState> {
     selectedLocationAddress = null;
     locations = [];
 
-    if (locType?.id == null) return;
+    if (locType?.id == null) {
+      emit(AddAfforestationLocationsLoadedState(locations));
+      return;
+    }
 
     emit(AddAfforestationLoadingLocationsState());
     try {
@@ -94,10 +100,12 @@ class AddAfforestationCubit extends Cubit<AddAfforestationState> {
 
   void onPlantNameChanged(PlantNamesResponse? plantName) {
     selectedPlantName = plantName;
+    emit(AddAfforestationPlantNameSelectedState(plantName));
   }
 
   void onLocationAddressChanged(LocNamesResponse? location) {
     selectedLocationAddress = location;
+    emit(AddAfforestationLocationAddressSelectedState(location));
   }
 
   Future<void> submit({
